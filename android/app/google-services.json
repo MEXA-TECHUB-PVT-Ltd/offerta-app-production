@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "308500907524",
+    "project_id": "offerta-409fa",
+    "storage_bucket": "offerta-409fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308500907524:android:6103d06411757af4195751",
+        "android_client_info": {
+          "package_name": "com.ofertasvAppMtechub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308500907524-tdve7467rtmcm13ecjdodocvsdeo0c2l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ofertasvAppMtechub",
+            "certificate_hash": "f3c8b9de9568c8fb019f0c2931a959c0d6d58d2e"
+          }
+        },
+        {
+          "client_id": "308500907524-q7t6qgl7pfrn8gubhtnpl08tcsnrr6j8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-xRtPFBQGO8xJmkcU3iviA18XEH8LUVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308500907524-q7t6qgl7pfrn8gubhtnpl08tcsnrr6j8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,334 @@
+[
+  {
+    "id": "73",
+    "requester": {
+      "id": "55",
+      "full_name": "Company",
+      "image": "assets/profile/20230317_93338.jpg",
+      "user_name": "ME",
+      "password": "$2y$10$hP1hQIv7GgI1287wSurcsuv/wR3Ip3ks/zvuB8yJUJoke1.gqCAcW",
+      "email": "company@gmail.com",
+      "location_address": "",
+      "phone_no": "090000000",
+      "email_verified_status": "false",
+      "status": "active",
+      "review": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2023-02-16 02:33:00"
+    },
+    "list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "notification": "Company has accept your offer",
+    "type": "Counter Offer",
+    "offer_status": "accept",
+    "offer": {
+      "id": "16",
+      "user_id": "1",
+      "second_user": "55",
+      "item": "57",
+      "item2": "57",
+      "status": "outgoing",
+      "created_at": "2023-03-17 12:49:00"
+    }
+  },
+  {
+    "id": "74",
+    "requester": {
+      "id": "55",
+      "full_name": "Company",
+      "image": "assets/profile/20230317_93338.jpg",
+      "user_name": "ME",
+      "password": "$2y$10$hP1hQIv7GgI1287wSurcsuv/wR3Ip3ks/zvuB8yJUJoke1.gqCAcW",
+      "email": "company@gmail.com",
+      "location_address": "",
+      "phone_no": "090000000",
+      "email_verified_status": "false",
+      "status": "active",
+      "review": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2023-02-16 02:33:00"
+    },
+    "list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "notification": "Company has reject your offer",
+    "type": "Counter Offer",
+    "offer_status": "reject",
+    "offer": {
+      "id": "16",
+      "user_id": "1",
+      "second_user": "55",
+      "item": "57",
+      "item2": "57",
+      "status": "outgoing",
+      "created_at": "2023-03-17 12:49:00"
+    }
+  },
+  {
+    "id": "94",
+    "requester": {
+      "id": "55",
+      "full_name": "Company",
+      "image": "assets/profile/20230317_93338.jpg",
+      "user_name": "ME",
+      "password": "$2y$10$hP1hQIv7GgI1287wSurcsuv/wR3Ip3ks/zvuB8yJUJoke1.gqCAcW",
+      "email": "company@gmail.com",
+      "location_address": "",
+      "phone_no": "090000000",
+      "email_verified_status": "false",
+      "status": "active",
+      "review": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2023-02-16 02:33:00"
+    },
+    "list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "notification": "Company has accept your offer",
+    "type": "Price Offer",
+    "offer_status": "accept",
+    "offer": {
+      "id": "16",
+      "user_id": "1",
+      "second_user": "55",
+      "item": "57",
+      "item2": "57",
+      "status": "outgoing",
+      "created_at": "2023-03-17 12:49:00"
+    }
+  },
+  {
+    "id": "95",
+    "requester": {
+      "id": "55",
+      "full_name": "Company",
+      "image": "assets/profile/20230317_93338.jpg",
+      "user_name": "ME",
+      "password": "$2y$10$hP1hQIv7GgI1287wSurcsuv/wR3Ip3ks/zvuB8yJUJoke1.gqCAcW",
+      "email": "company@gmail.com",
+      "location_address": "",
+      "phone_no": "090000000",
+      "email_verified_status": "false",
+      "status": "active",
+      "review": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2023-02-16 02:33:00"
+    },
+    "list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "notification": "Company has reject your offer",
+    "type": "Price Offer",
+    "offer_status": "reject",
+    "offer": {
+      "id": "16",
+      "user_id": "1",
+      "second_user": "55",
+      "item": "57",
+      "item2": "57",
+      "status": "outgoing",
+      "created_at": "2023-03-17 12:49:00"
+    }
+  },
+  {
+    "id": "97",
+    "requester": {
+      "id": "55",
+      "full_name": "Company",
+      "image": "assets/profile/20230317_93338.jpg",
+      "user_name": "ME",
+      "password": "$2y$10$hP1hQIv7GgI1287wSurcsuv/wR3Ip3ks/zvuB8yJUJoke1.gqCAcW",
+      "email": "company@gmail.com",
+      "location_address": "",
+      "phone_no": "090000000",
+      "email_verified_status": "false",
+      "status": "active",
+      "review": 0,
+      "followers": 0,
+      "following": 0,
+      "created_at": "2023-02-16 02:33:00"
+    },
+    "requester_list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "list": {
+      "id": "57",
+      "user_id": "55",
+      "title": "Summer Wear",
+      "description": "sadas",
+      "price": "20",
+      "location": "pindi",
+      "location_lat": 33.565109,
+      "location_log": 73.016914,
+      "product_condition": "old",
+      "exchange": "true",
+      "fixed_price": "true",
+      "giveaway": "true",
+      "shipping_cost": "5",
+      "sold": null,
+      "youtube_link": "abc.com",
+      "created_at": "2023-03-17 12:11:00",
+      "category": {
+        "category_id": "128",
+        "category_name": "Clothes"
+      },
+      "subcategory": {
+        "sub_category_id": "71",
+        "sub_category_name": "Shalwar Kamiz"
+      },
+      "images": [
+        "assets/listing/20230317_96432.jpg",
+        "assets/listing/20230317_95998.jpg",
+        "assets/listing/20230317_85926.jpg"
+      ]
+    },
+    "notification": "Company has reject your offer",
+    "type": "exchange",
+    "offer_status": "reject"
+  }
+]
