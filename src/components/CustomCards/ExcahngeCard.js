@@ -23,7 +23,6 @@ const ExcahangeCard = (props) => {
   });
   const formattedLikes =
     props.pricetext == null ? null : formatter.format(props.pricetext);
-  console.log("props?.image :  ", props?.image);
   return (
     // <TouchableOpacity
     //   onPress={() =>

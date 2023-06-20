@@ -83,6 +83,8 @@ import CustomMenu from "../../../../components/CustomMenu/CustomMenu";
 import CustomMenu1 from "../../../../components/CustomMenu/CustomMenu1";
 import TranslationStrings from "../../../../utills/TranslationStrings";
 
+import VideoPlayer from "react-native-video-player";
+
 const MainListingsDetails = ({ navigation, route }) => {
   const offer_options = [
     { id: "1", label: TranslationStrings.VIEW_PROFILE, icon: "eye" },
@@ -105,6 +107,9 @@ const MainListingsDetails = ({ navigation, route }) => {
     { id: "2", label: TranslationStrings.REPORT_ITEM, icon: "alert" },
     { id: "3", label: TranslationStrings.SHARE, icon: "share-variant" },
   ];
+
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
+
   ///////////////PREVIOUS DATA////////////
   const [predata] = useState(route.params);
 
@@ -124,6 +129,8 @@ const MainListingsDetails = ({ navigation, route }) => {
     route?.params?.like ? route?.params?.login_user_id : ""
   );
   const [listing_views_user_id, setListing_Views_User_id] = useState("");
+
+  const [videoFile, setVideoFile] = useState(null);
   //-----------like list
   const listing_like = async (props) => {
     let user_status = await AsyncStorage.getItem("account_status");
@@ -234,6 +241,8 @@ const MainListingsDetails = ({ navigation, route }) => {
 
   const [showBlockModal, setShowBlockModal] = useState(false);
 
+  const [listing_files, setListing_files] = useState([]);
+
   const GetLikeStatus = async () => {
     var user_id = await AsyncStorage.getItem("Userid");
     GET_LIKE_STATUS_NEW(predata.listing_id)
@@ -265,13 +274,37 @@ const MainListingsDetails = ({ navigation, route }) => {
         setListing_user_detail(response?.data?.user);
         setListing_User_Id(response.data.user_id);
         dispatch(setExchangeOffer_OtherListing(response.data));
-        setListing_Images(response.data.images);
+
         setListing_Item_Price(response.data.price);
         setListing_Item_Title(response.data.title);
         setListing_Details(response.data.description);
         setListing_Category(response.data.category.category_name);
         setListing_SubCategory(response.data.subcategory.sub_category_name);
         setListing_Condition(response.data.product_condition);
+        setListing_Images(response.data.images);
+
+        console.log("response.data.images : ", response.data.images);
+
+        setVideoFile(response.data?.video);
+
+        let list1 = [];
+        if (response.data?.video) {
+          let obj = {
+            type: "video",
+            path: response.data?.video,
+          };
+          list1.push(obj);
+        }
+        for (const element of response.data.images) {
+          list1.push(element);
+        }
+
+        console.log(
+          "list1 ____________________________________________ ",
+          list1
+        );
+        setListing_files(list1);
+
         getuser();
         //setListingLat()
         //////////date//////////
@@ -371,6 +404,7 @@ const MainListingsDetails = ({ navigation, route }) => {
   // const handleCommentPress = async () => {
   //   navigation.navigate("CommentsDetails");
   // };
+
   return (
     <SafeAreaView style={styles.container}>
       <BlockUserView visible={showBlockModal} setVisible={setShowBlockModal} />
@@ -389,7 +423,9 @@ const MainListingsDetails = ({ navigation, route }) => {
         <Loader isLoading={loading} />
         <View>
           <Slider
-            imagearray={listing_images}
+            // imagearray={listing_images}
+            imagearray={listing_files}
+            video={videoFile}
             listing_user_id={listing_user_id}
             type={"listing_detail"}
             hideMenu={true}

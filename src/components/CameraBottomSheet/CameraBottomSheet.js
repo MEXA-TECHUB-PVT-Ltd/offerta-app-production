@@ -38,7 +38,7 @@ import ImagePicker from "react-native-image-crop-picker";
 //////////////////app Images////////////////
 import { appImages } from "../../constant/images";
 import { Colors } from "react-native/Libraries/NewAppScreen";
-
+import { Image } from "react-native-compressor";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import TranslationStrings from "../../utills/TranslationStrings";
 

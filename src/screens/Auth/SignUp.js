@@ -46,7 +46,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { setsignupRole } from "../../redux/actions";
 
 import messaging from "@react-native-firebase/messaging";
-import TranslationStrings from "../../utills/TranslationStrings";
+import TranslationStrings, {
+  ChangeAppLanguage,
+} from "../../utills/TranslationStrings";
 import SocialIcons from "../../components/SocialView/SocialIcons";
 
 import GoogleButton from "../../components/Button/GoogleButton";
@@ -55,6 +57,7 @@ import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import LanguageSelector from "../../components/LanguageSelector";
 
 const SignUp = ({ navigation }) => {
   //////////////redux////////////////////
@@ -294,7 +297,13 @@ const SignUp = ({ navigation }) => {
     // return;
 
     // input validation
-    if (email == "") {
+    if (signup_role == "" || signup_role?.length == 0) {
+      setsnackbarValue({
+        value: TranslationStrings.PLEASE_SELECT_ROLE,
+        color: "red",
+      });
+      setVisible("true");
+    } else if (email == "") {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_EMAIL,
         color: "red",
@@ -343,12 +352,6 @@ const SignUp = ({ navigation }) => {
         color: "red",
       });
       setVisible("true");
-    } else if (signup_role == "" || signup_role?.length == 0) {
-      setsnackbarValue({
-        value: TranslationStrings.PLEASE_SELECT_ROLE,
-        color: "red",
-      });
-      setVisible("true");
     } else {
       setloading(1);
       setdisable(1);
@@ -356,6 +359,7 @@ const SignUp = ({ navigation }) => {
     }
   };
 
+  const [language, setLanguage] = useState("");
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -366,7 +370,12 @@ const SignUp = ({ navigation }) => {
           name={"arrow-back"}
           size={25}
           color={Colors.Appthemecolor}
-          style={{ marginLeft: wp(5), marginTop: hp(3) }}
+          style={{
+            marginLeft: wp(5),
+            marginTop: hp(3),
+
+            width: wp(15),
+          }}
           onPress={() => navigation.goBack()}
         />
         <View style={[Logostyles.Logoview, { marginTop: hp(5) }]}>
@@ -376,6 +385,11 @@ const SignUp = ({ navigation }) => {
             resizeMode="contain"
           />
         </View>
+        <LanguageSelector
+          onChange={(value) => {
+            setLanguage(value);
+          }}
+        />
         <View>
           <View style={Authstyles.textview}>
             <Text style={Authstyles.maintext}>
@@ -386,6 +400,18 @@ const SignUp = ({ navigation }) => {
             </Text>
           </View>
           <View>
+            <TouchableOpacity onPress={() => refRBSheet.current.open()}>
+              <CustomTextInput
+                icon={appImages.downarrow}
+                type={"iconinput"}
+                term={signup_role}
+                editable={false}
+                disable={false}
+                placeholder={TranslationStrings.SELECT_ROLE}
+                onTermChange={(newcountry) => setsignupRole(newcountry)}
+              />
+            </TouchableOpacity>
+
             <CustomTextInput
               icon={appImages.email}
               type={"iconinput"}
@@ -439,17 +465,6 @@ const SignUp = ({ navigation }) => {
               secureTextEntry={data.secureTextEntry ? true : false}
               onclick={() => updateSecureTextEntry()}
             />
-            <TouchableOpacity onPress={() => refRBSheet.current.open()}>
-              <CustomTextInput
-                icon={appImages.downarrow}
-                type={"iconinput"}
-                term={signup_role}
-                editable={false}
-                disable={false}
-                placeholder={TranslationStrings.SELECT_ROLE}
-                onTermChange={(newcountry) => setsignupRole(newcountry)}
-              />
-            </TouchableOpacity>
           </View>
         </View>
 

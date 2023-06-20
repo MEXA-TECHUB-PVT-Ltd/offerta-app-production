@@ -85,6 +85,18 @@ export const create_order_Transcation_Listings = async (
   console.log("obj : ", obj);
   return axios.post(BASE_URL + "ordertransaction.php", obj);
 };
+
+export const update_Listing_Quantity = async (order_id, status) => {
+  // axios
+  //   .post(BASE_URL)
+  //   .then((response) => {})
+  //   .catch((err) => {
+  //     console.log("err :  ", err);
+  //   })
+  //   .finally(() => {
+  //     setLoading(false);
+  //   });
+};
 export const update_order_status = async (order_id, status) => {
   let obj = {
     order_id: order_id,

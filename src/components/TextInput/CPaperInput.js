@@ -36,7 +36,7 @@ const CPaperInput = (props) => {
         // marginTop: 4,
         paddingTop: 5,
       }}
-      style={paperInputStyle.paperInputContinaer}
+      style={{ ...paperInputStyle.paperInputContinaer, ...props.style }}
     />
   );
 };

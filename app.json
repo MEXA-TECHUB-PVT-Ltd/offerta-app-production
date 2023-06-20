@@ -1,4 +1,9 @@
 {
   "name": "ofertasvAppMtechub",
-  "displayName": "ofertasvAppMtechub"
+  "displayName": "ofertasvAppMtechub",
+
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-8536082632787172~7920619365",
+    "ios_app_id": "ca-app-pub-xxxxxxxx~xxxxxxxx"
+  }
 }

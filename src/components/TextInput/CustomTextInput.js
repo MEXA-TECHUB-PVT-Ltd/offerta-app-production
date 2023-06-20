@@ -46,6 +46,8 @@ const CustomTextInput = ({
   maxLength,
   borderWidth,
   borderBottomWidth,
+  width,
+  height,
 }) => {
   const [isfocused, setisFocused] = useState(false);
   return (
@@ -54,12 +56,12 @@ const CustomTextInput = ({
         style={[
           styles.TextFieldView,
           {
-            width: length === "small" ? wp(39) : wp(84),
+            width: width ? width : length === "small" ? wp(39) : wp(84),
             borderColor:
               isfocused == true
                 ? Colors.activetextinput
                 : Colors.inactivetextinput,
-            height: multiline === true ? hp(20) : hp(7),
+            height: height ? height : multiline === true ? hp(20) : hp(7),
             borderRadius: multiline === true ? wp(8) : wp(10),
             borderWidth: borderWidth ? borderWidth : 1,
             borderBottomWidth: borderBottomWidth ? borderBottomWidth : 1,
@@ -70,14 +72,15 @@ const CustomTextInput = ({
           style={[
             styles.TextField,
             {
-              width:
-                length === "small"
-                  ? wp(23)
-                  : type === "iconinput"
-                  ? wp(64)
-                  : wp(74),
+              width: width
+                ? width
+                : length === "small"
+                ? wp(23)
+                : type === "iconinput"
+                ? wp(64)
+                : wp(74),
               textAlignVertical: multiline === true ? "top" : null,
-              height: multiline === true ? hp(16) : null,
+              height: height ? height : multiline === true ? hp(16) : null,
               marginTop: multiline === true ? hp(0) : null,
             },
           ]}
@@ -91,7 +94,7 @@ const CustomTextInput = ({
           disabled={disable}
           returnKeyType={returnType}
           keyboardType={keyboard_type}
-          // keyboardType="number-pad"
+          // keyboardType={'numeric'}
           placeholderTextColor={Colors.inputplaceholder}
           onFocus={() => setisFocused(true)}
           onChangeText={onTermChange}

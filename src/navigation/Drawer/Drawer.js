@@ -13,6 +13,7 @@ import ShippingAddressList from "../../screens/Drawer/ShippingAdress/ShippingAdd
 import Blogs from "../../screens/Drawer/Blogs";
 import StripePayments from "../../screens/Drawer/StripePayment";
 import PaypalMonthlySubscription from "../../screens/StackScreens/PaymentMethods/PaypalMonthlySubscription";
+import LiveUsers from "../../screens/LiveStreaming/LiveUsers";
 
 const Drawer = createDrawerNavigator();
 
@@ -33,6 +34,13 @@ export default function Drawerroute() {
         }}
         name="PrivacyTerms"
         component={PrivacyTerms}
+      />
+      <Drawer.Screen
+        options={{
+          headerShown: false,
+        }}
+        name="LiveUsers"
+        component={LiveUsers}
       />
 
       <Drawer.Screen

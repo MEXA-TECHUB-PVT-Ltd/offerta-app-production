@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { SafeAreaView, ScrollView, FlatList } from "react-native";
+import { SafeAreaView, ScrollView, FlatList, Linking } from "react-native";
 
 /////////////navigation////////////
 import { useIsFocused } from "@react-navigation/native";
@@ -126,6 +126,15 @@ const FilterListings = ({ navigation, route }) => {
     );
   }, [isFocused]);
 
+  const openAffiliateLink = async (url) => {
+    await Linking.openURL(url)
+      .then((res) => {
+        console.log("res : ", res);
+      })
+      .catch((err) => {
+        alert(`Invalid affiliate link`);
+      });
+  };
   const renderItem = ({ item }) => {
     return (
       <DashboardCard
@@ -133,10 +142,15 @@ const FilterListings = ({ navigation, route }) => {
         maintext={item.title}
         subtext={item.location}
         price={item?.price}
+        added_by={item?.added_by}
         onpress={() => {
-          navigation.navigate("MainListingsDetails", {
-            listing_id: item.id,
-          });
+          if (item?.added_by == "admin") {
+            openAffiliateLink(item?.description);
+          } else {
+            navigation.navigate("MainListingsDetails", {
+              listing_id: item.id,
+            });
+          }
         }}
       />
     );

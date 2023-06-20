@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  Linking,
 } from "react-native";
 
 ////////////////////app icons///////////////
@@ -104,7 +105,15 @@ const Search = ({ navigation, route }) => {
   useEffect(() => {
     listing_Search_Most();
   }, []);
-
+  const openAffiliateLink = async (url) => {
+    await Linking.openURL(url)
+      .then((res) => {
+        console.log("res : ", res);
+      })
+      .catch((err) => {
+        alert(`Invalid affiliate link`);
+      });
+  };
   const renderItem = ({ item }) => {
     return (
       <DashboardCard
@@ -118,10 +127,15 @@ const Search = ({ navigation, route }) => {
         maintext={item.title}
         subtext={item.location}
         price={item.price}
+        added_by={item?.added_by}
         onpress={() => {
-          navigation.navigate("MainListingsDetails", {
-            listing_id: item.id,
-          });
+          if (item?.added_by == "admin") {
+            openAffiliateLink(item?.description);
+          } else {
+            navigation.navigate("MainListingsDetails", {
+              listing_id: item.id,
+            });
+          }
         }}
       />
     );

@@ -46,6 +46,7 @@ import TranslationStrings from "../../../utills/TranslationStrings";
 
 const Filter = ({ navigation, route }) => {
   /////////////redux states///////
+
   const {
     category_name,
     post_within,

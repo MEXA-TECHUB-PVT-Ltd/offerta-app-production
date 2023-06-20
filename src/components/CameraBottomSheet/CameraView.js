@@ -55,6 +55,8 @@ function CameraViewScreen({ route, navigation }) {
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
+  const [video, setVideo] = useState(null);
+
   ///////////////camera mode///////////
   const [camera_mode, setCamera_Mode] = useState(true);
 
@@ -101,14 +103,17 @@ function CameraViewScreen({ route, navigation }) {
       console.warn(err);
     }
   };
+
   const takePhotoFromCamera = async () => {
     requestCameraPermission();
+    console.log("taking photo from camera.....");
     setLoading(true);
     var options = {
       storageOptions: {
         skipBackup: true,
         path: "images",
       },
+      // mediaType: "video",
       maxWidth: 500,
       maxHeight: 500,
       quality: 0.5,
@@ -185,6 +190,7 @@ function CameraViewScreen({ route, navigation }) {
   };
   ////////////////////library image//////////////////
   const choosePhotoFromLibrary = () => {
+    console.log("choosePhotoFromLibrary  :::");
     setLoading(true);
     ImagePicker.openPicker({
       width: 500,

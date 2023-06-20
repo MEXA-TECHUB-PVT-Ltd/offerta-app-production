@@ -106,6 +106,9 @@ const ListingsDetails = ({ navigation, route }) => {
     route?.params?.like ? route?.params?.login_user_id : ""
   );
   const [listing_views_user_id, setListing_Views_User_id] = useState("");
+
+  const [listing_files, setListing_files] = useState([]);
+  const [videoFile, setVideoFile] = useState(null);
   // //-----------like list
   // const listing_like = (props) => {
   //   post_Like_Listings(props).then((response) => {
@@ -283,6 +286,28 @@ const ListingsDetails = ({ navigation, route }) => {
         setListing_Category(response?.data?.category?.category_name);
         setListing_SubCategory(response.data?.subcategory?.sub_category_name);
         setListing_Condition(response.data.product_condition);
+
+        setVideoFile(response.data?.video);
+
+        let list1 = [];
+        if (response.data?.video) {
+          let obj = {
+            type: "video",
+            path: response.data?.video,
+          };
+          list1.push(obj);
+        }
+
+        for (const element of response.data.images) {
+          list1.push(element);
+        }
+
+        console.log(
+          "list1 ____________________________________________ ",
+          list1
+        );
+        setListing_files(list1);
+
         getuser();
         //////////date//////////
         const year =
@@ -368,7 +393,8 @@ const ListingsDetails = ({ navigation, route }) => {
         {/* {listingImages?.length > 0 && ( */}
 
         <Slider
-          imagearray={listingImages}
+          // imagearray={listingImages}
+          imagearray={listing_files}
           listing_owner_id={listing_user_id}
           menuitem1onpress={() => {
             {

@@ -25,6 +25,7 @@ import Colors from "../../utills/Colors";
 import { BASE_URL, IMAGE_URL } from "../../utills/ApiRootUrl";
 
 import { Snackbar } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 const data = [
   {
@@ -63,19 +64,19 @@ const renderItem = ({ item }) => {
   );
 };
 
-const CustomImageSlider = ({ imagearray }) => {
+const CustomImageSlider = ({ imagearray, type }) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
 
   const [visible, setVisible] = useState(false);
   const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
   const onDismissSnackBar = () => setVisible(false);
-
+  const navigation = useNavigation();
   return (
     <View style={{ width: wp(100), marginVertical: 10 }}>
       {imagearray ? (
         <SwiperFlatList
-          autoplay
+          autoplay={type == "upload_item" ? false : true}
           autoplayDelay={2}
           autoplayLoop
           //   index={2}
@@ -83,48 +84,98 @@ const CustomImageSlider = ({ imagearray }) => {
           data={imagearray}
           renderItem={({ item }) => {
             return (
-              <TouchableOpacity
-                onPress={() => {
-                  Linking.openURL(item?.app_img_link).catch((err) => {
-                    setsnackbarValue({
-                      value: "Something went wrong.Unable to open url",
-                      color: "red",
-                    });
-                    setVisible(true);
-                  });
-                }}
-                style={{
-                  width: wp(90),
-                  marginHorizontal: wp(5),
-                  height: hp(25),
-                  alignSelf: "center",
-                  borderRadius: hp(2.5),
-                  //   backgroundColor: item,
-                  borderWidth: 0.5,
-                  // marginTop: 35,
-                  overflow: "hidden",
-                }}
-              >
-                <ImageBackground
-                  blurRadius={4}
-                  resizeMode="cover"
-                  source={{
-                    uri: `${IMAGE_URL}${item?.app_img}`,
-                  }}
-                  style={{ flex: 1, justifyContent: "center" }}
-                >
-                  <Image
-                    source={{
-                      uri: `${IMAGE_URL}${item?.app_img}`,
+              <>
+                {type == "upload_item" ? (
+                  <View onPress={() => {}} style={styles.sliderCard}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("CameraViewScreen")}
+                      style={styles.btnChange}
+                    >
+                      <Text style={styles.btnChangeText}>Change</Text>
+                    </TouchableOpacity>
+                    <ImageBackground
+                      blurRadius={4}
+                      resizeMode="cover"
+                      source={{
+                        uri: item?.path,
+                      }}
+                      style={{ flex: 1, justifyContent: "center" }}
+                    >
+                      <Image
+                        source={{
+                          uri: item?.path,
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        resizeMode={"contain"}
+                      />
+                    </ImageBackground>
+                  </View>
+                ) : type == "edit_item" ? (
+                  <View style={styles.sliderCard}>
+                    <TouchableOpacity
+                      onPress={() => navigation.navigate("CameraViewScreen")}
+                      style={styles.btnChange}
+                    >
+                      <Text style={styles.btnChangeText}>Change</Text>
+                    </TouchableOpacity>
+                    <ImageBackground
+                      blurRadius={4}
+                      resizeMode="cover"
+                      source={{
+                        uri: item?.path ? item?.path : IMAGE_URL + item,
+                      }}
+                      style={{ flex: 1, justifyContent: "center" }}
+                    >
+                      <Image
+                        source={{
+                          uri: item?.path ? item?.path : IMAGE_URL + item,
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        resizeMode={"contain"}
+                      />
+                    </ImageBackground>
+                  </View>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      Linking.openURL(item?.app_img_link).catch((err) => {
+                        setsnackbarValue({
+                          value: "Something went wrong.Unable to open url",
+                          color: "red",
+                        });
+                        setVisible(true);
+                      });
                     }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                    }}
-                    resizeMode={"contain"}
-                  />
-                </ImageBackground>
-              </TouchableOpacity>
+                    style={styles.sliderCard}
+                  >
+                    <ImageBackground
+                      blurRadius={4}
+                      resizeMode="cover"
+                      source={{
+                        uri: `${IMAGE_URL}${item?.app_img}`,
+                      }}
+                      style={{ flex: 1, justifyContent: "center" }}
+                    >
+                      <Image
+                        source={{
+                          uri: `${IMAGE_URL}${item?.app_img}`,
+                        }}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                        }}
+                        resizeMode={"contain"}
+                      />
+                    </ImageBackground>
+                  </TouchableOpacity>
+                )}
+              </>
             );
           }}
           paginationStyleItemInactive={{
@@ -193,6 +244,33 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     // marginVertical: 10,
+  },
+  btnChange: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    backgroundColor: "green",
+    borderRadius: wp(5),
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 999,
+  },
+  btnChangeText: {
+    color: "white",
+    paddingVertical: hp(0.8),
+    paddingHorizontal: wp(3),
+    fontWeight: "bold",
+  },
+  sliderCard: {
+    width: wp(90),
+    marginHorizontal: wp(5),
+    height: hp(25),
+    alignSelf: "center",
+    borderRadius: hp(2.5),
+    //   backgroundColor: item,
+    borderWidth: 0.5,
+    // marginTop: 35,
+    overflow: "hidden",
   },
 });
 

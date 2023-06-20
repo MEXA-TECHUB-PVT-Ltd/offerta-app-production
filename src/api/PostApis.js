@@ -164,3 +164,9 @@ export const update_comment_notification = async (id, status) => {
     // status: status,
   });
 };
+
+// update listing details
+export const updateListingDetails = async (data) => {
+  console.log("data  : ", data);
+  return axios.put(BASE_URL + "updateList.php", data);
+};
