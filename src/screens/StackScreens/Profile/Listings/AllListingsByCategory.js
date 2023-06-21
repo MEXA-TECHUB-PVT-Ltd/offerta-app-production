@@ -4,6 +4,7 @@ import {
   ScrollView,
   FlatList,
   RefreshControl,
+  Linking,
 } from "react-native";
 
 //////////////////app components///////////////
@@ -95,20 +96,33 @@ const AllListingsByCategory = ({ navigation, route }) => {
     setRefreshing(true);
     getData();
   };
-
+  const openAffiliateLink = async (url) => {
+    await Linking.openURL(url)
+      .then((res) => {
+        console.log("res : ", res);
+      })
+      .catch((err) => {
+        alert(`Invalid affiliate link`);
+      });
+  };
   const renderItem = ({ item }) => (
     <DashboardCard
-      image={item.images === [] ? null : IMAGE_URL + item.images[0]}
+      image={item.images?.length == 0 ? null : IMAGE_URL + item.images[0]}
       maintext={item.title}
       subtext={item.location}
       price={item.price}
       sold={item?.sold}
       promotion={item?.Promotion[0]}
+      added_by={item?.added_by}
       onpress={() => {
-        // navigation.navigate("ListingsDetails", { listing_id: item.id });
-        navigation.navigate("MainListingsDetails", {
-          listing_id: item.id,
-        });
+        if (item?.added_by == "admin") {
+          openAffiliateLink(item?.description);
+        } else {
+          // navigation.navigate("ListingsDetails", { listing_id: item.id });
+          navigation.navigate("MainListingsDetails", {
+            listing_id: item.id,
+          });
+        }
       }}
     />
   );

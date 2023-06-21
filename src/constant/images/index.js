@@ -1,4 +1,5 @@
 const IMAGES_DIR = "../../assets/images/";
+const FLAG_DIR = "../../assets/images/Flag/";
 
 //////////////Drawer Images/////////////
 const Drawer_IMAGES_DIR = "../../assets/images/Drawer/";
@@ -7,8 +8,14 @@ const Drawer_IMAGES_DIR = "../../assets/images/Drawer/";
 const BottomTab_IMAGES_DIR = "../../assets/images/BottomTab/";
 
 const appImages = {
+  //Flag
+  usa: require(FLAG_DIR + "usa.png"),
+  spain: require(FLAG_DIR + "spain.png"),
+
   //////////////////Onboarding////////////
   Onboarding: require(IMAGES_DIR + "Onboarding.png"),
+
+  no_image: require(IMAGES_DIR + "image.png"),
 
   ////////textinput icons///////////
   email: require(IMAGES_DIR + "email.png"),
@@ -88,5 +95,9 @@ const appImages = {
   send_email: require(IMAGES_DIR + "send_email.png"),
   verify_email: require(IMAGES_DIR + "verify_email.png"),
   pending_account: require(IMAGES_DIR + "pending_account.png"),
+
+  live: require(IMAGES_DIR + "live.png"),
+  live_stream_bg: require(IMAGES_DIR + "live_stream_bg.png"),
+  user2: require(IMAGES_DIR + "user2.png"),
 };
 export { appImages };

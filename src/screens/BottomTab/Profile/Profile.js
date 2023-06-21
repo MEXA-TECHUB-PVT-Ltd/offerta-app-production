@@ -44,6 +44,7 @@ import {
   get_Login_User_Followings,
 } from "../../../api/GetApis";
 import TranslationStrings from "../../../utills/TranslationStrings";
+import CustomButtonhere from "../../../components/Button/CustomButton";
 
 const Profile = ({ navigation }) => {
   ////////////isfocused//////////
@@ -155,6 +156,13 @@ const Profile = ({ navigation }) => {
               label={TranslationStrings.SALE_AND_ORDERS}
               labelPress={() => navigation.navigate("SalesOrders")}
             />
+            <CustomButtonhere
+              title={"Live Streaming"}
+              widthset={80}
+              labelWidth={250}
+              topDistance={-1}
+              onPress={() => navigation?.navigate("Live")}
+            />
           </View>
         </ScrollView>
       </View>
@@ -183,6 +191,7 @@ const Profile = ({ navigation }) => {
           // }
         />
       </View>
+
       {/* </ScrollView> */}
     </View>
   );

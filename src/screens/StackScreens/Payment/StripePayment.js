@@ -1,4 +1,11 @@
-import { StyleSheet, Text, View, Alert, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  TouchableOpacity,
+  BackHandler,
+} from "react-native";
 import React, { useEffect, useState, useRef } from "react";
 import {
   initStripe,
@@ -36,7 +43,11 @@ import Colors from "../../../utills/Colors";
 
 import { Publishable_key } from "../../../utills/paymentKeys";
 import { async } from "regenerator-runtime";
-import { store_subscription_history } from "../../../api/PostApis";
+import {
+  store_subscription_history,
+  updateListingDetails,
+} from "../../../api/PostApis";
+import firestore from "@react-native-firebase/firestore";
 
 const StripePayment = ({ navigation, route }) => {
   const [loading1, setLoading1] = useState(false);
@@ -118,6 +129,20 @@ const StripePayment = ({ navigation, route }) => {
       console.log("Error catch : ", error);
     }
   };
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   //createPaymentIntent
   const fetchPaymentSheetParams = async (item) => {
@@ -455,6 +480,7 @@ const StripePayment = ({ navigation, route }) => {
   const createListingOrder = async () => {
     console.log("createListingOrder  _________________________called...");
     createListingTranscation();
+    updateListing();
     // create_order_Listings(
     //   exchange_other_listing.user_id,
     //   exchange_other_listing.id,
@@ -512,6 +538,69 @@ const StripePayment = ({ navigation, route }) => {
       .catch((err) => {
         console.log("error : ", err);
       });
+  };
+
+  const updateListing = async () => {
+    // console.log("exchange_other_listing?.category  : ", exchange_other_listing);
+    // return;
+    console.log(
+      "fees.______________________________________",
+      route?.params?.fees
+    );
+    if (route?.params?.buy_type == "live_stream") {
+      let listing_quantity = exchange_other_listing?.quantity
+        ? exchange_other_listing?.quantity
+        : 0;
+      let buy_quantity = route?.params?.quantity;
+      let remaining_quantity =
+        parseInt(listing_quantity) - parseInt(buy_quantity);
+      console.log(
+        "remaining_quantity  _______________________ : ",
+        remaining_quantity
+      );
+      var data1 = {
+        id: exchange_other_listing?.id,
+        user_id: exchange_other_listing?.user_id,
+        title: exchange_other_listing?.title,
+        description: exchange_other_listing?.description,
+        price: exchange_other_listing?.price,
+        category_id: exchange_other_listing?.category?.category_id,
+        // quantity: selectedItem?.quantity,
+        subcategory_id: exchange_other_listing?.subcategory?.sub_category_id,
+        product_condition: exchange_other_listing?.product_condition,
+        // fixed_price: selectedItem?.fixed_price,
+        location: exchange_other_listing?.location,
+        exchange: exchange_other_listing?.exchange,
+        // giveaway: selectedItem?.giveaway,
+        shipping_cost: exchange_other_listing?.shipping_cost,
+        youtube_link: exchange_other_listing?.youtube_link,
+        //
+        // quantity: exchange_other_listing?.quantity,
+        quantity: remaining_quantity,
+        fixed_price: exchange_other_listing?.fixed_price,
+        giveaway: exchange_other_listing?.giveaway,
+      };
+
+      updateListingDetails(data1)
+        .then((response) => {
+          console.log("update listing response : ", response?.data);
+
+          firestore()
+            .collection("live_stream")
+            .doc(route?.params?.streamId)
+            .collection("last_purchase")
+            .doc(route?.params?.streamId)
+            .set(
+              {
+                updatedDate: new Date(),
+              },
+              { merge: true }
+            );
+        })
+        .catch((err) => {
+          console.log("error in updating listing quantity : ", err);
+        });
+    }
   };
 
   return (

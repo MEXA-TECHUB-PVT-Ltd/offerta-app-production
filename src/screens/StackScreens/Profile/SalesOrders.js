@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, FlatList, View, Text } from "react-native";
+import { SafeAreaView, FlatList, View, Text, BackHandler } from "react-native";
 
 //////////////////app components///////////////
 import CustomHeader from "../../../components/Header/CustomHeader";
@@ -55,6 +55,20 @@ const SalesOrders = ({ navigation }) => {
   const [visible, setVisible] = useState(false);
   const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
   const onDismissSnackBar = () => setVisible(false);
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation?.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   const [Top_Tab, setTop_Tab] = useState([
     {

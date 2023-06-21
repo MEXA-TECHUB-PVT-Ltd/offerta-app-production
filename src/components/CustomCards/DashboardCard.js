@@ -25,6 +25,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { fontFamily } from "../../constant/fonts";
 import TranslationStrings from "../../utills/TranslationStrings";
 import moment from "moment";
+import { appImages } from "../../constant/images";
 
 const DashboardCard = (props) => {
   const [checked, setChecked] = React.useState(true);
@@ -35,6 +36,7 @@ const DashboardCard = (props) => {
     compactDisplay: "short",
   });
   const formattedLikes = formatter.format(props.price);
+
   return (
     <TouchableOpacity onPress={props.onpress} activeOpacity={0.9}>
       <View
@@ -43,32 +45,50 @@ const DashboardCard = (props) => {
           {
             width: props.type === "Exchange_Request" ? wp(90) : wp(45),
             height: props.type === "Exchange_Request" ? hp(27) : hp(23),
+            overflow: "hidden",
           },
         ]}
       >
         <View style={{ marginBottom: hp(0), marginTop: hp(0) }}>
-          <ImageBackground
-            blurRadius={4}
-            resizeMode="cover"
-            source={{ uri: props.image }}
-            style={{
-              // ...styles.dasboardimage,
-              // flex: 1,
-              justifyContent: "center",
-            }}
-          >
-            <Image
+          {props?.image ? (
+            <ImageBackground
+              blurRadius={4}
+              resizeMode="cover"
               source={{ uri: props.image }}
-              style={[
-                // styles.dasboardimage,
-                {
-                  width: props.type === "Exchange_Request" ? wp(90) : wp(45),
-                  height: props.type === "Exchange_Request" ? hp(18) : hp(15),
-                },
-              ]}
-              resizeMode="contain"
-            ></Image>
-          </ImageBackground>
+              style={{
+                // ...styles.dasboardimage,
+                // flex: 1,
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={{ uri: props.image }}
+                style={[
+                  // styles.dasboardimage,
+                  {
+                    width: props.type === "Exchange_Request" ? wp(90) : wp(45),
+                    height: props.type === "Exchange_Request" ? hp(18) : hp(15),
+                  },
+                ]}
+                resizeMode="contain"
+              ></Image>
+            </ImageBackground>
+          ) : (
+            <View
+              style={{
+                width: props.type === "Exchange_Request" ? wp(90) : wp(45),
+                height: props.type === "Exchange_Request" ? hp(18) : hp(15),
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Image
+                source={appImages.no_image}
+                style={{ height: 80, width: 80, tintColor: "gray" }}
+                resizeMode="contain"
+              />
+            </View>
+          )}
 
           {/* {(props?.tag == "sold" ||
             props?.tag == true ||
@@ -195,18 +215,27 @@ const DashboardCard = (props) => {
               flexDirection: "row",
               justifyContent: "space-between",
               alignItems: "center",
+              marginTop: props?.added_by == "admin" ? 15 : 0,
             }}
           >
             <Text numberOfLines={1} style={styles.dashboardmaintext}>
               {props.maintext}
             </Text>
             <Text numberOfLines={1} style={styles.pricetext}>
-              {formattedLikes === "0" ? "free" : "$" + formattedLikes}
+              {props?.added_by == "admin"
+                ? ""
+                : formattedLikes === "0"
+                ? "free"
+                : "$" + formattedLikes}
               {/* //+"$"  */}
             </Text>
           </View>
-          {props.type === "Exchange_Request" ? null : (
-            <View style={{ flexDirection: "row" }}>
+          {props.type === "Exchange_Request" ? null : props.subtext ? (
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
               <Ionicons
                 name={"location"}
                 size={15}
@@ -217,6 +246,8 @@ const DashboardCard = (props) => {
                 {props.subtext}
               </Text>
             </View>
+          ) : (
+            <View style={{}}></View>
           )}
         </View>
       </View>

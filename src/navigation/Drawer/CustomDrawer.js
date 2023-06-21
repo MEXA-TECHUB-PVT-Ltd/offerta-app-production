@@ -27,7 +27,7 @@ import { IMAGE_URL } from "../../utills/ApiRootUrl";
 ////////////////api function of user data/////////////
 import { get_Login_UserData } from "../../api/GetApis";
 import TranslationStrings from "../../utills/TranslationStrings";
-
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 export const DrawerContent = (props) => {
   const paperTheme = useTheme();
   //Modal States
@@ -138,6 +138,21 @@ export const DrawerContent = (props) => {
               labelStyle={styles.subtitle}
               onPress={() => {
                 props.navigation.navigate("Language");
+              }}
+            />
+            <DrawerItem
+              icon={({ color, size }) => (
+                <MaterialIcons
+                  name="live-tv"
+                  size={wp(7)}
+                  color={Colors.Appthemecolor}
+                  style={{ marginBottom: 6 }}
+                />
+              )}
+              label={"Live Streaming"}
+              labelStyle={styles.subtitle}
+              onPress={() => {
+                props.navigation.navigate("LiveUsers");
               }}
             />
 

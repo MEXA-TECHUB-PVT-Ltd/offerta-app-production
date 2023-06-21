@@ -7,8 +7,9 @@ import {
   Animated,
   Easing,
   ImageBackground,
+  ActivityIndicator,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 
 import {
   heightPercentageToDP as hp,
@@ -17,11 +18,19 @@ import {
 
 const { width, height } = Dimensions.get("screen");
 
+import VideoPlayer from "react-native-video-player";
+import {
+  BannerAd,
+  BannerAdSize,
+  TestIds,
+} from "react-native-google-mobile-ads";
+
 //////////////////api url//////////////
 import { IMAGE_URL } from "../../utills/ApiRootUrl";
 
 const SlideItem = ({ item }) => {
   const translateYImage = new Animated.Value(40);
+  const [loading, setLoading] = useState(false);
 
   Animated.timing(translateYImage, {
     toValue: 0,
@@ -32,18 +41,84 @@ const SlideItem = ({ item }) => {
 
   return (
     <View style={[styles.container]}>
-      <ImageBackground
-        blurRadius={3}
-        resizeMode="cover"
-        source={{ uri: IMAGE_URL + item }}
-        style={{ flex: 1, justifyContent: "center" }}
-      >
-        <Animated.Image
-          source={{ uri: IMAGE_URL + item }}
-          resizeMode="contain"
-          style={[styles.image]}
+      {loading && (
+        <ActivityIndicator
+          style={{
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 999,
+          }}
+          color={"white"}
+          size={45}
         />
-      </ImageBackground>
+      )}
+      {item?.type == "video" ? (
+        <VideoPlayer
+          // uri: IMAGE_URL + item?.path,
+          video={{
+            uri: item?.path,
+          }}
+          style={{ backgroundColor: "#000" }}
+          videoWidth={wp(100)}
+          videoHeight={hp(39)}
+          thumbnail={{ uri: "https://i.picsum.photos/id/866/1600/900.jpg" }}
+          // disableSeek
+          // showDursation
+          pauseOnPress
+          disableControlsAutoHide
+          onStart={() => {
+            console.log("onStart"); //start loading
+            setLoading(true);
+          }}
+          onBuffer={() => {
+            console.log("onBuffer");
+          }}
+          onPlayPress={() => {
+            console.log("onPlayPress");
+          }}
+          onLoad={() => {
+            console.log("onLoad"); //stop loading
+            setLoading(false);
+          }}
+          onLoadStart={() => {
+            console.log("onLoadStart");
+          }}
+          onVideoLoad={() => {
+            console.log("onVideoLoad");
+          }}
+        />
+      ) : (
+        <ImageBackground
+          blurRadius={3}
+          resizeMode="cover"
+          source={{ uri: IMAGE_URL + item }}
+          style={{ flex: 1, justifyContent: "center" }}
+        >
+          <Animated.Image
+            source={{ uri: IMAGE_URL + item }}
+            resizeMode="contain"
+            style={[styles.image]}
+          />
+        </ImageBackground>
+      )}
+
+      <View
+        style={{
+          alignSelf: "center",
+          // marginTop: 20,
+        }}
+      >
+        <BannerAd
+          unitId={TestIds.BANNER}
+          size={BannerAdSize.BANNER}
+          requestOptions={{
+            requestNonPersonalizedAdsOnly: true,
+          }}
+        />
+      </View>
     </View>
   );
 };

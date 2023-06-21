@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,33 +8,33 @@ import {
   TouchableOpacity,
   FlatList,
   ImageBackground,
-} from "react-native";
+} from 'react-native';
 
 ////////////////////paper////////////////////
-import { Checkbox, Snackbar } from "react-native-paper";
+import {Checkbox, Snackbar} from 'react-native-paper';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../../components/Header/CustomHeader";
-import CustomButtonhere from "../../../../components/Button/CustomButton";
-import CustomTextInput from "../../../../components/TextInput/CustomTextInput";
-import CamerBottomSheet from "../../../../components/CameraBottomSheet/CameraBottomSheet";
-import CustomModal from "../../../../components/Modal/CustomModal";
+import CustomHeader from '../../../../components/Header/CustomHeader';
+import CustomButtonhere from '../../../../components/Button/CustomButton';
+import CustomTextInput from '../../../../components/TextInput/CustomTextInput';
+import CamerBottomSheet from '../../../../components/CameraBottomSheet/CameraBottomSheet';
+import CustomModal from '../../../../components/Modal/CustomModal';
 
 //-------------->Dropdowns
-import Categories from "../../../../components/Dropdowns/Categories";
-import ProductCondition from "../../../../components/Dropdowns/ProductCondition";
+import Categories from '../../../../components/Dropdowns/Categories';
+import ProductCondition from '../../../../components/Dropdowns/ProductCondition';
 
 /////////////app styles////////////////
-import styles from "./styles";
-import Uploadstyles from "../../../../styles/GlobalStyles/Upload";
-import Colors from "../../../../utills/Colors";
+import styles from './styles';
+import Uploadstyles from '../../../../styles/GlobalStyles/Upload';
+import Colors from '../../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   setProductCondition,
   setCategoryName,
@@ -45,31 +45,38 @@ import {
   setLocationLng,
   setSubCategoryId,
   setCategoryId,
-} from "../../../../redux/actions";
+} from '../../../../redux/actions';
 
 /////////////////App Api function/////////////////
 import {
   edit_Item_Images,
   post_Item_Images,
-} from "../../../../api/Upload Item";
+  post_Listing_Video,
+} from '../../../../api/Upload Item';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import { BASE_URL, IMAGE_URL } from "../../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import {BASE_URL, IMAGE_URL} from '../../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /////////////////////app images/////////////////////
-import { appImages } from "../../../../constant/images";
+import {appImages} from '../../../../constant/images';
 
 ///////////////////////api funtion///////////////
 import {
   GetListingsDetails,
   GetListingsDetails_New,
-} from "../../../../api/GetApis";
-import TranslationStrings from "../../../../utills/TranslationStrings";
-import Loader from "../../../../components/Loader/Loader";
+} from '../../../../api/GetApis';
+import TranslationStrings from '../../../../utills/TranslationStrings';
+import Loader from '../../../../components/Loader/Loader';
+import CustomImageSlider from '../../../../components/ImageSlider/CustomImageSlider';
+import VideoBottomSheet from '../../../../components/CameraBottomSheet/VideoBottomSheet';
+import VideoPlayer from 'react-native-video-player';
 
-const EditList = ({ navigation, route }) => {
+import {Video} from 'react-native-compressor';
+// import RNVideoHelper from "react-native-video-helper";
+
+const EditList = ({navigation, route}) => {
   /////////////redux states///////
   const {
     category_name,
@@ -82,7 +89,8 @@ const EditList = ({ navigation, route }) => {
     location_lat,
     location_address,
     listing_id,
-  } = useSelector((state) => state.userReducer);
+  } = useSelector(state => state.userReducer);
+
   const dispatch = useDispatch();
   // console.log("item_images_array in edit item screen : ", item_images_array);
 
@@ -104,23 +112,43 @@ const EditList = ({ navigation, route }) => {
   const [loading, setloading] = useState(0);
   const [disable, setdisable] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
 
   ///////////////data states of Item////////////////////
-  const [title, setTitle] = React.useState("");
-  const [price, setPrice] = React.useState("");
-  const [youtubelink, setYoutubeLink] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [shippingprice, setShippingPrice] = React.useState("");
+  const [title, setTitle] = React.useState('');
+  const [price, setPrice] = React.useState('');
+  const [youtubelink, setYoutubeLink] = React.useState('');
+  const [description, setDescription] = React.useState('');
+  const [shippingprice, setShippingPrice] = React.useState('');
+
+  const [videoFile, setVideoFile] = useState(null);
+  const [isVideoUpdated, setIsVideoUpdated] = useState(false);
+
+  const ref_UploadVideoBottomSheet = useRef(null);
 
   //////////////Api Calling////////////////////
   const UploadItemDetail = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    // // post_Listing_Video("143", videoFile)
+    // //   .then((res) => res.json())
+    // //   .then((response) => {
+    // //     console.log(
+    // //       "upload video file response___________________________ : ",
+    // //       response
+    // //     );
+    // //   })
+    // //   .catch((err) => {
+    // //     console.log("upload video file error  : ", err);
+    // //   });
+    // setloading(false);
+    // setdisable(false);
+    // return;
+
+    var user_id = await AsyncStorage.getItem('Userid');
     var c_lat = parseFloat(location_lat);
     var c_lng = parseFloat(location_lng);
     console.log(
-      "here we are:",
+      'here we are:',
       c_lat,
       c_lng,
       user_id,
@@ -134,59 +162,75 @@ const EditList = ({ navigation, route }) => {
       givingawaychecked,
       youtubelink,
       description,
-      title
+      title,
     );
     var data = JSON.stringify({
       id: listing_id,
       user_id: user_id,
       title: title,
       description: description,
-      price: givingawaychecked != true ? price : "0.0",
+      price: givingawaychecked != true ? price : '0.0',
       category_id: category_id,
       subcategory_id: sub_category_id,
       product_condition: product_condition,
-      fixed_price: fixedpricechecked != true ? "false" : "true",
+      fixed_price: fixedpricechecked != true ? 'false' : 'true',
       location: location_address,
       //   location_lat: parseFloat(location_lat),
       //   location_log: parseFloat(location_lng),
-      exchange: exchangebuychecked != true ? "false" : "true",
-      giveaway: givingawaychecked != true ? "false" : "true",
+      exchange: exchangebuychecked != true ? 'false' : 'true',
+      giveaway: givingawaychecked != true ? 'false' : 'true',
       shipping_cost:
-        shippingprice === " " || givingawaychecked != true
+        shippingprice === ' ' || givingawaychecked != true
           ? shippingprice
-          : "0.0",
+          : '0.0',
       youtube_link: youtubelink,
     });
 
     var config = {
-      method: "put",
-      url: BASE_URL + "updateList.php",
+      method: 'put',
+      url: BASE_URL + 'updateList.php',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: data,
     };
 
     axios(config).then(function (response) {
-      console.log(
-        JSON.stringify(response.data),
-        "................",
-        item_images_array
-      );
+      console.log('response _________________', response.data);
+      console.log('images_______________________', item_images_array);
       setModalVisible(true);
       // edit_Item_Images({
       //   item_id: listing_id,
       //   item_images: item_images_array,
       // })
+
+      if (videoFile && isVideoUpdated) {
+        post_Listing_Video(response.data.id, videoFile)
+          .then(res => res.json())
+          .then(response => {
+            console.log(
+              'upload video file response___________________________ : ',
+              response,
+            );
+          })
+          .catch(err => {
+            console.log('upload video file error  : ', err);
+          });
+      } else {
+        console.log('__________________________________', {
+          videoFile,
+          isVideoUpdated,
+        });
+      }
       post_Item_Images({
         item_id: response.data.id,
         item_images: item_images_array,
       })
-        .then((response) => response.json())
-        .then((responseData) => {
+        .then(response => response.json())
+        .then(responseData => {
           console.log(
-            "listing images upload response.................:",
-            responseData
+            'listing images upload response.................:',
+            responseData,
           );
           // setModalVisible(true);
         });
@@ -195,20 +239,20 @@ const EditList = ({ navigation, route }) => {
   //Api form validation
   const formValidation = async () => {
     // input validation
-    if (title == "") {
-      setsnackbarValue({ value: "Please Enter Item Title", color: "red" });
-      setVisible("true");
+    if (title == '') {
+      setsnackbarValue({value: 'Please Enter Item Title', color: 'red'});
+      setVisible('true');
     }
     //  else if (price == "") {
     //   setsnackbarValue({ value: "Please Enter Item Price", color: "red" });
     //   setVisible("true");
     // }
-    else if (description == "") {
+    else if (description == '') {
       setsnackbarValue({
-        value: "Please Enter Item Description",
-        color: "red",
+        value: 'Please Enter Item Description',
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else {
       setloading(1);
       setdisable(1);
@@ -219,11 +263,16 @@ const EditList = ({ navigation, route }) => {
     setloading(true);
     // GetListingsDetails(listing_id)
     GetListingsDetails_New(listing_id)
-      .then((res) => {
+      .then(res => {
         let response = {
           data: res?.data[0],
         };
         dispatch(setItemImagesArray(response.data.images));
+
+        setVideoFile(
+          response?.data?.video ? IMAGE_URL + response?.data?.video : null,
+        );
+
         dispatch(setLocationAddress(response.data.location));
         dispatch(setLocationLat(response.data.location_lat));
         dispatch(setLocationLng(response.data.location_log));
@@ -231,7 +280,7 @@ const EditList = ({ navigation, route }) => {
         dispatch(setCategoryName(response.data.category.category_name));
         dispatch(setCategoryId(response.data.category.category_id));
         dispatch(
-          setSubCategoryName(response.data.subcategory.sub_category_name)
+          setSubCategoryName(response.data.subcategory.sub_category_name),
         );
         dispatch(setSubCategoryId(response.data.subcategory.sub_category_id));
         setPrice(response.data.price);
@@ -241,14 +290,14 @@ const EditList = ({ navigation, route }) => {
         setYoutubeLink(response.data.youtube_link);
         //-----------------> listings checks
         setExchangebuyChecked(
-          response.data.exchange === "false" ? false : true
+          response.data.exchange === 'false' ? false : true,
         );
         setFixedpriceChecked(
-          response.data.fixed_price === "false" ? false : true
+          response.data.fixed_price === 'false' ? false : true,
         );
-        setGivingawayChecked(response.data.giveaway === "false" ? false : true);
+        setGivingawayChecked(response.data.giveaway === 'false' ? false : true);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       })
       .finally(() => {
@@ -261,68 +310,64 @@ const EditList = ({ navigation, route }) => {
   }, []);
 
   ////////////////////images view////////////
-  const renderItem = ({ item, index }) => {
+  const renderItem = ({item, index}) => {
     return (
       <View
         style={{
-          alignItems: "center",
-          justifyContent: "center",
+          alignItems: 'center',
+          justifyContent: 'center',
           marginHorizontal: wp(0),
           marginRight: index === item_images_array.length - 1 ? wp(0) : wp(2),
-          overflow: "hidden",
-        }}
-      >
+          overflow: 'hidden',
+        }}>
         <ImageBackground
           blurRadius={4}
           resizeMode="cover"
           source={
-            route.params.navtype === "edit_list"
-              ? { uri: item?.path ? item?.path : IMAGE_URL + item }
-              : { uri: item.path }
+            route.params.navtype === 'edit_list'
+              ? {uri: item?.path ? item?.path : IMAGE_URL + item}
+              : {uri: item.path}
           }
           style={{
             flex: 1,
             width: wp(84),
-            justifyContent: "center",
-            overflow: "hidden",
+            justifyContent: 'center',
+            overflow: 'hidden',
             borderRadius: 20,
-          }}
-        >
+          }}>
           <Image
             source={
-              route.params.navtype === "edit_list"
-                ? { uri: item?.path ? item?.path : IMAGE_URL + item }
-                : { uri: item.path }
+              route.params.navtype === 'edit_list'
+                ? {uri: item?.path ? item?.path : IMAGE_URL + item}
+                : {uri: item.path}
             }
             style={{
               height: hp(20),
               width: wp(84),
 
-              alignSelf: "center",
+              alignSelf: 'center',
             }}
             resizeMode="contain"
           />
         </ImageBackground>
         <TouchableOpacity
-          onPress={() => navigation.navigate("CameraViewScreen")}
+          onPress={() => navigation.navigate('CameraViewScreen')}
           style={{
-            position: "absolute",
+            position: 'absolute',
             top: hp(1.3),
             right: wp(2),
-            backgroundColor: "green",
+            backgroundColor: 'green',
             borderRadius: wp(5),
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
           <Text
             style={{
-              color: "white",
+              color: 'white',
               paddingVertical: hp(0.8),
               paddingHorizontal: wp(3),
-              fontWeight: "bold",
-            }}
-          >
+              fontWeight: 'bold',
+            }}>
             Change
           </Text>
         </TouchableOpacity>
@@ -332,23 +377,49 @@ const EditList = ({ navigation, route }) => {
       </View>
     );
   };
+
+  const compressVideo = async url => {
+    try {
+      // setloading(true);
+
+      await Video.compress(
+        url?.path,
+        {
+          compressionMethod: 'manual',
+          minimumFileSizeForCompress: 1,
+        },
+        progress => {
+          console.log('progress  ___________________ : ', progress);
+        },
+      )
+        .then(async compressedVideoFileUrl => {
+          console.log(
+            'compressedVideoFileUrl  ____________________ : ',
+            compressedVideoFileUrl,
+          );
+          setVideoFile(compressedVideoFileUrl);
+          setIsVideoUpdated(true);
+        })
+        .finally(() => setloading(false));
+    } catch (error) {
+      console.log('Error: ' + error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+        showsHorizontalScrollIndicator={false}>
         <Loader isLoading={loading} />
         <CustomHeader headerlabel={TranslationStrings.UPLOAD_ITEMS} />
         {item_images_array.length === 0 ? (
           <TouchableOpacity
-            onPress={() => navigation.navigate("CameraViewScreen")}
-          >
+            onPress={() => navigation.navigate('CameraViewScreen')}>
             <View style={Uploadstyles.mainview}>
-              <View style={{ alignItems: "center" }}>
+              <View style={{alignItems: 'center'}}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate("CameraViewScreen")}
-                >
+                  onPress={() => navigation.navigate('CameraViewScreen')}>
                   <Image
                     source={appImages.UploadIcpn}
                     style={Uploadstyles.uploadicon}
@@ -362,84 +433,146 @@ const EditList = ({ navigation, route }) => {
             </View>
           </TouchableOpacity>
         ) : (
-          <View style={Uploadstyles.mainview}>
-            <View
-              style={{
-                alignItems: "center",
-                justifyContent: "center",
-                marginTop: hp(0),
-              }}
-            >
-              <FlatList
-                data={item_images_array}
-                renderItem={renderItem}
-                keyExtractor={(item, index) => index}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                horizontal={true}
-              />
-              {/* <Text style={Uploadstyles.uploadtext}>
-                  {item_images_array.length}
-                </Text>
-                <Text style={Uploadstyles.uploadtext}>Images Uploaded</Text> */}
-            </View>
+          <View style={{marginBottom: 25}}>
+            <CustomImageSlider
+              imagearray={item_images_array}
+              type="edit_item"
+            />
           </View>
+
+          // <View style={Uploadstyles.mainview}>
+          //   <View
+          //     style={{
+          //       alignItems: "center",
+          //       justifyContent: "center",
+          //       marginTop: hp(0),
+          //     }}
+          //   >
+          //     <FlatList
+          //       data={item_images_array}
+          //       renderItem={renderItem}
+          //       keyExtractor={(item, index) => index}
+          //       showsVerticalScrollIndicator={false}
+          //       showsHorizontalScrollIndicator={false}
+          //       horizontal={true}
+          //     />
+
+          //   </View>
+          // </View>
+        )}
+
+        {videoFile ? (
+          <View
+            style={{
+              width: wp(90),
+              marginHorizontal: wp(5),
+              height: hp(24),
+              alignSelf: 'center',
+              borderRadius: hp(2.5),
+              borderWidth: 0.5,
+              overflow: 'hidden',
+              backgroundColor: '#000',
+            }}>
+            <VideoPlayer
+              video={{
+                uri: videoFile,
+              }}
+              videoWidth={wp(90)}
+              videoHeight={hp(24)}
+              thumbnail={{uri: 'https://i.picsum.photos/id/866/1600/900.jpg'}}
+            />
+
+            <TouchableOpacity
+              onPress={() => ref_UploadVideoBottomSheet?.current?.open()}
+              style={{
+                position: 'absolute',
+                top: 10,
+                right: 10,
+                backgroundColor: 'green',
+                borderRadius: wp(5),
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 999,
+              }}>
+              <Text
+                style={{
+                  color: 'white',
+                  paddingVertical: hp(0.8),
+                  paddingHorizontal: wp(3),
+                  fontWeight: 'bold',
+                }}>
+                Change
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            onPress={() => ref_UploadVideoBottomSheet?.current?.open()}
+            style={{alignSelf: 'center', padding: 10}}>
+            <Text
+              style={{
+                color: Colors.Appthemecolor,
+                fontSize: 16,
+                fontWeight: 'bold',
+              }}>
+              Upload Video
+            </Text>
+          </TouchableOpacity>
         )}
 
         <View>
           <CustomTextInput
             icon={appImages.email}
-            type={"withouticoninput"}
-            texterror={"invalid"}
+            type={'withouticoninput'}
+            texterror={'invalid'}
             term={title}
             placeholder={TranslationStrings.ITEM_TITLE}
-            onTermChange={(itemtitle) => setTitle(itemtitle)}
+            onTermChange={itemtitle => setTitle(itemtitle)}
           />
           {/* {givingawaychecked === true ? null : ( */}
           <CustomTextInput
             icon={appImages.email}
-            type={"withouticoninput"}
-            texterror={"invalid"}
+            type={'withouticoninput'}
+            texterror={'invalid'}
             term={price}
             placeholder={TranslationStrings.ITEM_PRICE}
-            onTermChange={(itemprice) => setPrice(itemprice)}
-            keyboard_type={"numeric"}
+            onTermChange={itemprice => setPrice(itemprice)}
+            keyboard_type={'numeric'}
           />
           {/* )} */}
 
           <TouchableOpacity onPress={() => refddRBSheet.current.open()}>
             <CustomTextInput
               icon={appImages.downarrow}
-              type={"iconinput"}
+              type={'iconinput'}
               term={category_name}
               editable={false}
               disable={false}
               placeholder={TranslationStrings.SELECT_CATEGORY}
-              onTermChange={(category) => setCategoryName(category)}
+              onTermChange={category => setCategoryName(category)}
             />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => refsubddRBSheet.current.open()}>
             <CustomTextInput
               icon={appImages.downarrow}
-              type={"iconinput"}
+              type={'iconinput'}
               term={sub_category_name}
               editable={false}
               disable={false}
               placeholder={TranslationStrings.SELECT_SUB_CATEGORY}
-              onTermChange={(subcategory) => setSubCategoryName(subcategory)}
+              onTermChange={subcategory => setSubCategoryName(subcategory)}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => refproductcondionddRBSheet.current.open()}
-          >
+            onPress={() => refproductcondionddRBSheet.current.open()}>
             <CustomTextInput
               icon={appImages.downarrow}
-              type={"iconinput"}
+              type={'iconinput'}
               term={product_condition}
               editable={false}
               disable={false}
               placeholder={TranslationStrings.SELECT_PRODUCT_CONDITION}
-              onTermChange={(newcountry) => setCondition(newcountry)}
+              onTermChange={newcountry => setCondition(newcountry)}
             />
           </TouchableOpacity>
           {/* <CustomTextInput
@@ -452,45 +585,45 @@ const EditList = ({ navigation, route }) => {
           /> */}
           <CustomTextInput
             icon={appImages.email}
-            type={"withouticoninput"}
-            texterror={"invalid"}
+            type={'withouticoninput'}
+            texterror={'invalid'}
             term={youtubelink}
             placeholder={`${TranslationStrings.YOUTUBE_LINK} (optional)`}
-            onTermChange={(itemyoutubelink) => setYoutubeLink(itemyoutubelink)}
+            onTermChange={itemyoutubelink => setYoutubeLink(itemyoutubelink)}
           />
           <CustomTextInput
             icon={appImages.email}
-            type={"withouticoninput"}
-            texterror={"invalid"}
+            type={'withouticoninput'}
+            texterror={'invalid'}
             term={description}
             multiline={true}
             placeholder={TranslationStrings.DESCRIPTION}
-            onTermChange={(desc) => setDescription(desc)}
+            onTermChange={desc => setDescription(desc)}
           />
-          <TouchableOpacity onPress={() => navigation.navigate("Location")}>
+          <TouchableOpacity onPress={() => navigation.navigate('Location')}>
             <CustomTextInput
               icon={appImages.email}
-              type={"withouticoninput"}
-              texterror={"invalid"}
+              type={'withouticoninput'}
+              texterror={'invalid'}
               term={location_address}
               editable={false}
               disable={false}
               placeholder={TranslationStrings.ENTER_LOCATION}
-              onTermChange={(itemlocation) => setLocationAddress(itemlocation)}
+              onTermChange={itemlocation => setLocationAddress(itemlocation)}
             />
           </TouchableOpacity>
 
           {/* {givingawaychecked === true ? null : ( */}
           <CustomTextInput
             icon={appImages.email}
-            type={"withouticoninput"}
-            texterror={"invalid"}
+            type={'withouticoninput'}
+            texterror={'invalid'}
             term={shippingprice}
             placeholder={TranslationStrings.PICKUP_OR_DELIVERY_SHIPPING_PRICE}
-            onTermChange={(itemshippingprice) =>
+            onTermChange={itemshippingprice =>
               setShippingPrice(itemshippingprice)
             }
-            keyboard_type={"numeric"}
+            keyboard_type={'numeric'}
           />
           {/* )} */}
         </View>
@@ -501,30 +634,28 @@ const EditList = ({ navigation, route }) => {
             borderRadius: wp(5),
             marginTop: hp(1),
             marginBottom: hp(1),
-            borderColor: "#ccc",
+            borderColor: '#ccc',
             borderWidth: 1,
-            alignSelf: "center",
+            alignSelf: 'center',
             // alignItems: "center",
             // justifyContent: "space-between",
             paddingVertical: 13,
-          }}
-        >
+          }}>
           <Text
             style={{
-              color: "grey",
+              color: 'grey',
               fontSize: 12,
               // marginTop: 25,
               marginBottom: 15,
               // textAlign: "center",
               paddingHorizontal: wp(4),
-            }}
-          >
+            }}>
             {/* Don't check any option if you want to receive offers. */}
             {
               TranslationStrings.DONT_CHECK_ANY_OPTION_IF_YOU_WANT_TO_RECEIVE_OFFERS
             }
           </Text>
-          <View style={{ paddingHorizontal: wp(4) }}>
+          <View style={{paddingHorizontal: wp(4)}}>
             {/* <View
               style={{
                 flexDirection: "row",
@@ -546,18 +677,17 @@ const EditList = ({ navigation, route }) => {
               />
             </View> */}
           </View>
-          <View style={{ paddingHorizontal: wp(4) }}>
+          <View style={{paddingHorizontal: wp(4)}}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 // marginTop: hp(2),
-                alignItems: "center",
-              }}
-            >
+                alignItems: 'center',
+              }}>
               <Text style={styles.text}>{TranslationStrings.FIXED_PRICE}</Text>
               <Checkbox
-                status={fixedpricechecked ? "checked" : "unchecked"}
+                status={fixedpricechecked ? 'checked' : 'unchecked'}
                 color={Colors.activetextinput}
                 uncheckedColor={Colors.activetextinput}
                 onPress={() => {
@@ -574,39 +704,36 @@ const EditList = ({ navigation, route }) => {
             borderRadius: wp(5),
             marginTop: hp(1),
             marginBottom: hp(1),
-            borderColor: "#ccc",
+            borderColor: '#ccc',
             borderWidth: 1,
-            alignSelf: "center",
+            alignSelf: 'center',
             // alignItems: "center",
             // justifyContent: "space-between",
             paddingVertical: 13,
-          }}
-        >
+          }}>
           <Text
             style={{
-              color: "grey",
+              color: 'grey',
               fontSize: 12,
               // marginTop: 25,
               marginBottom: 15,
               // textAlign: "center",
               paddingHorizontal: wp(4),
-            }}
-          >
+            }}>
             {/* Check If you want to give item for free. */}
             {TranslationStrings.CHECK_IF_YOU_WANT_TO_GIVE_ITEM_FOR_FREE}
           </Text>
-          <View style={{ paddingHorizontal: wp(4) }}>
+          <View style={{paddingHorizontal: wp(4)}}>
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 // marginTop: hp(2),
-                alignItems: "center",
-              }}
-            >
+                alignItems: 'center',
+              }}>
               <Text style={styles.text}>{TranslationStrings.GIVING_AWAY}</Text>
               <Checkbox
-                status={givingawaychecked ? "checked" : "unchecked"}
+                status={givingawaychecked ? 'checked' : 'unchecked'}
                 color={Colors.activetextinput}
                 uncheckedColor={Colors.activetextinput}
                 onPress={() => {
@@ -625,7 +752,17 @@ const EditList = ({ navigation, route }) => {
             )} */}
           </View>
         </View>
+        <VideoBottomSheet
+          refRBSheet={ref_UploadVideoBottomSheet}
+          onClose={() => ref_UploadVideoBottomSheet.current.close()}
+          onFilePicked={async url => {
+            console.log('url ::: ', url);
 
+            // compressVideo(url);
+            setVideoFile(url?.path);
+            setIsVideoUpdated(true);
+          }}
+        />
         {/* <View
           style={{
             flexDirection: "row",
@@ -690,7 +827,7 @@ const EditList = ({ navigation, route }) => {
         </View> */}
         {/* )} */}
 
-        <View style={{ marginBottom: hp(15) }}>
+        <View style={{marginBottom: hp(15)}}>
           <CustomButtonhere
             title={TranslationStrings.UPDATE}
             widthset={80}
@@ -705,7 +842,7 @@ const EditList = ({ navigation, route }) => {
         <CamerBottomSheet
           refRBSheet={refRBSheet}
           onClose={() => refRBSheet.current.close()}
-          title={"From Gallery"}
+          title={'From Gallery'}
         />
         <Categories
           refRBSheet={refddRBSheet}
@@ -714,7 +851,7 @@ const EditList = ({ navigation, route }) => {
         <Categories
           refRBSheet={refsubddRBSheet}
           onClose={() => refsubddRBSheet.current.close()}
-          type={"subcategory"}
+          type={'subcategory'}
         />
         <ProductCondition
           refRBSheet={refproductcondionddRBSheet}
@@ -728,8 +865,7 @@ const EditList = ({ navigation, route }) => {
             backgroundColor: snackbarValue.color,
             marginBottom: hp(20),
             zIndex: 999,
-          }}
-        >
+          }}>
           {snackbarValue.value}
         </Snackbar>
         <CustomModal
@@ -740,7 +876,7 @@ const EditList = ({ navigation, route }) => {
           subtext={TranslationStrings.ITEM_UPDATED_SUCCESSFULLY}
           buttontext={TranslationStrings.OK}
           onPress={() => {
-            setModalVisible(false), navigation.navigate("Listings");
+            setModalVisible(false), navigation.navigate('Listings');
           }}
         />
       </ScrollView>

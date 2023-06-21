@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
+  BackHandler,
 } from "react-native";
 
 ////////navigation////////////////
@@ -54,6 +55,8 @@ import {
   create_order_Transcation_Listings,
 } from "../../../../../api/Offer";
 import Loader from "../../../../../components/Loader/Loader";
+import { updateListingDetails } from "../../../../../api/PostApis";
+import firestore from "@react-native-firebase/firestore";
 
 const ConfirmAddress = ({ navigation, route }) => {
   ///////////////data states////////////////////
@@ -91,6 +94,20 @@ const ConfirmAddress = ({ navigation, route }) => {
   const onDismissSnackBar = () => setVisible(false);
 
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   useEffect(() => {
     console.log("useEffect  : ", isFocused);
@@ -135,12 +152,20 @@ const ConfirmAddress = ({ navigation, route }) => {
       navigation.replace("Checkout", {
         payment_type: route?.params?.payment_type,
         type: route?.params?.type,
+        //live streaming params
+        user_id: route?.params?.user_id,
+        listing_user_detail: route?.params?.listing_user_detail,
+        buy_type: route?.params?.buy_type,
+        quantity: route?.params?.quantity,
+        streamId: route?.params?.streamId,
       });
     }
   };
 
   const handleSubmit = async () => {
-    console.log(" route?.params?.type :   ", route?.params?.type);
+    console.log("route?.params?.streamId :  ", route?.params?.streamId);
+    //test
+    // updateListingQuantity();
 
     if (route?.params?.type == "giveaway") {
       //handle give away scenario
@@ -249,6 +274,7 @@ const ConfirmAddress = ({ navigation, route }) => {
             //order created successfully
             let order_id = response?.data?.order_id;
             createListingTranscation(order_id, type);
+            updateListing();
           } else {
             alert("Something went wrong");
           }
@@ -315,6 +341,64 @@ const ConfirmAddress = ({ navigation, route }) => {
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const updateListing = async () => {
+    // console.log("exchange_other_listing?.category  : ", exchange_other_listing);
+    // return;
+    if (route?.params?.buy_type == "live_stream") {
+      let listing_quantity = exchange_other_listing?.quantity
+        ? exchange_other_listing?.quantity
+        : 0;
+      let buy_quantity = route?.params?.quantity;
+      let remaining_quantity =
+        parseInt(listing_quantity) - parseInt(buy_quantity);
+      var data1 = {
+        id: exchange_other_listing?.id,
+        user_id: exchange_other_listing?.user_id,
+        title: exchange_other_listing?.title,
+        description: exchange_other_listing?.description,
+        price: exchange_other_listing?.price,
+        category_id: exchange_other_listing?.category?.category_id,
+        // quantity: selectedItem?.quantity,
+        subcategory_id: exchange_other_listing?.subcategory?.sub_category_id,
+        product_condition: exchange_other_listing?.product_condition,
+        // fixed_price: selectedItem?.fixed_price,
+        location: exchange_other_listing?.location,
+        exchange: exchange_other_listing?.exchange,
+        // giveaway: selectedItem?.giveaway,
+        shipping_cost: exchange_other_listing?.shipping_cost,
+        youtube_link: exchange_other_listing?.youtube_link,
+        //
+        // quantity: exchange_other_listing?.quantity,
+        quantity: remaining_quantity ? remaining_quantity : 0,
+        fixed_price: exchange_other_listing?.fixed_price,
+        giveaway: exchange_other_listing?.giveaway,
+      };
+
+      updateListingDetails(data1)
+        .then((response) => {
+          console.log("update listing response : ", response?.data);
+          console.log(
+            "route?.params?.streamId  ______________________________ : ",
+            route?.params?.streamId
+          );
+          firestore()
+            .collection("live_stream")
+            .doc(route?.params?.streamId)
+            .collection("last_purchase")
+            .doc(route?.params?.streamId)
+            .set(
+              {
+                updatedDate: new Date(),
+              },
+              { merge: true }
+            );
+        })
+        .catch((err) => {
+          console.log("error in updating listing quantity : ", err);
+        });
+    }
   };
 
   return (
@@ -602,23 +686,31 @@ const ConfirmAddress = ({ navigation, route }) => {
             //     handleNext();
             //   }}
             // />
-            <CustomButtonhere
-              title={TranslationStrings.SUBMIT}
-              widthset={80}
-              topDistance={10}
-              onPress={() => {
-                handleSubmit();
-              }}
-            />
+            <>
+              {shippinglist?.length == 0 ? null : (
+                <CustomButtonhere
+                  title={TranslationStrings.SUBMIT}
+                  widthset={80}
+                  topDistance={10}
+                  onPress={() => {
+                    handleSubmit();
+                  }}
+                />
+              )}
+            </>
           ) : (
-            <CustomButtonhere
-              title={TranslationStrings.SUBMIT}
-              widthset={80}
-              topDistance={10}
-              onPress={() => {
-                handleSubmit();
-              }}
-            />
+            <>
+              {shippinglist?.length == 0 ? null : (
+                <CustomButtonhere
+                  title={TranslationStrings.SUBMIT}
+                  widthset={80}
+                  topDistance={10}
+                  onPress={() => {
+                    handleSubmit();
+                  }}
+                />
+              )}
+            </>
           )}
         </View>
       </ScrollView>

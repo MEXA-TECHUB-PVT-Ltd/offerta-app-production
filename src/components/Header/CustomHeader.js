@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Dimensions, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  StatusBar,
+} from "react-native";
 
 ///////////////app icons///////////////
 import Icon from "react-native-vector-icons/Ionicons";
@@ -35,6 +42,11 @@ const CustomHeader = ({
         { marginBottom: type === "profile" ? hp(0) : hp(3.5) },
       ]}
     >
+      <StatusBar
+        backgroundColor={Colors.Appthemecolor}
+        translucent={false}
+        barStyle={"light-content"}
+      />
       <Icon
         name={icon}
         size={25}

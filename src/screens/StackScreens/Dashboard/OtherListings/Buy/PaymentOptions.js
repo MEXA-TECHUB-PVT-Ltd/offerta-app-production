@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  BackHandler,
 } from "react-native";
 
 ////////navigation////////////////
@@ -58,6 +59,20 @@ const PaymentOptions = ({ navigation, route }) => {
 
   const [type, setType] = useState("");
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   const handlePress = async (index, type) => {
     setSelected_index(index);
     console.log("index  : ", index);
@@ -78,6 +93,13 @@ const PaymentOptions = ({ navigation, route }) => {
         listing_user_detail: route?.params?.listing_user_detail,
         payment_type: index == "stripe" ? "Credit_card" : "Paypal",
         type: type ? type : "",
+        // ...route?.params,
+        //live streaming params
+        user_id: route?.params?.user_id,
+        listing_user_detail: route?.params?.listing_user_detail,
+        buy_type: route?.params?.buy_type,
+        quantity: route?.params?.quantity,
+        streamId: route?.params?.streamId,
       });
     } else if (
       index !== 1 ||
@@ -88,9 +110,21 @@ const PaymentOptions = ({ navigation, route }) => {
         index: index,
         listing_user_detail: route?.params?.listing_user_detail,
         type: type ? type : "",
+        // ...route?.params,
+        //live streaming params
+        user_id: route?.params?.user_id,
+        listing_user_detail: route?.params?.listing_user_detail,
+        buy_type: route?.params?.buy_type,
+        quantity: route?.params?.quantity,
+        streamId: route?.params?.streamId,
       });
     }
   };
+
+  console.log(
+    "route?.params?.listing_user_detai  : ",
+    route?.params?.listing_user_detail
+  );
 
   const getDAta = async () => {
     setLoading(true);

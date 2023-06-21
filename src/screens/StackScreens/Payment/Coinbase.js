@@ -1,17 +1,17 @@
-import React, { useMemo, useState, useCallback, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { WebView } from "react-native-webview";
+import React, {useMemo, useState, useCallback, useEffect} from 'react';
+import {View, Text, StyleSheet} from 'react-native';
+import {WebView} from 'react-native-webview';
+// import { generateOnRampURL } from "@coinbase/cbpay-js";
+import 'react-native-url-polyfill/auto';
 
-import "react-native-url-polyfill/auto";
+import {Appbar} from 'react-native-paper';
+import Colors from '../../../utills/Colors';
 
-import { Appbar } from "react-native-paper";
-import Colors from "../../../utills/Colors";
-
-const Coinbase = ({ navigation, route }) => {
+const Coinbase = ({navigation, route}) => {
   const [currentAmount, setCurrentAmount] = useState(1);
   const [destinationAddress, setDestinationAddress] = useState([
-    { address: "0xabcdef", blockchains: ["solana"] },
-    { address: "0x123456", assets: ["ETH", "USDC"] },
+    {address: '0xabcdef', blockchains: ['solana']},
+    {address: '0x123456', assets: ['ETH', 'USDC']},
   ]);
   //   const coinbaseURL = useMemo(() => {
   //     const options = {
@@ -41,13 +41,13 @@ const Coinbase = ({ navigation, route }) => {
   //       console.error(error);
   //     }
   //   }, []);
-  const onUrlChange = async (webviewstate) => {
-    console.log("webviewstate : ", webviewstate);
+  const onUrlChange = async webviewstate => {
+    console.log('webviewstate : ', webviewstate);
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Appbar.Header style={{ backgroundColor: Colors.Appthemecolor }}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
+      <Appbar.Header style={{backgroundColor: Colors.Appthemecolor}}>
         <Appbar.BackAction
           color="#FFFFFF"
           onPress={() => {

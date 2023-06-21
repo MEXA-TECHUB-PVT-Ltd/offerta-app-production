@@ -6,6 +6,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  BackHandler,
 } from "react-native";
 
 //////////////////app components///////////////
@@ -49,11 +50,24 @@ const Checkout = ({ navigation, route }) => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+
   // // new
   const createListingOrder = async () => {
     try {
       console.log("createListingOrder  _________________________called...");
-
       setLoading(true);
       let mode = route?.params?.payment_type == "Paypal" ? "paypal" : "stripe";
       create_order_Listings_new(
@@ -65,21 +79,41 @@ const Checkout = ({ navigation, route }) => {
       )
         .then((response) => {
           console.log("create order response :  ", response?.data);
+          let fee =
+            route?.params?.buy_type == "live_stream"
+              ? exchange_other_listing.price * route?.params?.quantity
+              : exchange_other_listing?.price;
+          console.log("fee__________________ : ", fee);
           if (response?.data?.success == true) {
             // setModalVisible(true);
             // handleNext();
             if (route?.params?.payment_type == "Paypal") {
+              console.log("Paypal  :::::::::::::::::::::::::  ");
               navigation.navigate("PaypalPayment", {
-                fee: exchange_other_listing?.price,
+                fee: fee,
                 type: "listing_paypal",
                 order_details: response?.data,
+                // ...route?.params,
+                //live streaming params
+                user_id: route?.params?.user_id,
+                listing_user_detail: route?.params?.listing_user_detail,
+                buy_type: route?.params?.buy_type,
+                quantity: route?.params?.quantity,
+                streamId: route?.params?.streamId,
               });
             } else {
               // navigation.replace("CardDetails");
               navigation.replace("StripePayment", {
-                fee: exchange_other_listing?.price,
+                fee: fee,
                 type: "listing_stripe",
                 order_details: response?.data,
+                // ...route?.params,
+                //live streaming params
+                user_id: route?.params?.user_id,
+                listing_user_detail: route?.params?.listing_user_detail,
+                buy_type: route?.params?.buy_type,
+                quantity: route?.params?.quantity,
+                streamId: route?.params?.streamId,
               });
             }
           } else {
@@ -188,7 +222,11 @@ const Checkout = ({ navigation, route }) => {
           <Text style={styles.timelinetext}>
             {TranslationStrings.TOTAL_ITEMS}
           </Text>
-          <Text style={styles.timelinetext}>01</Text>
+          <Text style={styles.timelinetext}>
+            {route?.params?.buy_type == "live_stream"
+              ? route?.params?.quantity
+              : "01"}
+          </Text>
         </View>
         <View
           style={{
@@ -201,7 +239,9 @@ const Checkout = ({ navigation, route }) => {
             {TranslationStrings.TOTAL_PRICE}
           </Text>
           <Text style={styles.timelinetext}>
-            {exchange_other_listing.price}
+            {route?.params?.buy_type == "live_stream"
+              ? exchange_other_listing.price * route?.params?.quantity
+              : exchange_other_listing.price}
           </Text>
         </View>
         <View style={{ marginBottom: hp(15) }}>
