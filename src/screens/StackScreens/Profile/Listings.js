@@ -1,31 +1,31 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   FlatList,
   RefreshControl,
   Linking,
-} from "react-native";
+} from 'react-native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../components/Header/CustomHeader";
-import DashboardCard from "../../../components/CustomCards/DashboardCard";
-import NoDataFound from "../../../components/NoDataFound/NoDataFound";
+import CustomHeader from '../../../components/Header/CustomHeader';
+import DashboardCard from '../../../components/CustomCards/DashboardCard';
+import NoDataFound from '../../../components/NoDataFound/NoDataFound';
 
 /////////////app styles////////////////
-import styles from "./styles";
+import styles from './styles';
 
 /////////////api function/////////
-import { get_User_Listings } from "../../../api/GetApis";
+import {get_User_Listings} from '../../../api/GetApis';
 
 ///////////////image url///////////////
-import { IMAGE_URL } from "../../../utills/ApiRootUrl";
-import { useFocusEffect } from "@react-navigation/native";
-import Colors from "../../../utills/Colors";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import Loader from "../../../components/Loader/Loader";
+import {IMAGE_URL} from '../../../utills/ApiRootUrl';
+import {useFocusEffect} from '@react-navigation/native';
+import Colors from '../../../utills/Colors';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import Loader from '../../../components/Loader/Loader';
 
-const Listings = ({ navigation, route }) => {
+const Listings = ({navigation, route}) => {
   ////////////////LIST DATA/////////
   const [data, setdata] = useState();
   const [loading, setLoading] = useState(false);
@@ -49,14 +49,14 @@ const Listings = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       getUSerListings();
-    }, [])
+    }, []),
   );
 
   const getUSerListings = async () => {
     get_User_Listings()
-      .then((response) => {
-        if (response.data.message === "No data available") {
-          setdata("");
+      .then(response => {
+        if (response.data.message === 'No data available') {
+          setdata('');
         } else {
           setdata(response.data);
         }
@@ -71,15 +71,16 @@ const Listings = ({ navigation, route }) => {
     setRefreshing(true);
     getUSerListings();
   };
-  const renderItem = ({ item }) => (
+
+  const renderItem = ({item}) => (
     <DashboardCard
-      image={item.images === [] ? null : IMAGE_URL + item.images[0]}
+      image={item?.images?.length == 0 ? null : IMAGE_URL + item.images[0]}
       maintext={item.title}
       subtext={item.location}
       sold={item?.sold}
       price={item.price}
       onpress={() =>
-        navigation.navigate("ListingsDetails", { listing_id: item.id })
+        navigation.navigate('ListingsDetails', {listing_id: item.id})
       }
     />
   );
@@ -94,8 +95,7 @@ const Listings = ({ navigation, route }) => {
             colors={[Colors.Appthemecolor]}
             onRefresh={() => handleRefresh()}
           />
-        }
-      >
+        }>
         <Loader isLoading={loading} />
 
         <CustomHeader
@@ -103,11 +103,11 @@ const Listings = ({ navigation, route }) => {
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
-        {data === "" ? (
+        {data === '' ? (
           <NoDataFound
-            icon={"exclamation-thick"}
+            icon={'exclamation-thick'}
             text={TranslationStrings.NO_DATA_FOUND}
           />
         ) : (

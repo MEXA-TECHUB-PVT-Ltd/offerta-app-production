@@ -1,46 +1,45 @@
 /**
  * @format
  */
-
-import { AppRegistry } from "react-native";
-import App from "./App";
-import { name as appName } from "./app.json";
-import { Text, TextInput } from "react-native";
-import PushNotification from "react-native-push-notification";
-import messaging from "@react-native-firebase/messaging";
-import { navigationRef } from "./RootNavigation";
-import { Store } from "./src/redux/store";
+import 'react-native-gesture-handler';
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+import {Text, TextInput} from 'react-native';
+import PushNotification from 'react-native-push-notification';
+import messaging from '@react-native-firebase/messaging';
+import {navigationRef} from './RootNavigation';
+import {Store} from './src/redux/store';
 import {
   setChatCount,
   setChatList,
   setNotificationCount,
   setNotificationList,
-} from "./src/redux/actions";
-import { get_Notifications } from "./src/api/GetApis";
-import { get_Chat_Users } from "./src/api/ChatApis";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import firestore from "@react-native-firebase/firestore";
+} from './src/redux/actions';
+import {get_Notifications} from './src/api/GetApis';
+import {get_Chat_Users} from './src/api/ChatApis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
-messaging().setBackgroundMessageHandler(async (remoteMessage) => {
-  console.log("Message handled in the background!", remoteMessage);
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
 });
-
 PushNotification.createChannel(
   {
-    channelId: "fcm_fallback_notification_channel", // (required)
-    channelName: "fcm_fallback_notification_channel", // (required)
-    channelDescription: "A channel to categorise your notifications", // (optional) default: undefined.
+    channelId: 'fcm_fallback_notification_channel', // (required)
+    channelName: 'fcm_fallback_notification_channel', // (required)
+    channelDescription: 'A channel to categorise your notifications', // (optional) default: undefined.
     playSound: false, // (optional) default: true
-    soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+    soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
     vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
   },
-  (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+  created => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
 );
 
 const get_user_notifications = async () => {
   get_Notifications()
-    .then(async (response) => {
-      if (response.data.msg === "No Result") {
+    .then(async response => {
+      if (response.data.msg === 'No Result') {
         Store.dispatch(setNotificationList([]));
       } else if (response.data?.length > 0) {
         let notificationList = response?.data ? response?.data : [];
@@ -48,25 +47,25 @@ const get_user_notifications = async () => {
         Store.dispatch(setNotificationList(notificationList?.reverse()));
       }
     })
-    .catch((err) => {
-      console.log("Error : ", err);
+    .catch(err => {
+      console.log('Error : ', err);
     });
 };
 
-const getLastMessage = async (user_list) => {
+const getLastMessage = async user_list => {
   return new Promise((resolve, reject) => {
     try {
       user_list
-        .orderBy("createdAt", "desc")
+        .orderBy('createdAt', 'desc')
         .limit(1)
         .get()
-        .then((snapshots) => {
+        .then(snapshots => {
           let myArr = [];
-          snapshots.forEach((item) => {
+          snapshots.forEach(item => {
             // if (item?._data?.user?._id != user) {
             let date = new Date(
               item?._data?.createdAt.seconds * 1000 +
-                item?._data?.createdAt.nanoseconds / 1000000
+                item?._data?.createdAt.nanoseconds / 1000000,
             );
             let obj = {
               ...item?._data,
@@ -84,23 +83,23 @@ const getLastMessage = async (user_list) => {
   });
 };
 
-const countUnreadMessages_OF_Specific_User = async (user_id) => {
+const countUnreadMessages_OF_Specific_User = async user_id => {
   return new Promise(async (resolve, reject) => {
     try {
-      var user = await AsyncStorage.getItem("Userid");
+      var user = await AsyncStorage.getItem('Userid');
       let unread_count = 0;
-      let docid = user_id > user ? user + "-" + user_id : user_id + "-" + user;
+      let docid = user_id > user ? user + '-' + user_id : user_id + '-' + user;
       const user_list = firestore()
-        .collection("chats")
+        .collection('chats')
         .doc(docid)
-        .collection("messages");
+        .collection('messages');
       let last_message = await getLastMessage(user_list);
       user_list
-        .where("read", "==", false)
+        .where('read', '==', false)
         .get()
-        .then((snapshots) => {
+        .then(snapshots => {
           let myArr = [];
-          snapshots.forEach((item) => {
+          snapshots.forEach(item => {
             if (item?._data?.user?._id != user) {
               myArr.push(item);
             }
@@ -112,7 +111,7 @@ const countUnreadMessages_OF_Specific_User = async (user_id) => {
           resolve(obj);
         });
     } catch (error) {
-      console.log("error : ", error);
+      console.log('error : ', error);
       resolve(0);
     }
   });
@@ -147,20 +146,20 @@ const countUnreadMessages_OF_Specific_User = async (user_id) => {
 // };
 
 const getDetails = async () => {
-  get_Chat_Users().then(async (response) => {
-    if (response.data.msg === "No Result") {
+  get_Chat_Users().then(async response => {
+    if (response.data.msg === 'No Result') {
       dispatch(setChatList([]));
     } else {
       let list = [];
       let totalCount = 0;
-      var user_id = await AsyncStorage.getItem("Userid");
+      var user_id = await AsyncStorage.getItem('Userid');
       for (const element of response?.data) {
         let chat_user_id =
           element?.user?.id == user_id
             ? element?.chat_user?.id
             : element?.user?.id;
         let messages_detail = await countUnreadMessages_OF_Specific_User(
-          chat_user_id
+          chat_user_id,
         );
         let count1 = messages_detail?.count;
         let obj = {
@@ -180,7 +179,7 @@ const getDetails = async () => {
             : 1) -
           (a?.last_message?.createdAt
             ? new Date(a?.last_message?.createdAt)
-            : 0)
+            : 0),
       );
       Store.dispatch(setChatList(sortedList));
     }
@@ -190,29 +189,29 @@ const getDetails = async () => {
 PushNotification.configure({
   // (optional) Called when Token is generated (iOS and Android)
   onRegister: function (token) {
-    console.log("TOKEN:", token);
+    console.log('TOKEN:', token);
   },
   // (required) Called when a remote is received or opened, or local notification is opened
   onNotification: function (notification) {
     let data = notification;
-    console.log("new notification received ::::: ", data);
+    console.log('new notification received ::::: ', data);
     console.log(
-      "data.userInteraction_______________ ::::: ",
-      data.userInteraction
+      'data.userInteraction_______________ ::::: ',
+      data.userInteraction,
     );
 
-    console.log("user_id in notification  :  ", data?.data?.user_id);
+    console.log('user_id in notification  :  ', data?.data?.user_id);
 
     //   navigationRef?.current?.navigate('NotificationStackScreens', {
     //     data,
     //   });
 
     if (data.userInteraction) {
-      console.log("navigationRef : ", navigationRef);
-      if (data?.data?.type == "chat") {
+      console.log('navigationRef : ', navigationRef);
+      if (data?.data?.type == 'chat') {
         getDetails();
-        navigationRef?.current?.navigate("ChatScreen", {
-          navtype: "chatlist",
+        navigationRef?.current?.navigate('ChatScreen', {
+          navtype: 'chatlist',
           userid: data?.data?.user_id,
         });
       } else {
@@ -221,12 +220,12 @@ PushNotification.configure({
         // });
         get_user_notifications();
 
-        navigationRef?.current?.navigate("BottomTab", {
-          screen: "Notification",
+        navigationRef?.current?.navigate('BottomTab', {
+          screen: 'Notification',
         });
       }
     } else {
-      if (data?.data?.type == "chat") {
+      if (data?.data?.type == 'chat') {
         getDetails();
         let prev_chatCount = Store.getState().userReducer.chatCount;
         Store.dispatch(setChatCount(prev_chatCount + 1));
@@ -238,7 +237,7 @@ PushNotification.configure({
       }
     }
   },
-  requestPermissions: Platform.OS === "ios",
+  requestPermissions: Platform.OS === 'ios',
 });
 
 AppRegistry.registerComponent(appName, () => App);

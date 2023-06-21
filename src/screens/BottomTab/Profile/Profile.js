@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,52 +6,52 @@ import {
   StatusBar,
   ScrollView,
   RefreshControl,
-} from "react-native";
+} from 'react-native';
 
 ///////////////////icons///////////
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 ///////////////////react native navigation///////////////
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from '@react-navigation/native';
 
 ////////////////app components//////////////
-import CustomHeader from "../../../components/Header/CustomHeader";
-import ProfileCard from "../../../components/CustomCards/Profile";
-import SettingsMenu from "../../../components/SettingsView/SettingsMenu";
+import CustomHeader from '../../../components/Header/CustomHeader';
+import ProfileCard from '../../../components/CustomCards/Profile';
+import SettingsMenu from '../../../components/SettingsView/SettingsMenu';
 
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 ////////////////api////////////////
-import axios from "axios";
-import { BASE_URL } from "../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import {BASE_URL} from '../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ///////////app styles////////////////
-import styles from "./styles";
-import Colors from "../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../utills/Colors';
 
 //////////////////app images///////////
-import { appImages } from "../../../constant/images";
+import {appImages} from '../../../constant/images';
 
 ///////////////api function///////////
 import {
   get_Login_UserData,
   get_Login_User_Followers,
   get_Login_User_Followings,
-} from "../../../api/GetApis";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import CustomButtonhere from "../../../components/Button/CustomButton";
+} from '../../../api/GetApis';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import CustomButtonhere from '../../../components/Button/CustomButton';
 
-const Profile = ({ navigation }) => {
+const Profile = ({navigation}) => {
   ////////////isfocused//////////
   const isfocussed = useIsFocused();
 
   ///////////////data states////////////////////
-  const [username, setUserName] = React.useState("");
+  const [username, setUserName] = React.useState('');
   const [userimage, setUserImage] = React.useState();
   const [useremail, setUseremail] = React.useState();
   const [ratting, setRatting] = React.useState();
@@ -59,12 +59,12 @@ const Profile = ({ navigation }) => {
   const [following, setFollowing] = React.useState();
 
   const [verificationStatus, setVerificationStatus] = useState(null);
-  const [userRole, setUserRole] = useState("");
+  const [userRole, setUserRole] = useState('');
 
   const [refreshing, setRefreshing] = useState(false);
 
   const GetAcountDetail = async () => {
-    get_Login_UserData().then((response) => {
+    get_Login_UserData().then(response => {
       // setVerificationStatus(response?.data?.subscription);
       setVerificationStatus(response?.data?.verify_status);
       setUserRole(response?.data?.role);
@@ -81,8 +81,8 @@ const Profile = ({ navigation }) => {
   //////////////////////Follower detail////////////
   const [userfollwer, setUserfollower] = React.useState();
   const GetFollowers = async () => {
-    get_Login_User_Followers().then((response) => {
-      if (response.data.msg === "No follower yet") {
+    get_Login_User_Followers().then(response => {
+      if (response.data.msg === 'No follower yet') {
         setUserfollower(0);
       } else {
         setUserfollower(response.data.Total);
@@ -93,9 +93,9 @@ const Profile = ({ navigation }) => {
   //////////////////////Following detail////////////
   const [userfollwings, setUserfollowings] = React.useState();
   const GetFollowings = async () => {
-    get_Login_User_Followings().then((response) => {
-      console.log("here total:", response.data);
-      if (response.data === "No following yet") {
+    get_Login_User_Followings().then(response => {
+      console.log('here total:', response.data);
+      if (response.data === 'No following yet') {
         setUserfollowings(0);
       } else {
         setUserfollowings(response.data.Total);
@@ -119,29 +119,28 @@ const Profile = ({ navigation }) => {
         barStyle="light-content"
       />
       <View style={styles.header}>
-        <View style={{ alignSelf: "flex-end", marginTop: wp(5) }}>
+        <View style={{alignSelf: 'flex-end', marginTop: wp(5)}}>
           <Icon
-            name={"settings"}
+            name={'settings'}
             size={25}
-            color={"white"}
-            style={{ marginLeft: wp(30) }}
-            onPress={() => navigation.navigate("Settings")}
+            color={'white'}
+            style={{marginLeft: wp(30)}}
+            onPress={() => navigation.navigate('Settings')}
           />
         </View>
       </View>
       <View style={[styles.footer]}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          showsHorizontalScrollIndicator={false}
-        >
-          <View style={{ marginTop: hp(23), marginBottom: hp(2) }}>
+          showsHorizontalScrollIndicator={false}>
+          <View style={{marginTop: hp(23), marginBottom: hp(2)}}>
             <SettingsMenu
               label={TranslationStrings.LISTINGS}
-              labelPress={() => navigation.navigate("Listings")}
+              labelPress={() => navigation.navigate('Listings')}
             />
             <SettingsMenu
               label={TranslationStrings.LIKED_ITEMS}
-              labelPress={() => navigation.navigate("LikedItems")}
+              labelPress={() => navigation.navigate('LikedItems')}
             />
             {/* <SettingsMenu
               label={TranslationStrings.EXCHANGES}
@@ -150,30 +149,29 @@ const Profile = ({ navigation }) => {
 
             <SettingsMenu
               label={TranslationStrings.PROMOTIONS}
-              labelPress={() => navigation.navigate("Promotions")}
+              labelPress={() => navigation.navigate('Promotions')}
             />
             <SettingsMenu
               label={TranslationStrings.SALE_AND_ORDERS}
-              labelPress={() => navigation.navigate("SalesOrders")}
+              labelPress={() => navigation.navigate('SalesOrders')}
             />
-            <CustomButtonhere
+            {/* <CustomButtonhere
               title={"Live Streaming"}
               widthset={80}
               labelWidth={250}
               topDistance={-1}
               onPress={() => navigation?.navigate("Live")}
-            />
+            /> */}
           </View>
         </ScrollView>
       </View>
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: hp(10),
-          alignItems: "center",
-          alignSelf: "center",
-        }}
-      >
+          alignItems: 'center',
+          alignSelf: 'center',
+        }}>
         <ProfileCard
           verificationStatus={verificationStatus}
           userRole={userRole}

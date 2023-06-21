@@ -7,9 +7,16 @@
 // const uid = 0;
 
 const appId = '2103cc766ad141bf90843544931573d8';
-const channelName = 'Test';
+const appCertificate = '9b9ad3f820ab41ada65255fe2d1ef452';
+const channelName = 'xyz';
 const token =
-  '007eJxTYDjEHrL4T6u6+kONiRci/BTWFatc/xV5RzSUK3DBHd78SUoKDEaGBsbJyeZmZokphiaGSWmWBhYmxqYmJpbGhqbmxikWNsETUxoCGRmOeycxMDKwADEjAwgAANrTGlw=';
-const uid = 0;
+  '0062103cc766ad141bf90843544931573d8IAC9JCs7tarUAcPIuUa1HbZ15YLQw30f+h4/KTMTtW4NEGe6jusNvtUaEADcoAAAegGUZAEAAQAKvpJk';
+const uid = 2;
 
-export default LiveStreamingKeys = {appId, channelName, token, uid};
+export default LiveStreamingKeys = {
+  appId,
+  appCertificate,
+  channelName,
+  token,
+  uid,
+};

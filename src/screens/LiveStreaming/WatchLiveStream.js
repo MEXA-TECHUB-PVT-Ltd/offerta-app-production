@@ -78,6 +78,7 @@ const WatchLiveStream = ({navigation, route}) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [showBottomView, setShowBottomView] = useState(true);
   const [comment, setComment] = useState('');
+  const [isCommentFocused, setIsCommentFocused] = useState(false);
 
   const [user_id, setUser_id] = useState('');
   const [username, setUsername] = useState('');
@@ -474,12 +475,13 @@ const WatchLiveStream = ({navigation, route}) => {
       let stream_id1 = route?.params?.response?.stream[0]?.insertedId;
 
       setStream_id(stream_id1);
-      // let token = route?.params?.response?.stream[0]?.token;
-      // let channelName1 = route?.params?.response?.stream[0]?.channelName;
-      // let uid = parseInt(route?.params?.response?.stream[0]?.uid);
-      let token = LiveStreamingKeys.token;
-      let channelName1 = LiveStreamingKeys.channelName;
-      let uid = LiveStreamingKeys.uid;
+      let token = route?.params?.response?.stream[0]?.token;
+      let channelName1 = route?.params?.response?.stream[0]?.channelName;
+      let uid = parseInt(route?.params?.response?.stream[0]?.uid);
+
+      // let token = LiveStreamingKeys.token;
+      // let channelName1 = LiveStreamingKeys.channelName;
+      // let uid = LiveStreamingKeys.uid;
 
       setRemoteUid(uid);
       setTokenId(token);
@@ -503,13 +505,13 @@ const WatchLiveStream = ({navigation, route}) => {
       if (route?.params?.response?.stream) {
         let stream_id1 = route?.params?.response?.stream[0]?.insertedId;
         setStream_id(stream_id1);
-        // let token = route?.params?.response?.stream[0]?.token;
-        // let channelName1 = route?.params?.response?.stream[0]?.channelName;
-        // let uid = parseInt(route?.params?.response?.stream[0]?.uid);
+        let token = route?.params?.response?.stream[0]?.token;
+        let channelName1 = route?.params?.response?.stream[0]?.channelName;
+        let uid = parseInt(route?.params?.response?.stream[0]?.uid);
 
-        let token = LiveStreamingKeys.token;
-        let channelName1 = LiveStreamingKeys.channelName;
-        let uid = LiveStreamingKeys.uid;
+        // let token = LiveStreamingKeys.token;
+        // let channelName1 = LiveStreamingKeys.channelName;
+        // let uid = LiveStreamingKeys.uid;
 
         setChannelName(channelName1);
         setRemoteUid(uid);
@@ -813,6 +815,7 @@ const WatchLiveStream = ({navigation, route}) => {
               }}
               showBottomView={showBottomView}
             />
+
             {/* <View
               style={{
                 alignSelf: "center",
@@ -830,7 +833,7 @@ const WatchLiveStream = ({navigation, route}) => {
             <CommentInput
               value={comment}
               onChangeValue={text => setComment(text)}
-              onPress={text => handleAddComment(comment)}
+              onPress={text => comment?.length > 0 && handleAddComment(comment)}
             />
             <View
               style={{

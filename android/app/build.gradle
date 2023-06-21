@@ -101,6 +101,10 @@ android {
         versionCode 20
         versionName "20.0"
     }
+    //add this
+     packagingOptions {
+        pickFirst 'lib/*/*.so'
+    }
 
     splits {
         abi {
@@ -151,7 +155,6 @@ android {
                 output.versionCodeOverride =
                         defaultConfig.versionCode * 1000 + versionCodes.get(abi)
             }
-
         }
     }
 }

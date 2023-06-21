@@ -20,7 +20,7 @@ const HostPage = ({navigation}) => {
           "a1ed9aefd5c36e06d33aad00b21b4d9f171ebc010f013a33572e5458e968fdfa"
         }
         userID={userId}
-        userName={"host_user"}
+        userName={"host_user"} 
         liveID={"5185"}
         config={{
           ...HOST_DEFAULT_CONFIG,

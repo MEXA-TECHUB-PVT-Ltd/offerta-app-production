@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -13,36 +13,38 @@ import {
   useWindowDimensions,
   StyleSheet,
   ImageBackground,
-} from "react-native";
+} from 'react-native';
 
-import CustomHeader from "../../components/Header/CustomHeader";
+import CustomHeader from '../../components/Header/CustomHeader';
 
-import Colors from "../../utills/Colors";
+import Colors from '../../utills/Colors';
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { Avatar, Button, Card, Modal } from "react-native-paper";
+} from 'react-native-responsive-screen';
+import {Avatar, Button, Card, Modal} from 'react-native-paper';
 
-import Loader from "../../components/Loader/Loader";
-import { appImages } from "../../constant/images";
+import Loader from '../../components/Loader/Loader';
+import {appImages} from '../../constant/images';
 
-import { Rating } from "react-native-rating-element";
-import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { fontFamily } from "../../constant/fonts";
-import { getALLLiveStreams } from "../../api/LiveStreamingApi";
-import { IMAGE_URL } from "../../utills/ApiRootUrl";
-import { async } from "regenerator-runtime";
-import moment from "moment";
-import { useFocusEffect } from "@react-navigation/native";
-import CPaperInput from "../../components/TextInput/CPaperInput";
-import CustomTextInput from "../../components/TextInput/CustomTextInput";
-import CustomButtonhere from "../../components/Button/CustomButton";
+import {Rating} from 'react-native-rating-element';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {fontFamily} from '../../constant/fonts';
+import {getALLLiveStreams, joinLiveStream} from '../../api/LiveStreamingApi';
+import {IMAGE_URL} from '../../utills/ApiRootUrl';
+import {async} from 'regenerator-runtime';
+import moment from 'moment';
+import {useFocusEffect} from '@react-navigation/native';
+import CPaperInput from '../../components/TextInput/CPaperInput';
+import CustomTextInput from '../../components/TextInput/CustomTextInput';
+import CustomButtonhere from '../../components/Button/CustomButton';
+import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LiveUsers = ({ navigation, route }) => {
+const LiveUsers = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([
@@ -104,24 +106,24 @@ const LiveUsers = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       getLiveStreamsData();
-    }, [])
+    }, []),
   );
 
   const getLiveStreamsData = async () => {
     getALLLiveStreams()
-      .then((response) => {
+      .then(response => {
         let list = [];
         if (response?.data?.error == false) {
           for (const item of response?.data?.stream) {
             if (
-              item?.active_status == "active" &&
-              item?.uid != "0" &&
+              item?.active_status == 'active' &&
+              item?.uid != '0' &&
               item?.user != null
             ) {
               let obj = {
                 stream: [
                   {
-                    list_id: "165",
+                    list_id: '165',
                     insertedId: item?.id,
                     token: item?.token,
                     // appID: "2103cc766ad141bf90843544931573d8",
@@ -155,6 +157,53 @@ const LiveUsers = ({ navigation, route }) => {
     setRefreshing(true);
     getLiveStreamsData();
   };
+
+  const handleJoinStream = async item => {
+    // navigation.navigate("WatchLiveStream", {
+    //   host: false,
+    //   response: item,
+    // });
+
+    setLoading(true);
+    var user_id = await AsyncStorage.getItem('Userid');
+    let obj = {
+      appID: LiveStreamingKeys.appId,
+      appCertificate: LiveStreamingKeys.appCertificate,
+      // channelName: 'xyz',
+      channelName: item?.user[0]?.id,
+      uid: user_id,
+      uidStr: user_id,
+      role: 'audience',
+      expireTimeInSeconds: 172800, //2 days seconds
+    };
+
+    joinLiveStream(obj)
+      .then(response => {
+        console.log('response : ', response?.data);
+        let obj = {
+          stream: [
+            {
+              ...item?.stream[0],
+              token: response?.data?.tokenWithIntUID,
+              uid: response?.data?.uid,
+            },
+          ],
+          user: item?.user,
+          Listing: item?.Listing,
+        };
+        console.log('obj : ', obj);
+        navigation.navigate('WatchLiveStream', {
+          host: false,
+          response: obj,
+        });
+      })
+      .catch(err => {
+        alert(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -164,11 +213,10 @@ const LiveUsers = ({ navigation, route }) => {
 
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: 'white',
           height: hp(100),
-          alignItems: "center",
-        }}
-      >
+          alignItems: 'center',
+        }}>
         {/* <CustomHeader type={"profile"} headerlabel={"Live Streaming"} /> */}
         <Loader isLoading={loading} />
         <FlatList
@@ -180,40 +228,29 @@ const LiveUsers = ({ navigation, route }) => {
           }
           ListHeaderComponent={
             <CustomHeader
-              type={"profile"}
-              headerlabel={"Live Streaming"}
+              type={'profile'}
+              headerlabel={'Live Streaming'}
               iconPress={() => {
                 navigation.goBack();
               }}
-              icon={"arrow-back"}
+              icon={'arrow-back'}
             />
           }
           data={data}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
-          renderItem={({ item, index }) => {
+          renderItem={({item, index}) => {
             return (
               <Card
                 style={styles.card}
                 onPress={() => {
-                  navigation.navigate("WatchLiveStream", {
-                    host: false,
-                    response: item,
-                  });
-                  // let start_time = item?.stream[0]?.currentDateTime;
-                  // let x = new Date();
-                  // let y = new Date(start_time);
-                  // let dif = Math.abs(x - y) / 1000;
-                  // console.log("seconds  :  ", dif);
+                  // navigation.navigate("WatchLiveStream", {
+                  //   host: false,
+                  //   response: item,
+                  // });
 
-                  // let start_time = item?.stream[0]?.currentDateTime;
-                  // console.log("start_time :   ", start_time);
-                  // let dt = new Date();
-                  // let seconds = Math.floor(dt / 1000);
-                  // seconds = seconds.toFixed(0);
-                  // console.log("seconds :  ", moment.duration(new Date()));
-                }}
-              >
+                  handleJoinStream(item);
+                }}>
                 <ImageBackground
                   blurRadius={3}
                   // source={
@@ -223,20 +260,19 @@ const LiveUsers = ({ navigation, route }) => {
                   source={
                     item?.user && item?.user[0]?.image == null
                       ? appImages.no_image
-                      : { uri: IMAGE_URL + item?.user[0]?.image }
+                      : {uri: IMAGE_URL + item?.user[0]?.image}
                   }
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    justifyContent: "center",
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'center',
                   }}
-                  resizeMode="cover"
-                >
+                  resizeMode="cover">
                   <ImageBackground
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      justifyContent: "flex-end",
+                      width: '100%',
+                      height: '100%',
+                      justifyContent: 'flex-end',
                     }}
                     resizeMode="contain"
                     // source={
@@ -248,45 +284,41 @@ const LiveUsers = ({ navigation, route }) => {
                     source={
                       item?.user && item?.user[0]?.image == null
                         ? appImages.no_image
-                        : { uri: IMAGE_URL + item?.user[0]?.image }
-                    }
-                  >
+                        : {uri: IMAGE_URL + item?.user[0]?.image}
+                    }>
                     <View
                       style={{
                         margin: 10,
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                      }}
-                    >
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
                       <Avatar.Image
-                        source={{ uri: IMAGE_URL + item?.user[0]?.image }}
+                        source={{uri: IMAGE_URL + item?.user[0]?.image}}
                         size={35}
                       />
                       <View
                         style={{
-                          backgroundColor: "#FFFFFF5C",
+                          backgroundColor: '#FFFFFF5C',
                           padding: 3,
                           paddingHorizontal: 8,
                           borderRadius: 18,
-                          flexDirection: "row",
-                          alignItems: "center",
-                          justifyContent: "center",
-                        }}
-                      >
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
                         <Ionicons
                           name="md-eye-outline"
-                          color={"white"}
+                          color={'white'}
                           size={20}
                         />
                         <Text
                           style={{
-                            color: "white",
+                            color: 'white',
                             marginLeft: 5,
                             fontFamily: fontFamily.Poppins_Regular,
                             marginBottom: -3,
-                          }}
-                        >
+                          }}>
                           {item?.stream[0]?.view}
                         </Text>
                       </View>
@@ -300,21 +332,19 @@ const LiveUsers = ({ navigation, route }) => {
             <View
               style={{
                 flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
+                alignItems: 'center',
+                justifyContent: 'center',
                 marginTop: 10,
-              }}
-            >
-              <Text style={{ color: "#000" }}>No Record Found</Text>
+              }}>
+              <Text style={{color: '#000'}}>No Record Found</Text>
             </View>
           )}
-          ListFooterComponent={() => <View style={{ height: 70 }} />}
+          ListFooterComponent={() => <View style={{height: 70}} />}
         />
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => navigation.navigate("CreateLive")}
-        >
-          <AntDesign name="plus" color={"white"} size={20} />
+          onPress={() => navigation.navigate('CreateLive')}>
+          <AntDesign name="plus" color={'white'} size={20} />
           <Text style={styles.btnText}>Start Live</Text>
         </TouchableOpacity>
       </View>
@@ -326,37 +356,37 @@ export default LiveUsers;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     margin: 10,
     marginLeft: 13,
     height: hp(28),
     // flex: 1,
     width: wp(42.5),
     borderRadius: 10,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   liveView: {
-    backgroundColor: "red",
-    position: "absolute",
+    backgroundColor: 'red',
+    position: 'absolute',
     right: 10,
     top: 7,
     paddingHorizontal: 8,
     borderRadius: 4,
   },
-  liveText: { color: "#fff", fontWeight: "500" },
+  liveText: {color: '#fff', fontWeight: '500'},
   btn: {
     width: wp(85),
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 30,
     backgroundColor: Colors.Appthemecolor,
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   btnText: {
-    color: "white",
+    color: 'white',
     marginLeft: 7,
     fontFamily: fontFamily.Poppins_Medium,
     marginBottom: -3,
