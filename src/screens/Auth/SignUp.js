@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,62 +6,62 @@ import {
   View,
   Text,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
 ///////////////app components////////////////
-import CustomButtonhere from "../../components/Button/CustomButton";
-import CustomTextInput from "../../components/TextInput/CustomTextInput";
-import CustomModal from "../../components/Modal/CustomModal";
+import CustomButtonhere from '../../components/Button/CustomButton';
+import CustomTextInput from '../../components/TextInput/CustomTextInput';
+import CustomModal from '../../components/Modal/CustomModal';
 
 ///////////////////dropdown////////////////
-import SignupRole from "../../components/Dropdowns/SignupRole";
+import SignupRole from '../../components/Dropdowns/SignupRole';
 
 ////////////////app pakages////////////
-import { Snackbar } from "react-native-paper";
+import {Snackbar} from 'react-native-paper';
 
 //////////////////app icons/////////////
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 /////////////app styles///////////////////
-import styles from "./styles";
-import Authstyles from "../../styles/GlobalStyles/Authstyles";
-import Logostyles from "../../styles/GlobalStyles/Logostyles";
-import Authlaststyles from "../../styles/GlobalStyles/Authlaststyles";
-import Colors from "../../utills/Colors";
+import styles from './styles';
+import Authstyles from '../../styles/GlobalStyles/Authstyles';
+import Logostyles from '../../styles/GlobalStyles/Logostyles';
+import Authlaststyles from '../../styles/GlobalStyles/Authlaststyles';
+import Colors from '../../utills/Colors';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////////app images////////
-import { appImages } from "../../constant/images";
+import {appImages} from '../../constant/images';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import { BASE_URL } from "../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import {BASE_URL} from '../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
-import { setsignupRole } from "../../redux/actions";
+import {useSelector, useDispatch} from 'react-redux';
+import {setsignupRole} from '../../redux/actions';
 
-import messaging from "@react-native-firebase/messaging";
+import messaging from '@react-native-firebase/messaging';
 import TranslationStrings, {
   ChangeAppLanguage,
-} from "../../utills/TranslationStrings";
-import SocialIcons from "../../components/SocialView/SocialIcons";
+} from '../../utills/TranslationStrings';
+import SocialIcons from '../../components/SocialView/SocialIcons';
 
-import GoogleButton from "../../components/Button/GoogleButton";
+import GoogleButton from '../../components/Button/GoogleButton';
 
 import {
   GoogleSignin,
   statusCodes,
-} from "@react-native-google-signin/google-signin";
-import LanguageSelector from "../../components/LanguageSelector";
+} from '@react-native-google-signin/google-signin';
+import LanguageSelector from '../../components/LanguageSelector';
 
-const SignUp = ({ navigation }) => {
+const SignUp = ({navigation}) => {
   //////////////redux////////////////////
-  const { signup_role } = useSelector((state) => state.userReducer);
+  const {signup_role} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   ////////Bottom sheet references/////////
@@ -78,7 +78,7 @@ const SignUp = ({ navigation }) => {
   const [loading, setloading] = useState(0);
   const [disable, setdisable] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
 
   //password eye function and states
@@ -96,23 +96,23 @@ const SignUp = ({ navigation }) => {
   };
 
   ///////////email//////////////////
-  const handleValidEmail = (val) => {
+  const handleValidEmail = val => {
     let reg = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w\w+)+$/;
     if (reg.test(val)) {
-      console.log("true");
+      console.log('true');
       return true;
     } else {
-      console.log("falsse");
+      console.log('falsse');
       return false;
     }
   };
 
   ///////////////data states////////////////////
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [userInfo, setUserInfo] = useState(null);
   const [gettingLoginStatus, setGettingLoginStatus] = useState(true);
 
@@ -127,10 +127,10 @@ const SignUp = ({ navigation }) => {
           const fcmToken = await messaging().getToken();
           resolve(fcmToken);
         } else {
-          resolve("");
+          resolve('');
         }
       } catch (error) {
-        resolve("");
+        resolve('');
       }
     });
   };
@@ -138,8 +138,8 @@ const SignUp = ({ navigation }) => {
   const SignupUser = async () => {
     let fcm_token = await getUserFCMToken();
     axios({
-      method: "post",
-      url: BASE_URL + "regisrationApi.php",
+      method: 'post',
+      url: BASE_URL + 'regisrationApi.php',
       data: {
         email: email.toLowerCase(),
         password: password,
@@ -150,13 +150,13 @@ const SignUp = ({ navigation }) => {
       },
     })
       .then(async function (response) {
-        console.log("response", JSON.stringify(response.data));
+        console.log('response', JSON.stringify(response.data));
         setloading(0);
         setdisable(0);
-        if (response.data.message === "User Register successful") {
-          await AsyncStorage.setItem("Userid", response.data.data.id);
-          await AsyncStorage.setItem("UserEmail", response.data.data.email);
-          navigation.navigate("CreateProfile", {
+        if (response.data.message === 'User Register successful') {
+          await AsyncStorage.setItem('Userid', response.data.data.id);
+          await AsyncStorage.setItem('UserEmail', response.data.data.email);
+          navigation.navigate('CreateProfile', {
             useremail: response.data.data.email,
             signup_role: signup_role,
           });
@@ -170,11 +170,11 @@ const SignUp = ({ navigation }) => {
         setloading(0);
         setdisable(0);
         if (error) {
-          console.log("Email or Password is incorrect");
+          console.log('Email or Password is incorrect');
         }
         setModalVisible(true);
 
-        console.log("error", error);
+        console.log('error', error);
       });
   };
 
@@ -196,7 +196,7 @@ const SignUp = ({ navigation }) => {
     setGettingLoginStatus(false);
   };
   const gmailLoginHandler = async () => {
-    console.log("gmailLoginHandler  :  ");
+    console.log('gmailLoginHandler  :  ');
     // It will prompt google Signin Widget
     try {
       await GoogleSignin.hasPlayServices({
@@ -206,13 +206,13 @@ const SignUp = ({ navigation }) => {
       });
       const userInfo = await GoogleSignin.signIn();
 
-      console.log("User Info --> ", userInfo);
+      console.log('User Info --> ', userInfo);
       // console.log('User Info currentUser tokeen--> ', currentUser);
       setUserInfo(userInfo);
       _signOut();
       GoogleSignupUser(userInfo.user.email);
     } catch (error) {
-      console.log("Message", JSON.stringify(error));
+      console.log('Message', JSON.stringify(error));
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         //alert('User Cancelled the Login Flow');
       } else if (error.code === statusCodes.IN_PROGRESS) {
@@ -226,30 +226,30 @@ const SignUp = ({ navigation }) => {
   };
 
   //////////////Google Signup Api Calling////////////////////
-  const GoogleSignupUser = async (props) => {
-    if (signup_role == "" || signup_role?.length == 0) {
+  const GoogleSignupUser = async props => {
+    if (signup_role == '' || signup_role?.length == 0) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_SELECT_ROLE,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else {
       let fcm_token = await getUserFCMToken();
       setloading(true);
       axios({
-        method: "post",
-        url: BASE_URL + "regisrationApi.php",
+        method: 'post',
+        url: BASE_URL + 'regisrationApi.php',
         data: {
           email: props.toLowerCase(),
-          password: "google123",
-          conformPassword: "google123",
+          password: 'google123',
+          conformPassword: 'google123',
           role: signup_role,
           fcm: fcm_token,
-          phone: "",
+          phone: '',
         },
       })
         .then(async function (response) {
-          console.log("response", response.data);
+          console.log('response', response.data);
           // if (response.data.message === "User Already Registered") {
           //   GoogleLoginUser(props);
           // } else {
@@ -260,27 +260,27 @@ const SignUp = ({ navigation }) => {
           setloading(0);
           setdisable(0);
           if (
-            response.data?.data?.message === "User Register successful" ||
-            response?.data?.message === "User Register successful"
+            response.data?.data?.message === 'User Register successful' ||
+            response?.data?.message === 'User Register successful'
           ) {
-            console.log("if_________________________");
-            await AsyncStorage.setItem("Userid", response.data.data.id);
-            await AsyncStorage.setItem("UserEmail", response.data.data.email);
-            navigation.navigate("CreateProfile", {
+            console.log('if_________________________');
+            await AsyncStorage.setItem('Userid', response.data.data.id);
+            await AsyncStorage.setItem('UserEmail', response.data.data.email);
+            navigation.navigate('CreateProfile', {
               useremail: response.data.data.email,
               signup_role: signup_role,
             });
           } else {
-            console.log("else____________________________");
+            console.log('else____________________________');
             setloading(0);
             setdisable(0);
             setModalVisible(true);
           }
         })
         .catch(function (error) {
-          console.log("error  : ", error);
+          console.log('error in GoogleSignupUser : ', error);
           if (error) {
-            console.log("Wrong");
+            console.log('Wrong');
           }
         });
     }
@@ -297,61 +297,61 @@ const SignUp = ({ navigation }) => {
     // return;
 
     // input validation
-    if (signup_role == "" || signup_role?.length == 0) {
+    if (signup_role == '' || signup_role?.length == 0) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_SELECT_ROLE,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
-    } else if (email == "") {
+      setVisible('true');
+    } else if (email == '') {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_EMAIL,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else if (phoneNumber?.length == 0) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_PHONE_NUMBER,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else if (!handleValidEmail(email)) {
-      console.log("a");
+      console.log('a');
       setsnackbarValue({
         value: TranslationStrings.INCORRECT_EMAIL,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
-    } else if (password == "") {
+      setVisible('true');
+    } else if (password == '') {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_PASSWORD,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else if (password.length <= 5) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_SIX_DIGIT_PASSWORD,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
-    } else if (confirmPassword == "") {
+      setVisible('true');
+    } else if (confirmPassword == '') {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_CONFIRM_PASSWORD,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else if (confirmPassword.length <= 5) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_SIX_DIGIT_PASSWORD,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else if (password != confirmPassword) {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_SAME_PASSWORD,
-        color: "red",
+        color: 'red',
       });
-      setVisible("true");
+      setVisible('true');
     } else {
       setloading(1);
       setdisable(1);
@@ -359,15 +359,14 @@ const SignUp = ({ navigation }) => {
     }
   };
 
-  const [language, setLanguage] = useState("");
+  const [language, setLanguage] = useState('');
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsHorizontalScrollIndicator={false}
-        showsVerticalScrollIndicator={false}
-      >
+        showsVerticalScrollIndicator={false}>
         <Ionicons
-          name={"arrow-back"}
+          name={'arrow-back'}
           size={25}
           color={Colors.Appthemecolor}
           style={{
@@ -378,7 +377,7 @@ const SignUp = ({ navigation }) => {
           }}
           onPress={() => navigation.goBack()}
         />
-        <View style={[Logostyles.Logoview, { marginTop: hp(5) }]}>
+        <View style={[Logostyles.Logoview, {marginTop: hp(5)}]}>
           <Image
             source={appImages.logo}
             style={Logostyles.logo}
@@ -386,7 +385,7 @@ const SignUp = ({ navigation }) => {
           />
         </View>
         <LanguageSelector
-          onChange={(value) => {
+          onChange={value => {
             setLanguage(value);
           }}
         />
@@ -403,65 +402,65 @@ const SignUp = ({ navigation }) => {
             <TouchableOpacity onPress={() => refRBSheet.current.open()}>
               <CustomTextInput
                 icon={appImages.downarrow}
-                type={"iconinput"}
+                type={'iconinput'}
                 term={signup_role}
                 editable={false}
                 disable={false}
                 placeholder={TranslationStrings.SELECT_ROLE}
-                onTermChange={(newcountry) => setsignupRole(newcountry)}
+                onTermChange={newcountry => setsignupRole(newcountry)}
               />
             </TouchableOpacity>
 
             <CustomTextInput
               icon={appImages.email}
-              type={"iconinput"}
-              texterror={"invalid"}
+              type={'iconinput'}
+              texterror={'invalid'}
               texttype="email-address"
               term={email}
-              returnType={"next"}
+              returnType={'next'}
               onNext={() => {
                 ref_input2.current.focus();
               }}
               placeholder={TranslationStrings.EMAIL_ADDRESS}
-              onTermChange={(newEmail) => setEmail(newEmail)}
+              onTermChange={newEmail => setEmail(newEmail)}
             />
             <CustomTextInput
               icon={appImages.email}
-              type={"phone"}
-              texterror={"invalid"}
+              type={'phone'}
+              texterror={'invalid'}
               texttype="number-pad"
-              keyboard_type={"number-pad"}
+              keyboard_type={'number-pad'}
               term={phoneNumber}
-              returnType={"next"}
+              returnType={'next'}
               // onNext={() => {
               //   ref_input2.current.focus();
               // }}
               placeholder={TranslationStrings.ENTER_PHONE_NO}
-              onTermChange={(newEmail) => setPhoneNumber(newEmail)}
+              onTermChange={newEmail => setPhoneNumber(newEmail)}
             />
             <CustomTextInput
               onRef={ref_input2}
               icon={appImages.lock}
-              type={"iconinput"}
+              type={'iconinput'}
               term={password}
-              returnType={"next"}
+              returnType={'next'}
               onNext={() => {
                 ref_input3.current.focus();
               }}
               placeholder={TranslationStrings.PASSWORD}
-              onTermChange={(newPassword) => setPassword(newPassword)}
-              mode={"password"}
+              onTermChange={newPassword => setPassword(newPassword)}
+              mode={'password'}
               secureTextEntry={data.secureTextEntry ? true : false}
               onclick={() => updateSecureTextEntry()}
             />
             <CustomTextInput
               onRef={ref_input3}
               icon={appImages.lock}
-              type={"iconinput"}
+              type={'iconinput'}
               term={confirmPassword}
               placeholder={TranslationStrings.CONFIRM_PASSWORD}
-              onTermChange={(newPassword) => setConfirmPassword(newPassword)}
-              mode={"password"}
+              onTermChange={newPassword => setConfirmPassword(newPassword)}
+              mode={'password'}
               secureTextEntry={data.secureTextEntry ? true : false}
               onclick={() => updateSecureTextEntry()}
             />
@@ -471,13 +470,12 @@ const SignUp = ({ navigation }) => {
         <View
           style={{
             marginHorizontal: wp(5),
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             // width: wp(60),
-            alignSelf: "center",
+            alignSelf: 'center',
             marginTop: 30,
-          }}
-        >
+          }}>
           {/* <SocialIcons icon={appImages.apple} bgcolor={"#000000"} /> */}
           {/* <SocialIcons
             icon={appImages.facebook}
@@ -501,9 +499,8 @@ const SignUp = ({ navigation }) => {
           style={{
             flex: 1,
             marginTop: hp(3),
-          }}
-        >
-          <View style={{ marginTop: hp(0) }}>
+          }}>
+          <View style={{marginTop: hp(0)}}>
             <CustomButtonhere
               title={TranslationStrings.SIGN_UP}
               widthset={80}
@@ -516,17 +513,17 @@ const SignUp = ({ navigation }) => {
             />
           </View>
 
-          <View style={[Authlaststyles.lasttextview, { marginTop: hp(1) }]}>
+          <View style={[Authlaststyles.lasttextview, {marginTop: hp(1)}]}>
             <Text style={Authlaststyles.lasttextgrey}>
               {TranslationStrings.ALREADY_HAVE_AN_ACCOUNT}?
             </Text>
             <TouchableOpacity
               activeOpacity={0.5}
-              onPress={() => navigation.navigate("Login")}
+              onPress={() => navigation.navigate('Login')}
               // style={{ width: wp(16) }}
             >
               <Text style={Authlaststyles.lasttextblue}>
-                {" "}
+                {' '}
                 {TranslationStrings.SIGN_IN}
               </Text>
             </TouchableOpacity>
@@ -540,8 +537,7 @@ const SignUp = ({ navigation }) => {
             backgroundColor: snackbarValue.color,
             marginBottom: hp(20),
             zIndex: 999,
-          }}
-        >
+          }}>
           {snackbarValue.value}
         </Snackbar>
         <CustomModal
@@ -550,7 +546,7 @@ const SignUp = ({ navigation }) => {
           Icon={appImages.failed}
           text={TranslationStrings.ERROR}
           subtext={TranslationStrings.USER_ALREADY_REGISTERED}
-          buttontext={"GO BACK"}
+          buttontext={'GO BACK'}
           onPress={() => {
             setModalVisible(false);
           }}

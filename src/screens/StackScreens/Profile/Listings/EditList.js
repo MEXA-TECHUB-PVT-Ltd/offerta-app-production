@@ -73,7 +73,6 @@ import CustomImageSlider from '../../../../components/ImageSlider/CustomImageSli
 import VideoBottomSheet from '../../../../components/CameraBottomSheet/VideoBottomSheet';
 import VideoPlayer from 'react-native-video-player';
 
-import {Video} from 'react-native-compressor';
 // import RNVideoHelper from "react-native-video-helper";
 
 const EditList = ({navigation, route}) => {
@@ -379,31 +378,30 @@ const EditList = ({navigation, route}) => {
   };
 
   const compressVideo = async url => {
-    try {
-      // setloading(true);
-
-      await Video.compress(
-        url?.path,
-        {
-          compressionMethod: 'manual',
-          minimumFileSizeForCompress: 1,
-        },
-        progress => {
-          console.log('progress  ___________________ : ', progress);
-        },
-      )
-        .then(async compressedVideoFileUrl => {
-          console.log(
-            'compressedVideoFileUrl  ____________________ : ',
-            compressedVideoFileUrl,
-          );
-          setVideoFile(compressedVideoFileUrl);
-          setIsVideoUpdated(true);
-        })
-        .finally(() => setloading(false));
-    } catch (error) {
-      console.log('Error: ' + error);
-    }
+    // try {
+    //   // setloading(true);
+    //   await Video.compress(
+    //     url?.path,
+    //     {
+    //       compressionMethod: 'manual',s
+    //       minimumFileSizeForCompress: 1,
+    //     },
+    //     progress => {
+    //       console.log('progress  ___________________ : ', progress);
+    //     },
+    //   )
+    //     .then(async compressedVideoFileUrl => {
+    //       console.log(
+    //         'compressedVideoFileUrl  ____________________ : ',
+    //         compressedVideoFileUrl,
+    //       );
+    //       setVideoFile(compressedVideoFileUrl);
+    //       setIsVideoUpdated(true);
+    //     })
+    //     .finally(() => setloading(false));
+    // } catch (error) {
+    //   console.log('Error: ' + error);
+    // }
   };
 
   return (

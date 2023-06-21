@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -13,44 +13,45 @@ import {
   useWindowDimensions,
   StyleSheet,
   ImageBackground,
-} from "react-native";
+} from 'react-native';
 
-import CustomHeader from "../../components/Header/CustomHeader";
+import CustomHeader from '../../components/Header/CustomHeader';
 
-import Colors from "../../utills/Colors";
+import Colors from '../../utills/Colors';
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { Avatar, Button, Card } from "react-native-paper";
+} from 'react-native-responsive-screen';
+import {Avatar, Button, Card} from 'react-native-paper';
 
-import Loader from "../../components/Loader/Loader";
-import { appImages } from "../../constant/images";
+import Loader from '../../components/Loader/Loader';
+import {appImages} from '../../constant/images';
 
-import { Rating } from "react-native-rating-element";
-import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
-import MaterialIcons from "react-native-vector-icons/MaterialIcons";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import AntDesign from "react-native-vector-icons/AntDesign";
-import { fontFamily } from "../../constant/fonts";
+import {Rating} from 'react-native-rating-element';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {fontFamily} from '../../constant/fonts';
 
-import { CheckBox } from "react-native-elements";
-import RBSheet from "react-native-raw-bottom-sheet";
-import CustomTextInput from "../../components/TextInput/CustomTextInput";
-import CustomButtonhere from "../../components/Button/CustomButton";
-import TranslationStrings from "../../utills/TranslationStrings";
+import {CheckBox} from 'react-native-elements';
+import RBSheet from 'react-native-raw-bottom-sheet';
+import CustomTextInput from '../../components/TextInput/CustomTextInput';
+import CustomButtonhere from '../../components/Button/CustomButton';
+import TranslationStrings from '../../utills/TranslationStrings';
 
-import firestore from "@react-native-firebase/firestore";
-import { createLiveStream } from "../../api/LiveStreamingApi";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { get_User_Listings, get_all_listings } from "../../api/GetApis";
-import { BASE_URL, IMAGE_URL } from "../../utills/ApiRootUrl";
-import axios from "axios";
+import firestore from '@react-native-firebase/firestore';
+import {createLiveStream} from '../../api/LiveStreamingApi';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {get_User_Listings, get_all_listings} from '../../api/GetApis';
+import {BASE_URL, IMAGE_URL} from '../../utills/ApiRootUrl';
+import axios from 'axios';
+import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
 
-const CreateLive = ({ navigation, route }) => {
+const CreateLive = ({navigation, route}) => {
   const ref_RBSheet = useRef();
-  const [quantity, setQuantity] = useState("");
+  const [quantity, setQuantity] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -58,7 +59,7 @@ const CreateLive = ({ navigation, route }) => {
 
   const [fixedPrice, setFixedPrice] = useState(false);
   const [giveAway, setGiveAway] = useState(false);
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItem, setSelectedItem] = useState('');
 
   const [data, setData] = useState([
     // {
@@ -97,23 +98,22 @@ const CreateLive = ({ navigation, route }) => {
   const getCurrentUserProducts = async () => {
     setLoading(true);
     get_User_Listings()
-      .then((response) => {
-        console.log("response  :  ", response?.data);
+      .then(response => {
         if (response?.data?.status == true) {
           setData([]);
         } else {
           setData(response?.data);
         }
       })
-      .catch((err) => {
-        console.log("error : ", err);
+      .catch(err => {
+        console.log('error : ', err);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
-  const CustomCheckBox = ({ checked, size, onPress }) => (
+  const CustomCheckBox = ({checked, size, onPress}) => (
     <CheckBox
       checkedIcon={
         <MaterialIcons
@@ -126,7 +126,7 @@ const CreateLive = ({ navigation, route }) => {
         <MaterialIcons
           name="check-box-outline-blank"
           size={size ? size : 25}
-          color={"#D5D4DC"}
+          color={'#D5D4DC'}
         />
       }
       checked={checked}
@@ -135,9 +135,9 @@ const CreateLive = ({ navigation, route }) => {
     />
   );
 
-  const handleUpdateItem = async (selectedItem) => {
+  const handleUpdateItem = async selectedItem => {
     if (quantity?.length == 0 || quantity == 0) {
-      alert("Please Enter Quantity");
+      alert('Please Enter Quantity');
     } else {
       ref_RBSheet?.current?.close();
       setLoading(true);
@@ -163,20 +163,20 @@ const CreateLive = ({ navigation, route }) => {
         giveaway: giveAway,
       });
       var config = {
-        method: "put",
-        url: BASE_URL + "updateList.php",
+        method: 'put',
+        url: BASE_URL + 'updateList.php',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         data: data1,
       };
 
       axios(config)
-        .then((response) => {
-          console.log("response  :  ", response?.data);
+        .then(response => {
+          console.log('response  :  ', response?.data);
           if (response?.data?.status == false) {
           } else {
-            const newData = data?.map((item) => {
+            const newData = data?.map(item => {
               if (item?.id == selectedItem?.id) {
                 return {
                   ...item,
@@ -194,8 +194,8 @@ const CreateLive = ({ navigation, route }) => {
             setData(newData);
           }
         })
-        .catch((err) => {
-          console.log("err :  ", err);
+        .catch(err => {
+          console.log('err :  ', err);
         })
         .finally(() => {
           setLoading(false);
@@ -203,8 +203,8 @@ const CreateLive = ({ navigation, route }) => {
     }
   };
 
-  const handleUnSelectItem = async (id) => {
-    const newData = data?.map((item) => {
+  const handleUnSelectItem = async id => {
+    const newData = data?.map(item => {
       if (item?.id == id) {
         return {
           ...item,
@@ -220,54 +220,55 @@ const CreateLive = ({ navigation, route }) => {
   };
 
   const handleGoLive = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     setLoading(true);
     let selectedListings = data
-      ?.filter((item) => item?.selected == true)
-      ?.map((element) => element?.id);
+      ?.filter(item => item?.selected == true)
+      ?.map(element => element?.id);
     let obj = {
       expireTimeInSeconds: 172800, //2 days seconds
-      appID: "2103cc766ad141bf90843544931573d8",
-      appCertificate: "9b9ad3f820ab41ada65255fe2d1ef452",
-      channelName: "xyz",
+      appID: LiveStreamingKeys.appId,
+      appCertificate: LiveStreamingKeys.appCertificate,
+      // channelName: 'ofertaSV',
+      channelName: user_id,
       uid: user_id,
       user_id: user_id,
       uidStr: user_id,
-
-      active_status: "active",
+      role: 'host',
+      active_status: 'active',
       list_id: selectedListings,
-      quantity: "0",
+      quantity: '0',
       currentDateTime: new Date(),
     };
-    console.log("obj to create live ::: ", obj);
+    console.log('obj to create live ::: ', obj);
     createLiveStream(obj)
-      .then((response) => {
-        console.log("response : ", response?.data);
+      .then(response => {
+        console.log('response : ', response?.data);
         if (response?.data?.stream) {
           let stream_id = response?.data?.stream[0]?.insertedId;
-          console.log("stream_id  : ", stream_id);
+          console.log('stream_id  : ', stream_id);
           console.log(
-            "firestore.FieldValue.serverTimestamp() :  ",
-            firestore.FieldValue.serverTimestamp()
+            'firestore.FieldValue.serverTimestamp() :  ',
+            firestore.FieldValue.serverTimestamp(),
           );
           let obj = {
             ...response?.data?.stream[0],
             createdAt: firestore.FieldValue.serverTimestamp(),
           };
-          console.log("obj : ", obj);
+          console.log('obj : ', obj);
           firestore()
-            .collection("live_stream")
+            .collection('live_stream')
             .doc(stream_id?.toString())
-            .collection("stream_detail")
+            .collection('stream_detail')
             .add(obj);
-          navigation.navigate("WatchLiveStream", {
+          navigation.navigate('WatchLiveStream', {
             response: response?.data,
           });
         }
       })
-      .catch((err) => {
-        console.log("err : ", err);
-        alert("Something went wrong");
+      .catch(err => {
+        console.log('err : ', err);
+        alert('Something went wrong');
       })
       .finally(() => setLoading(false));
 
@@ -294,31 +295,30 @@ const CreateLive = ({ navigation, route }) => {
       <Loader isLoading={loading} />
       <View
         style={{
-          backgroundColor: "white",
+          backgroundColor: 'white',
           height: hp(100),
-          alignItems: "center",
-        }}
-      >
+          alignItems: 'center',
+        }}>
         {/* <CustomHeader type={"profile"} headerlabel={"Live Streaming"} /> */}
         <Loader isLoading={loading} />
         <FlatList
           ListHeaderComponent={
             <CustomHeader
-              headerlabel={"Create Live"}
+              headerlabel={'Create Live'}
               iconPress={() => {
                 navigation.goBack();
               }}
-              type={"left_icon"}
-              icon={"arrow-back"}
-              searchicon={"plus-box"}
+              type={'left_icon'}
+              icon={'arrow-back'}
+              searchicon={'plus-box'}
               onpresseacrh={() => {
-                navigation.navigate("UploadItem");
+                navigation.navigate('UploadItem');
               }}
             />
           }
           data={data}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item, index }) => {
+          renderItem={({item, index}) => {
             return (
               <Card
                 style={styles.card}
@@ -329,10 +329,9 @@ const CreateLive = ({ navigation, route }) => {
               >
                 <View
                   style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                  }}>
                   <CustomCheckBox
                     checked={item?.selected}
                     onPress={() => {
@@ -340,15 +339,15 @@ const CreateLive = ({ navigation, route }) => {
                         setSelectedItem(item);
                         setQuantity(item?.quantity);
                         setFixedPrice(
-                          item?.fixed_price == "true" ||
+                          item?.fixed_price == 'true' ||
                             item?.fixed_price == true
                             ? true
-                            : false
+                            : false,
                         );
                         setGiveAway(
-                          item?.giveaway == "true" || item?.giveaway == true
+                          item?.giveaway == 'true' || item?.giveaway == true
                             ? true
-                            : false
+                            : false,
                         );
                         ref_RBSheet.current?.open();
                       } else {
@@ -359,7 +358,7 @@ const CreateLive = ({ navigation, route }) => {
                   {/* <View style={styles.cardImageView}> */}
                   {item?.images?.length > 0 ? (
                     <Image
-                      source={{ uri: IMAGE_URL + item?.images[0] }}
+                      source={{uri: IMAGE_URL + item?.images[0]}}
                       style={styles.cardImage}
                     />
                   ) : (
@@ -375,12 +374,11 @@ const CreateLive = ({ navigation, route }) => {
                   )}
                   {/* </View> */}
 
-                  <View style={{ flex: 1 }}>
+                  <View style={{flex: 1}}>
                     <View style={styles.rowView}>
                       <Text
-                        style={{ ...styles.boldText, flex: 0.7 }}
-                        numberOfLines={1}
-                      >
+                        style={{...styles.boldText, flex: 0.7}}
+                        numberOfLines={1}>
                         {item?.title}
                       </Text>
                       <Text style={styles.boldText}>{item?.price}$</Text>
@@ -388,17 +386,17 @@ const CreateLive = ({ navigation, route }) => {
                     <View style={styles.rowView}>
                       <Text style={styles.mediumText}>Quantity:</Text>
                       <Text style={styles.mediumText}>
-                        {item?.quantity == "" ? 0 : item?.quantity}
+                        {item?.quantity == '' ? 0 : item?.quantity}
                       </Text>
                     </View>
                     <View style={styles.tagView}>
-                      {item?.fixed_price != "false" &&
+                      {item?.fixed_price != 'false' &&
                         item?.fixed_price != false && (
                           <View style={styles.tag}>
                             <Text style={styles.tagText}>Fixed Price</Text>
                           </View>
                         )}
-                      {item?.giveaway != "false" && item?.giveaway != false && (
+                      {item?.giveaway != 'false' && item?.giveaway != false && (
                         <View style={styles.tag}>
                           <Text style={styles.tagText}>Giving Away</Text>
                         </View>
@@ -413,14 +411,13 @@ const CreateLive = ({ navigation, route }) => {
             <View
               style={{
                 flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text style={{ color: "#000" }}>No Record Found</Text>
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text style={{color: '#000'}}>No Record Found</Text>
             </View>
           )}
-          ListFooterComponent={() => <View style={{ height: 70 }} />}
+          ListFooterComponent={() => <View style={{height: 70}} />}
         />
         <TouchableOpacity style={styles.btn} onPress={() => handleGoLive()}>
           <Text style={styles.btnText}>GO LIVE NOW</Text>
@@ -436,20 +433,18 @@ const CreateLive = ({ navigation, route }) => {
               borderTopRightRadius: 30,
               padding: 20,
             },
-          }}
-        >
-          <View style={{ flex: 1 }}>
+          }}>
+          <View style={{flex: 1}}>
             <Text style={styles.boldText}>Item Details</Text>
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: 'row',
+                alignItems: 'center',
                 marginVertical: 10,
-              }}
-            >
+              }}>
               {selectedItem?.images?.length > 0 ? (
                 <Image
-                  source={{ uri: IMAGE_URL + selectedItem?.images[0] }}
+                  source={{uri: IMAGE_URL + selectedItem?.images[0]}}
                   style={styles.cardImage}
                 />
               ) : (
@@ -461,16 +456,14 @@ const CreateLive = ({ navigation, route }) => {
                 />
               )}
 
-              <View style={{ flex: 1 }}>
+              <View style={{flex: 1}}>
                 <View style={styles.rowView}>
                   <Text style={styles.mediumText}>{selectedItem?.title}</Text>
                   <Text style={styles.boldText}>{selectedItem?.price}$</Text>
                 </View>
-                <View
-                  style={{ ...styles.rowView, justifyContent: "flex-start" }}
-                >
+                <View style={{...styles.rowView, justifyContent: 'flex-start'}}>
                   <Ionicons
-                    name={"location"}
+                    name={'location'}
                     size={15}
                     color={Colors.activetextinput}
                   />
@@ -480,8 +473,7 @@ const CreateLive = ({ navigation, route }) => {
                       fontFamily: fontFamily.Poppins_Regular,
                       fontSize: 11,
                       marginBottom: -3,
-                    }}
-                  >
+                    }}>
                     {selectedItem?.location}
                   </Text>
                 </View>
@@ -490,27 +482,26 @@ const CreateLive = ({ navigation, route }) => {
             <View
               style={{
                 height: 1,
-                backgroundColor: "#00000017",
+                backgroundColor: '#00000017',
                 marginVertical: 10,
               }}
             />
 
             <CustomTextInput
               icon={appImages.email}
-              type={"withouticoninput"}
-              texterror={"invalid"}
+              type={'withouticoninput'}
+              texterror={'invalid'}
               keyboard_type="numeric"
-              placeholder={"Enter Quantity"}
-              term={quantity?.toString() == 0 ? "" : quantity?.toString()}
-              onTermChange={(itemtitle) => setQuantity(itemtitle)}
+              placeholder={'Enter Quantity'}
+              term={quantity?.toString() == 0 ? '' : quantity?.toString()}
+              onTermChange={itemtitle => setQuantity(itemtitle)}
             />
             <View
               style={{
                 marginVertical: 10,
                 height: 50,
-              }}
-            >
-              <View style={{ ...styles.rowView, marginBottom: 10 }}>
+              }}>
+              <View style={{...styles.rowView, marginBottom: 10}}>
                 <Text style={styles.mediumText}>Fixed Price{fixedPrice}</Text>
                 <CustomCheckBox
                   checked={fixedPrice}
@@ -544,65 +535,65 @@ export default CreateLive;
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     margin: 10,
     marginLeft: 13,
     // height: hp(28),
     flex: 1,
     borderRadius: 10,
-    overflow: "hidden",
+    overflow: 'hidden',
     padding: 10,
   },
   cardImageView: {
     height: 50,
     width: 50,
     borderRadius: 10,
-    resizeMode: "stretch",
+    resizeMode: 'stretch',
     // marginHorizontal: 10,
     marginLeft: 10,
     marginRight: 12,
-    backgroundColor: "#Ccc",
+    backgroundColor: '#Ccc',
   },
   cardImage: {
     height: 55,
     width: 55,
     borderRadius: 10,
-    resizeMode: "stretch",
+    resizeMode: 'stretch',
     // marginHorizontal: 10,
     marginLeft: 10,
     marginRight: 12,
-    backgroundColor: "#Ccc",
+    backgroundColor: '#Ccc',
   },
   liveView: {
-    backgroundColor: "red",
-    position: "absolute",
+    backgroundColor: 'red',
+    position: 'absolute',
     right: 10,
     top: 7,
     paddingHorizontal: 8,
     borderRadius: 4,
   },
-  liveText: { color: "#fff", fontWeight: "500" },
+  liveText: {color: '#fff', fontWeight: '500'},
   btn: {
     width: wp(85),
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     borderRadius: 30,
     backgroundColor: Colors.Appthemecolor,
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
-    flexDirection: "row",
+    flexDirection: 'row',
   },
   btnText: {
-    color: "white",
+    color: 'white',
     marginLeft: 7,
     fontFamily: fontFamily.Poppins_Medium,
     marginBottom: -3,
   },
   rowView: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   boldText: {
     fontFamily: fontFamily.Poppins_Bold,
@@ -616,16 +607,16 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Poppins_Regular,
     color: Colors.Appthemecolor,
   },
-  tagView: { flexDirection: "row" },
+  tagView: {flexDirection: 'row'},
   tag: {
-    backgroundColor: "#576AF4",
+    backgroundColor: '#576AF4',
     marginTop: 10,
     padding: 12,
     paddingVertical: 5,
     borderRadius: 20,
     marginRight: 10,
   },
-  tagText: { color: "white", fontSize: 10 },
+  tagText: {color: 'white', fontSize: 10},
   checkboxContainer: {
     margin: 0,
     padding: 0,

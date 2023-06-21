@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   FlatList,
@@ -10,41 +10,41 @@ import {
   LogBox,
   Linking,
   Image,
-} from "react-native";
+} from 'react-native';
 
 //////////////////app icons////////////////
-import Ionicons from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 /////////////////app components/////////
-import ViewAll from "../../../components/ViewAll/ViewAll";
-import DashboardCard from "../../../components/CustomCards/DashboardCard";
-import IconsTopTabs from "../../../components/TopTabs/IconsTabs/IconsTopTabs";
-import Slider from "../../../components/ImageSlider/Slider";
-import Loader from "../../../components/Loader/Loader";
+import ViewAll from '../../../components/ViewAll/ViewAll';
+import DashboardCard from '../../../components/CustomCards/DashboardCard';
+import IconsTopTabs from '../../../components/TopTabs/IconsTabs/IconsTopTabs';
+import Slider from '../../../components/ImageSlider/Slider';
+import Loader from '../../../components/Loader/Loader';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   setListingId,
   setExchangeOffer_OtherListing,
   setLoginUserId,
   get_Categories_Listings_By_Location,
   setChatCount,
-} from "../../../redux/actions";
+} from '../../../redux/actions';
 
 ////////////////Image URL////////////////
-import { IMAGE_URL } from "../../../utills/ApiRootUrl";
+import {IMAGE_URL} from '../../../utills/ApiRootUrl';
 
 /////////////////app Height and width////////////////
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 /////////////////////app styles////////////
-import styles from "./styles";
-import Colors from "../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../utills/Colors';
 
 ////////////////api helper functions///////
 import {
@@ -54,37 +54,37 @@ import {
   get_Banners,
   get_all_listings,
   get_Categories_Listings_new,
-} from "../../../api/GetApis";
+} from '../../../api/GetApis';
 
 //////////////////location////////////////
 import {
   locationPermission,
   getCurrentLocation,
-} from "../../../api/CurrentLocation";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { colors } from "react-native-swiper-flatlist/src/themes";
-import CustomImageSlider from "../../../components/ImageSlider/CustomImageSlider";
+} from '../../../api/CurrentLocation';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {colors} from 'react-native-swiper-flatlist/src/themes';
+import CustomImageSlider from '../../../components/ImageSlider/CustomImageSlider';
 
-import TranslationStrings from "../../../utills/TranslationStrings";
-import moment from "moment";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { appImages } from "../../../constant/images";
+import TranslationStrings from '../../../utills/TranslationStrings';
+import moment from 'moment';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {appImages} from '../../../constant/images';
 
-const Home = ({ navigation }) => {
-  const { name, age } = useSelector((state) => state.userReducer);
+const Home = ({navigation}) => {
+  const {name, age} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   ///////////////////loader loading state///////////////
   const [loading, setloading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   /////////////current location states/////////////
-  const [cur_lat, setCur_Lat] = useState("");
-  const [cur_lng, setCur_Lng] = useState("");
+  const [cur_lat, setCur_Lat] = useState('');
+  const [cur_lng, setCur_Lng] = useState('');
 
   /////////////user data states/////////////
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const GetUserData = async () => {
-    get_Login_UserData().then((response) => {
+    get_Login_UserData().then(response => {
       setUsername(response.data.full_name);
     });
   };
@@ -92,27 +92,27 @@ const Home = ({ navigation }) => {
   const [banners, setBanners] = useState([]);
   const Get_Banners = async () => {
     get_Banners()
-      .then((response) => {
-        console.log("response : ", response?.data);
+      .then(response => {
+        console.log('response : ', response?.data);
         if (
-          response.data.msg === "No Result" ||
-          typeof response?.data == "string"
+          response.data.msg === 'No Result' ||
+          typeof response?.data == 'string'
         ) {
-          console.log("her..,...................");
+          console.log('her..,...................');
           setBanners([]);
         } else {
           setBanners(response.data);
         }
       })
-      .catch((err) => {
-        console.log("Error :  ", err);
+      .catch(err => {
+        console.log('Error :  ', err);
         setBanners([]);
       });
   };
   /////////////main menu status states/////////////
-  const [Categorylist, setCategoryList] = useState("");
+  const [Categorylist, setCategoryList] = useState('');
 
-  const GetCategoriesList = async (props) => {
+  const GetCategoriesList = async props => {
     // get_Categories_Listings_By_Location(props,cur_lat,cur_lng).then((response) => {
     //   if(response.data.message === "No data available")
     //   {
@@ -124,32 +124,32 @@ const Home = ({ navigation }) => {
     // });
     // get_Categories_Listings(props)
     get_Categories_Listings_new(props)
-      .then((response) => {
+      .then(response => {
         let list = response?.data ? response?.data : [];
-        if (response.data.message === "No data available") {
-          setCategoryList("");
+        if (response.data.message === 'No data available') {
+          setCategoryList('');
         } else if (response?.data?.error == true) {
-          setCategoryList("");
-          console.log("here................................");
+          setCategoryList('');
+          console.log('here................................');
         } else {
           const urgentList = list?.filter(
-            (item) =>
+            item =>
               item?.Promotion &&
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") <
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') <
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const urgentList_expire = list?.filter(
-            (item) =>
+            item =>
               item?.Promotion &&
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") >=
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') >=
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const orthersList = list?.filter(
-            (item) => item?.Promotion && item?.Promotion[0]?.tag !== "Urgent"
+            item => item?.Promotion && item?.Promotion[0]?.tag !== 'Urgent',
           );
           const finallist = [
             ...urgentList,
@@ -160,41 +160,41 @@ const Home = ({ navigation }) => {
           // setCategoryList(response.data);
         }
       })
-      .catch((err) => {
-        console.log("Error while getting category list : ", err);
+      .catch(err => {
+        console.log('Error while getting category list : ', err);
       });
   };
 
-  const getAllListings = async (props) => {
+  const getAllListings = async props => {
     get_all_listings()
-      .then((response) => {
+      .then(response => {
         // console.log("response  :   ", response?.data);
         let list = response?.data ? response?.data : [];
-        if (typeof list == "string") {
+        if (typeof list == 'string') {
           //error : response contain  some error strings
-          console.log("error : response contain  some error strings  ");
+          console.log('error : response contain  some error strings  ');
         } else {
           // list.sort((a, b) => a.Promotion?.tag == "Advertisement");
           // THE SORTED ARRAY:
 
           const urgentList = list?.filter(
-            (item) =>
+            item =>
               item?.Promotion &&
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") <
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') <
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const urgentList_expire = list?.filter(
-            (item) =>
+            item =>
               item?.Promotion &&
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") >=
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') >=
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const orthersList = list?.filter(
-            (item) => item?.Promotion && item?.Promotion[0]?.tag !== "Urgent"
+            item => item?.Promotion && item?.Promotion[0]?.tag !== 'Urgent',
           );
           const finallist = [
             ...urgentList,
@@ -205,27 +205,27 @@ const Home = ({ navigation }) => {
           // setCategoryList(list);
         }
       })
-      .catch((err) => {
-        console.log("Error while getting listings: ", err);
+      .catch(err => {
+        console.log('Error while getting listings: ', err);
       });
   };
 
-  const [categorydata, setCategoryData] = useState("");
+  const [categorydata, setCategoryData] = useState('');
 
   useEffect(() => {
     try {
       LogBox.ignoreAllLogs();
       Get_Banners();
       GetCategories()
-        .then((response) => {
+        .then(response => {
           dispatch(setExchangeOffer_OtherListing(response.data[0]));
 
           let obj = {
-            created_at: "2023-03-21 10:49:00",
-            id: "All",
-            image: "",
-            image_url: "",
-            name: "All",
+            created_at: '2023-03-21 10:49:00',
+            id: 'All',
+            image: '',
+            image_url: '',
+            name: 'All',
           };
           let list1 = response?.data;
           list1.unshift(obj);
@@ -237,32 +237,32 @@ const Home = ({ navigation }) => {
           getAllListings();
           setloading(false);
         })
-        .catch((err) => {
-          console.log("err  : ", err);
+        .catch(err => {
+          console.log('err  : ', err);
           setloading(false);
         });
-      GetUserData().catch((err) =>
-        console.log("error getting user data  : ", err)
+      GetUserData().catch(err =>
+        console.log('error getting user data  : ', err),
       );
-      getLiveLocation().catch((err) =>
-        console.log("error getting live location : ", err)
+      getLiveLocation().catch(err =>
+        console.log('error getting live location : ', err),
       );
-      getuser().catch((err) => console.log("err getting usr : ", err));
+      getuser().catch(err => console.log('err getting usr : ', err));
     } catch (error) {
-      console.log("error raised  : ", error);
+      console.log('error raised  : ', error);
     }
   }, []);
 
   const [login_user_id, setlogin_user_id] = useState();
   const getuser = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     setlogin_user_id(user_id);
   };
 
   const getLiveLocation = async () => {
     const locPermissionDenied = await locationPermission();
     if (locPermissionDenied) {
-      const { latitude, longitude, heading } = await getCurrentLocation();
+      const {latitude, longitude, heading} = await getCurrentLocation();
       setCur_Lat(latitude);
       setCur_Lng(longitude);
     }
@@ -271,9 +271,9 @@ const Home = ({ navigation }) => {
   ////////////select state////////////
   const [selectedId, setSelectedId] = useState(null);
   ///////////////select function/////////////
-  const onselect = (item) => {
+  const onselect = item => {
     setSelectedId(item);
-    if (item == "All") {
+    if (item == 'All') {
       //get all listings
       getAllListings();
     } else {
@@ -285,14 +285,14 @@ const Home = ({ navigation }) => {
     try {
       Get_Banners();
       GetCategories()
-        .then((response) => {
+        .then(response => {
           dispatch(setExchangeOffer_OtherListing(response.data[0]));
           let obj = {
-            created_at: "2023-03-21 10:49:00",
-            id: "All",
-            image: "",
-            image_url: "",
-            name: "All",
+            created_at: '2023-03-21 10:49:00',
+            id: 'All',
+            image: '',
+            image_url: '',
+            name: 'All',
           };
           let list1 = response?.data;
           list1.unshift(obj);
@@ -304,29 +304,29 @@ const Home = ({ navigation }) => {
           setloading(false);
           setRefreshing(false);
         })
-        .catch((err) => {
-          console.log("err  : ", err);
+        .catch(err => {
+          console.log('err  : ', err);
           setloading(false);
           setRefreshing(false);
         });
-      GetUserData().catch((err) =>
-        console.log("error getting user data  : ", err)
+      GetUserData().catch(err =>
+        console.log('error getting user data  : ', err),
       );
-      getLiveLocation().catch((err) =>
-        console.log("error getting live location : ", err)
+      getLiveLocation().catch(err =>
+        console.log('error getting live location : ', err),
       );
-      getuser().catch((err) => console.log("err getting usr : ", err));
+      getuser().catch(err => console.log('err getting usr : ', err));
     } catch (error) {
-      console.log("error raised  : ", error);
+      console.log('error raised  : ', error);
       setloading(false);
       setRefreshing(false);
     }
   };
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <IconsTopTabs
-      title={item.name == "All" ? TranslationStrings.All : item.name}
-      icon={item.image_url.replace("{{baseurl}}", "")}
+      title={item.name == 'All' ? TranslationStrings.All : item.name}
+      icon={item.image_url.replace('{{baseurl}}', '')}
       width={wp(10)}
       // maxWidth={wp(6)}
       selected={selectedId}
@@ -338,12 +338,12 @@ const Home = ({ navigation }) => {
   // useEffect(() => {
   //   ChangeAppLanguage("es");
   // }, []);
-  const openAffiliateLink = async (url) => {
+  const openAffiliateLink = async url => {
     await Linking.openURL(url)
-      .then((res) => {
-        console.log("res : ", res);
+      .then(res => {
+        console.log('res : ', res);
       })
-      .catch((err) => {
+      .catch(err => {
         alert(`Invalid affiliate link`);
       });
   };
@@ -358,58 +358,55 @@ const Home = ({ navigation }) => {
             colors={[Colors.Appthemecolor]}
             onRefresh={() => handleRefresh()}
           />
-        }
-      >
-        <StatusBar backgroundColor={"white"} barStyle="dark-content" />
+        }>
+        <StatusBar backgroundColor={'white'} barStyle="dark-content" />
         <Loader isLoading={loading} />
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             paddingHorizontal: wp(5),
-            alignItems: "center",
+            alignItems: 'center',
             marginTop: hp(2),
-          }}
-        >
+          }}>
           <Ionicons
-            name={"menu"}
+            name={'menu'}
             size={30}
             color={Colors.Appthemecolor}
             onPress={() => navigation.toggleDrawer()}
           />
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               width: wp(40),
-            }}
-          >
+            }}>
             <View style={styles.headericonsview}>
               <MaterialCommunityIcons
-                name={"filter"}
+                name={'filter'}
                 size={25}
                 color={Colors.Appthemecolor}
-                onPress={() => navigation.navigate("Filter")}
+                onPress={() => navigation.navigate('Filter')}
               />
             </View>
             <View style={styles.headericonsview}>
               <Ionicons
-                name={"search"}
+                name={'search'}
                 size={25}
                 color={Colors.Appthemecolor}
-                onPress={() => navigation.navigate("Search")}
+                onPress={() => navigation.navigate('Search')}
               />
             </View>
             <TouchableOpacity
-              onPress={() => navigation?.navigate("LiveStreaming")}
-              style={styles.headericonsview}
-            >
+              // onPress={() => navigation?.navigate("LiveStreaming")}
+              onPress={() => navigation?.navigate('LiveUsers')}
+              style={styles.headericonsview}>
               <Image
                 source={appImages.live}
                 style={{
                   width: 27,
                   height: 27,
-                  resizeMode: "contain",
+                  resizeMode: 'contain',
                   tintColor: Colors.Appthemecolor,
                 }}
               />
@@ -417,7 +414,7 @@ const Home = ({ navigation }) => {
           </View>
         </View>
 
-        <View style={{ justifyContent: "center", paddingHorizontal: wp(5) }}>
+        <View style={{justifyContent: 'center', paddingHorizontal: wp(5)}}>
           <Text style={styles.welcometext}>{TranslationStrings.WELCOME}</Text>
           <Text style={styles.usertext}>{username}</Text>
         </View>
@@ -430,12 +427,12 @@ const Home = ({ navigation }) => {
 
         <ViewAll
           headerlabel={TranslationStrings.Categories1}
-          onpress={() => navigation.navigate("Categories")}
+          onpress={() => navigation.navigate('Categories')}
           // onpress={() => {
           //   dispatch(setChatCount(100));
           // }}
         />
-        <View style={{ paddingHorizontal: wp(3) }}>
+        <View style={{paddingHorizontal: wp(3)}}>
           <FlatList
             data={categorydata}
             renderItem={renderItem}
@@ -447,20 +444,19 @@ const Home = ({ navigation }) => {
         </View>
         <View
           style={{
-            borderBottomColor: "#B2B2B2",
+            borderBottomColor: '#B2B2B2',
             borderBottomWidth: 0.25,
-            backgroundColor: "white",
+            backgroundColor: 'white',
             marginTop: hp(0),
             marginBottom: hp(3),
-          }}
-        ></View>
+          }}></View>
 
-        {Categorylist === "" ? null : (
+        {Categorylist === '' ? null : (
           <FlatList
             data={Categorylist}
             numColumns={2}
             // item.user_id === login_user_id ? null :
-            renderItem={({ item }) => {
+            renderItem={({item}) => {
               return (
                 <DashboardCard
                   image={
@@ -477,16 +473,16 @@ const Home = ({ navigation }) => {
                   added_by={item?.added_by}
                   price={item.price}
                   onpress={() => {
-                    if (item?.added_by == "admin") {
+                    if (item?.added_by == 'admin') {
                       openAffiliateLink(item?.description);
                     } else {
                       dispatch(setListingId(item.id));
                       if (item.user_id === login_user_id) {
-                        navigation.navigate("ListingsDetails", {
+                        navigation.navigate('ListingsDetails', {
                           listing_id: item.id,
                         });
                       } else {
-                        navigation.navigate("MainListingsDetails", {
+                        navigation.navigate('MainListingsDetails', {
                           listing_id: item.id,
                         });
                       }
@@ -502,27 +498,25 @@ const Home = ({ navigation }) => {
       </ScrollView>
       <View
         style={{
-          position: "absolute",
+          position: 'absolute',
           right: wp(6),
           bottom: hp(4),
-        }}
-      >
+        }}>
         <TouchableOpacity
           // onPress={() => navigation.navigate("Live")}
-          onPress={() => navigation.navigate("LiveUsers")}
+          onPress={() => navigation.navigate('LiveUsers')}
           style={{
             backgroundColor: Colors.Appthemecolor,
             width: wp(17),
             height: wp(17),
             borderRadius: wp(17) / 2,
-            justifyContent: "center",
-            alignItems: "center",
+            justifyContent: 'center',
+            alignItems: 'center',
             elevation: 3,
-          }}
-        >
+          }}>
           <Image
             source={appImages.live}
-            style={{ width: "65%", height: "70%", resizeMode: "contain" }}
+            style={{width: '65%', height: '70%', resizeMode: 'contain'}}
           />
         </TouchableOpacity>
       </View>
