@@ -83,7 +83,7 @@ const ProductList = ({data, isHost, streamId}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{flex: 1, justifyContent: 'flex-end'}}>
       <View
         style={{
           position: 'absolute',
@@ -111,110 +111,111 @@ const ProductList = ({data, isHost, streamId}) => {
         />
       </View>
       <Loader isLoading={loading} />
-
-      <FlatList
-        fadingEdgeLength={100}
-        showsVerticalScrollIndicator={false}
-        data={data}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({item, index}) => {
-          return (
-            <>
-              <Card
-                style={{
-                  ...styles.card,
-                  opacity:
-                    item?.quantity == '0' ||
-                    item?.quantity?.length == 0 ||
-                    item?.quantity == 0
-                      ? 0.5
-                      : 1,
-                }}>
-                <View
+      <View>
+        <FlatList
+          fadingEdgeLength={100}
+          showsVerticalScrollIndicator={false}
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({item, index}) => {
+            return (
+              <>
+                <Card
                   style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                  }}>
-                  {item?.images?.length > 0 ? (
-                    <Image
-                      source={{uri: IMAGE_URL + item?.images[0]}}
-                      style={styles.cardImage}
-                    />
-                  ) : (
-                    <Image
-                      source={appImages.no_image}
-                      style={{
-                        ...styles.cardImage,
-                        // height: 50,
-                        // width: 50,
-                        // resizeMode: "contain",
-                      }}
-                    />
-                  )}
-
-                  <View style={{flex: 1}}>
-                    <View style={styles.rowView}>
-                      <Text style={styles.boldText}>{item?.title}</Text>
-                      <Text style={styles.boldText}>{item?.price}$</Text>
-                    </View>
-                    <View style={styles.rowView}>
-                      <Text style={styles.mediumText}>
-                        Quantity:
-                        <Text style={styles.lightText}>
-                          {item?.quantity ? item?.quantity : 0}
-                        </Text>
-                      </Text>
-
-                      {!isHost && (
-                        <TouchableOpacity
-                          style={styles.tag}
-                          onPress={() => {
-                            // handleBuyNow(item?.giveaway, item?.user_id, item)
-                            setSelectedItem(item);
-                            setShowQuantityModal(true);
-                          }}>
-                          <Text style={styles.tagText}>Buy</Text>
-                        </TouchableOpacity>
-                      )}
-                    </View>
-                  </View>
-                </View>
-              </Card>
-              {(item?.quantity == '0' ||
-                item?.quantity?.length == 0 ||
-                item?.quantity == 0) && (
-                <View
-                  style={{
-                    position: 'absolute',
-                    alignSelf: 'center',
-                    top: 20,
-                    zIndex: 999,
+                    ...styles.card,
+                    opacity:
+                      item?.quantity == '0' ||
+                      item?.quantity?.length == 0 ||
+                      item?.quantity == 0
+                        ? 0.5
+                        : 1,
                   }}>
                   <View
                     style={{
-                      backgroundColor: '#F86E0B',
-                      width: 120,
-                      paddingVertical: 8,
+                      flexDirection: 'row',
                       alignItems: 'center',
-                      justifyContent: 'center',
-                      borderRadius: 30,
                     }}>
-                    <Text
-                      style={{
-                        color: 'white',
-                        fontFamily: fontFamily.Poppins_Regular,
-                        marginBottom: -3,
-                        fontSize: 13,
-                      }}>
-                      SOLD OUT
-                    </Text>
+                    {item?.images?.length > 0 ? (
+                      <Image
+                        source={{uri: IMAGE_URL + item?.images[0]}}
+                        style={styles.cardImage}
+                      />
+                    ) : (
+                      <Image
+                        source={appImages.no_image}
+                        style={{
+                          ...styles.cardImage,
+                          // height: 50,
+                          // width: 50,
+                          // resizeMode: "contain",
+                        }}
+                      />
+                    )}
+
+                    <View style={{flex: 1}}>
+                      <View style={styles.rowView}>
+                        <Text style={styles.boldText}>{item?.title}</Text>
+                        <Text style={styles.boldText}>{item?.price}$</Text>
+                      </View>
+                      <View style={styles.rowView}>
+                        <Text style={styles.mediumText}>
+                          Quantity:
+                          <Text style={styles.lightText}>
+                            {item?.quantity ? item?.quantity : 0}
+                          </Text>
+                        </Text>
+
+                        {!isHost && (
+                          <TouchableOpacity
+                            style={styles.tag}
+                            onPress={() => {
+                              // handleBuyNow(item?.giveaway, item?.user_id, item)
+                              setSelectedItem(item);
+                              setShowQuantityModal(true);
+                            }}>
+                            <Text style={styles.tagText}>Buy</Text>
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                    </View>
                   </View>
-                </View>
-              )}
-            </>
-          );
-        }}
-      />
+                </Card>
+                {(item?.quantity == '0' ||
+                  item?.quantity?.length == 0 ||
+                  item?.quantity == 0) && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      alignSelf: 'center',
+                      top: 20,
+                      zIndex: 999,
+                    }}>
+                    <View
+                      style={{
+                        backgroundColor: '#F86E0B',
+                        width: 120,
+                        paddingVertical: 8,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: 30,
+                      }}>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontFamily: fontFamily.Poppins_Regular,
+                          marginBottom: -3,
+                          fontSize: 13,
+                        }}>
+                        SOLD OUT
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </>
+            );
+          }}
+        />
+      </View>
     </View>
   );
 };

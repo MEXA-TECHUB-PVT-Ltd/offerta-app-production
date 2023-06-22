@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,63 +11,61 @@ import {
   StatusBar,
   RefreshControl,
   useWindowDimensions,
-} from "react-native";
+} from 'react-native';
 
 ////////////////app components///////////
-import CustomHeader from "../../../components/Header/CustomHeader";
+import CustomHeader from '../../../components/Header/CustomHeader';
 
 /////////////app styles///////////////////
-import styles from "./styles";
-import Colors from "../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import { BASE_URL, IMAGE_URL } from "../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { appImages } from "../../../constant/images";
+import axios from 'axios';
+import {BASE_URL, IMAGE_URL} from '../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {appImages} from '../../../constant/images';
 
 ////////////////////api function/////////////
-import { get_Notifications } from "../../../api/GetApis";
-import { useDispatch, useSelector } from "react-redux";
+import {get_Notifications} from '../../../api/GetApis';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setChatCount,
   setExchangeOffer_OtherListing,
   setNotificationCount,
   setNotificationList,
-} from "../../../redux/actions";
-import Loader from "../../../components/Loader/Loader";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+} from '../../../redux/actions';
+import Loader from '../../../components/Loader/Loader';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
-import BlockUserView from "../../../components/BlockUserView";
-import { get_user_status } from "../../../api/GetApis";
+import BlockUserView from '../../../components/BlockUserView';
+import {get_user_status} from '../../../api/GetApis';
 
-import moment from "moment";
-import "moment-timezone";
+import moment from 'moment';
+import 'moment-timezone';
 
-import TranslationStrings from "../../../utills/TranslationStrings";
-import { Avatar } from "react-native-paper";
-import { update_notification } from "../../../api/PostApis";
+import TranslationStrings from '../../../utills/TranslationStrings';
+import {Avatar} from 'react-native-paper';
+import {update_notification} from '../../../api/PostApis';
 
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import LikesNotifications from "./LikesNotifications";
-import CommentNotifications from "./CommentNotifications";
-import NoNotificationFound from "./NoNotificationFound";
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import LikesNotifications from './LikesNotifications';
+import CommentNotifications from './CommentNotifications';
+import NoNotificationFound from './NoNotificationFound';
 
-import { Snackbar } from "react-native-paper";
+import {Snackbar} from 'react-native-paper';
 
 const OffersNotifications = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { chatCount, notificationList } = useSelector(
-    (state) => state.userReducer
-  );
+  const {chatCount, notificationList} = useSelector(state => state.userReducer);
 
   ///////////////////data state///////////
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showBlockModal, setShowBlockModal] = useState(false);
@@ -75,7 +73,7 @@ const OffersNotifications = () => {
   //snackbar
   const [visible, setVisible] = React.useState(false);
   const onDismissSnackBar = () => setVisible(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
 
   useEffect(() => {
     setLoading(true);
@@ -85,20 +83,20 @@ const OffersNotifications = () => {
     React.useCallback(() => {
       get_user_notifications();
       // getTimeZone();
-    }, [])
+    }, []),
   );
 
   function changeDatetimeByTimezone(datetime, timezone) {
-    console.log("datetime, timezone  :   ", datetime, timezone);
+    console.log('datetime, timezone  :   ', datetime, timezone);
     const parsedDateAsUtc = moment
       .utc()
-      .startOf("day")
-      .add(datetime.substring(0, 2), "hours")
-      .add(datetime.substring(3, 5), "minutes");
-    return parsedDateAsUtc?.clone()?.tz(timezone)?.format("hh:mm");
+      .startOf('day')
+      .add(datetime.substring(0, 2), 'hours')
+      .add(datetime.substring(3, 5), 'minutes');
+    return parsedDateAsUtc?.clone()?.tz(timezone)?.format('hh:mm');
   }
 
-  const convertUTCToLocalTime = (dateString) => {
+  const convertUTCToLocalTime = dateString => {
     try {
       let date = new Date(dateString);
       const milliseconds = Date.UTC(
@@ -107,25 +105,25 @@ const OffersNotifications = () => {
         date.getDate(),
         date.getHours(),
         date.getMinutes(),
-        date.getSeconds()
+        date.getSeconds(),
       );
       const localTime = new Date(milliseconds);
       // localTime.getDate(); // local date
       // let hours = localTime.getHours(); // local hour
       return moment(localTime).fromNow();
     } catch (error) {
-      return "";
+      return '';
     }
   };
 
   const getTimeZone = () => {
     setLoading(false);
     let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    convertUTCToLocalTime("2023-04-08 04:12:57");
+    convertUTCToLocalTime('2023-04-08 04:12:57');
     var localTime = moment
-      .utc(new Date("2023-04-08 04:12:57"), "HH:mm")
+      .utc(new Date('2023-04-08 04:12:57'), 'HH:mm')
       .tz(timeZone)
-      .format("HH:mm");
+      .format('HH:mm');
     console.log(localTime);
 
     // const dateTimeBE = changeDatetimeByTimezone(
@@ -148,13 +146,13 @@ const OffersNotifications = () => {
 
   const get_user_notifications = async () => {
     get_Notifications()
-      .then(async (response) => {
+      .then(async response => {
         //setData(response.data)
-        if (response.data.msg === "No Result") {
+        if (response.data.msg === 'No Result') {
           // setNotification("");
           setNotification([]);
           dispatch(setNotificationList([]));
-          console.log("if executed : ......");
+          console.log('if executed : ......');
         } else {
           if (response.data?.length > 0) {
             let notificationList1 = response.data;
@@ -163,23 +161,23 @@ const OffersNotifications = () => {
             dispatch(setNotificationList(sorted_list));
             // let lastItem = response.data?.pop();
             let lastItem = notificationList1[0];
-            console.log("lastItem?.id :  ", lastItem?.id);
+            console.log('lastItem?.id :  ', lastItem?.id);
             await AsyncStorage.setItem(
-              "LastNotification",
-              lastItem?.id?.toString()
+              'LastNotification',
+              lastItem?.id?.toString(),
             );
             let lastNotification = await AsyncStorage.getItem(
-              "LastNotification"
+              'LastNotification',
             );
             const filter = notificationList1.filter(
-              (item) => parseInt(item?.id) > parseInt(lastNotification)
+              item => parseInt(item?.id) > parseInt(lastNotification),
             );
             dispatch(setNotificationCount(filter?.length));
           }
         }
       })
-      .catch((err) => {
-        console.log("Error : ", err);
+      .catch(err => {
+        console.log('Error : ', err);
       })
       .finally(() => {
         setRefreshing(false);
@@ -192,7 +190,7 @@ const OffersNotifications = () => {
     get_user_notifications();
   };
 
-  const handleNotificationPress = async (item) => {
+  const handleNotificationPress = async item => {
     updateNotificationStatus(item?.id, true);
     // dispatch(setExchangeOffer_OtherListing(""));
     // navigation.navigate("ListingsDetails", {
@@ -209,11 +207,11 @@ const OffersNotifications = () => {
 
     // return;
 
-    if (item?.type == "Price Offer") {
-      console.log("notification is price offer");
+    if (item?.type == 'Price Offer') {
+      console.log('notification is price offer');
       dispatch(setExchangeOffer_OtherListing(item?.list));
-      console.log("item :::", item?.offer_status);
-      if (item?.offer_status == "reject") {
+      console.log('item :::', item?.offer_status);
+      if (item?.offer_status == 'reject') {
         //handle offer reject
         // let obj = {
         //   sale_by: item?.offer?.sale_by,
@@ -235,38 +233,38 @@ const OffersNotifications = () => {
           // sale_by: item?.offer?.sale_by,
           sale_by: item?.list?.user_id,
           buyer_id: item?.offer?.user_id,
-          offer_type: "price_offer",
+          offer_type: 'price_offer',
           receiverId: item?.offer?.user_id,
           // receiverId: item?.list?.user_id,
           senderId: item?.offer?.user_id,
           // senderId: item?.requester?.id,
           listing_id: item?.list?.id,
-          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : "",
+          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : '',
           offer_price: item?.offer?.price,
           offerid: item?.offer?.id,
           itemprice: item?.list?.price,
-          navtype: "notification",
+          navtype: 'notification',
           // userid: item?.offer?.sale_by,
           // userid: item?.list?.user_id,
           userid: item?.offer?.requester_id,
           offer_status: item?.offer_status,
         };
-        console.log("reject offer response  :;  ", obj);
-        navigation.navigate("PriceOfferNoti", obj);
-      } else if (item?.offer_status == "accept") {
+        console.log('reject offer response  :;  ', obj);
+        navigation.navigate('PriceOfferNoti', obj);
+      } else if (item?.offer_status == 'accept') {
         // navigation.navigate("ConfirmAddress", {
         //   index: 0,
         // });
 
-        console.log("item?.list  : ", item?.list);
+        console.log('item?.list  : ', item?.list);
 
         dispatch(setExchangeOffer_OtherListing(item?.list));
-        navigation.navigate("PaymentOptions", {
+        navigation.navigate('PaymentOptions', {
           index: 0,
         });
       } else if (
-        item?.offer_status == "pending" ||
-        item?.offer_status == "created"
+        item?.offer_status == 'pending' ||
+        item?.offer_status == 'created'
       ) {
         // navigation.navigate("MainListingsDetails", {
         //   listing_id: item?.list?.id,
@@ -276,45 +274,45 @@ const OffersNotifications = () => {
           sale_by: item?.list?.user_id,
           buyer_id: item?.offer?.requester_id,
           // buyer_id: item?.requester?.id,
-          offer_type: "price_offer",
+          offer_type: 'price_offer',
           receiverId: item?.offer?.user_id,
           // receiverId: item?.list?.user_id,
           senderId: item?.offer?.requester_id,
           // senderId: item?.requester?.id,
           listing_id: item?.list?.id,
-          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : "",
+          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : '',
           offer_price: item?.offer?.price,
           offerid: item?.offer?.id,
           itemprice: item?.list?.price,
-          navtype: "notification",
+          navtype: 'notification',
           // userid: item?.offer?.sale_by,
           // userid: item?.list?.user_id,
           userid: item?.offer?.user_id,
         };
 
-        console.log("obj : ", obj);
+        console.log('obj : ', obj);
 
-        if (typeof obj?.listing_id == "undefined") {
+        if (typeof obj?.listing_id == 'undefined') {
           setsnackbarValue({
-            value: "Oops.Listing Details not found.",
-            color: "red",
+            value: 'Oops.Listing Details not found.',
+            color: 'red',
           });
           setLoading(false);
           setVisible(true);
         } else {
-          navigation.navigate("PriceOfferNoti", obj);
+          navigation.navigate('PriceOfferNoti', obj);
         }
       }
-    } else if (item?.type == "Counter Offer") {
-      if (item?.offer_status == "created") {
+    } else if (item?.type == 'Counter Offer') {
+      if (item?.offer_status == 'created') {
         let obj = {
           buyer_id: item?.offer?.requester_id,
-          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : "",
+          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : '',
           itemprice: item?.list?.price,
           listing_id: item?.list?.id,
-          navtype: "notification",
+          navtype: 'notification',
           offer_price: item?.offer?.price,
-          offer_type: "counter_offer",
+          offer_type: 'counter_offer',
           price_offer: item?.offer?.price,
           offerid: item?.offer?.id,
           receiverId: item?.offer?.user_id,
@@ -323,29 +321,29 @@ const OffersNotifications = () => {
           senderId: item?.offer?.requester_id,
           userId: item?.offer?.requester_id,
           offer_status: item?.offer_status,
-          type: "view",
+          type: 'view',
         };
-        if (typeof obj?.listing_id == "undefined") {
-          console.log("listing details not found...");
-          console.log("counter offer object:::::::::::::::::", obj);
+        if (typeof obj?.listing_id == 'undefined') {
+          console.log('listing details not found...');
+          console.log('counter offer object:::::::::::::::::', obj);
           setsnackbarValue({
-            value: "Oops.Listing Details not found.",
-            color: "red",
+            value: 'Oops.Listing Details not found.',
+            color: 'red',
           });
           setLoading(false);
           setVisible(true);
         } else {
-          navigation.navigate("CounterOffer", obj);
+          navigation.navigate('CounterOffer', obj);
         }
       } else {
         let obj = {
           buyer_id: item?.offer?.requester_id,
-          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : "",
+          item_img: item?.list?.images?.length > 0 ? item?.list?.images[0] : '',
           itemprice: item?.list?.price,
           listing_id: item?.list?.id,
-          navtype: "notification",
+          navtype: 'notification',
           offer_price: item?.offer?.price,
-          offer_type: "counter_offer",
+          offer_type: 'counter_offer',
           price_offer: item?.offer?.price,
           offerid: item?.offer?.id,
           receiverId: item?.offer?.user_id,
@@ -354,20 +352,20 @@ const OffersNotifications = () => {
           senderId: item?.offer?.requester_id,
           userId: item?.offer?.requester_id,
           offer_status: item?.offer_status,
-          type: "view",
+          type: 'view',
         };
-        if (typeof obj?.listing_id == "undefined") {
+        if (typeof obj?.listing_id == 'undefined') {
           setsnackbarValue({
-            value: "Oops.Listing Details not found.",
-            color: "red",
+            value: 'Oops.Listing Details not found.',
+            color: 'red',
           });
           setLoading(false);
           setVisible(true);
         } else {
-          navigation.navigate("CounterOffer", obj);
+          navigation.navigate('CounterOffer', obj);
         }
       }
-    } else if (item?.type == "exchange") {
+    } else if (item?.type == 'exchange') {
       //item1  : requester_list
       //item2 : list
 
@@ -378,14 +376,14 @@ const OffersNotifications = () => {
         itemname2: item?.list?.title,
         itemprice1: item?.requester_list?.price,
         itemprice2: item?.list?.price,
-        navtype: "notification",
+        navtype: 'notification',
 
         // userid:
         //   item?.status == "incomming" || item?.status == "reject"
         //     ? item?.offer?.user_id
         //     : item?.list?.user_id,
         userid:
-          item?.status == "incomming" || item?.status == "reject"
+          item?.status == 'incomming' || item?.status == 'reject'
             ? item?.offer?.user_id
             : item?.requester_list?.user_id,
         receiverId: item?.list?.user_id,
@@ -399,18 +397,18 @@ const OffersNotifications = () => {
           item2: item?.offer?.item2,
         },
       };
-      console.log("obj : ", obj);
-      navigation.navigate("ExchangeNoti", obj);
+      console.log('obj : ', obj);
+      navigation.navigate('ExchangeNoti', obj);
     } else {
-      console.log("other type that is not handled yet  :  ", item?.type);
+      console.log('other type that is not handled yet  :  ', item?.type);
     }
   };
 
   const updateNotificationStatus = async (id, status) => {
     setLoading(true);
     update_notification(id, status)
-      .then((response) => {
-        const newData = notification?.map((item) => {
+      .then(response => {
+        const newData = notification?.map(item => {
           if (item?.id == id) {
             return {
               ...item,
@@ -425,12 +423,12 @@ const OffersNotifications = () => {
         setNotification(newData);
         dispatch(setNotificationList(newData));
       })
-      .catch((err) => {
-        console.log("err : ", err);
+      .catch(err => {
+        console.log('err : ', err);
       })
       .finally(() => setLoading(false));
   };
-  const renderItem = (item) => {
+  const renderItem = item => {
     return (
       <TouchableOpacity
         style={{
@@ -440,32 +438,29 @@ const OffersNotifications = () => {
           paddingHorizontal: 15,
           marginBottom: 2,
           backgroundColor:
-            item?.item?.read == "false" || item?.item?.read == false
-              ? "#EFF6FF"
-              : "transparent",
+            item?.item?.read == 'false' || item?.item?.read == false
+              ? '#EFF6FF'
+              : 'transparent',
           minHeight: 65,
         }}
         onPress={() => {
           handleNotificationPress(item?.item);
-        }}
-      >
+        }}>
         <View
-          style={{ flexDirection: "row", alignItems: "center", width: wp(100) }}
-        >
+          style={{flexDirection: 'row', alignItems: 'center', width: wp(100)}}>
           <Avatar.Image
             size={wp(12)}
-            source={{ uri: IMAGE_URL + item?.item?.requester?.image }}
+            source={{uri: IMAGE_URL + item?.item?.requester?.image}}
           />
-          <View style={{ marginLeft: wp(3), flex: 0.9, paddingRight: 10 }}>
+          <View style={{marginLeft: wp(3), flex: 0.9, paddingRight: 10}}>
             <View
               style={{
                 flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ ...styles.username }}>
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{...styles.username}}>
                 {item.item.requester.full_name}
               </Text>
               {/* <Text
@@ -475,9 +470,7 @@ const OffersNotifications = () => {
                   convertUTCToLocalTime(item?.item?.created_at)}
               </Text> */}
             </View>
-            <Text
-              style={[styles.recomend, { color: "#7A8FA6", width: wp(57) }]}
-            >
+            <Text style={[styles.recomend, {color: '#7A8FA6', width: wp(57)}]}>
               {item.item.notification}
             </Text>
           </View>
@@ -498,7 +491,7 @@ const OffersNotifications = () => {
       /> */}
       <BlockUserView visible={showBlockModal} setVisible={setShowBlockModal} />
 
-      <View style={{ ...styles.postcard, marginTop: 0, marginBottom: hp(13) }}>
+      <View style={{...styles.postcard, marginTop: 0}}>
         <Loader isLoading={loading} />
 
         <FlatList
@@ -520,6 +513,7 @@ const OffersNotifications = () => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={<NoNotificationFound loading={loading} />}
+          ListFooterComponent={() => <View style={{marginBottom: hp(13)}} />}
         />
       </View>
       <Snackbar
@@ -528,8 +522,7 @@ const OffersNotifications = () => {
         onDismiss={onDismissSnackBar}
         style={{
           backgroundColor: snackbarValue.color,
-        }}
-      >
+        }}>
         {snackbarValue?.value}
       </Snackbar>
     </SafeAreaView>

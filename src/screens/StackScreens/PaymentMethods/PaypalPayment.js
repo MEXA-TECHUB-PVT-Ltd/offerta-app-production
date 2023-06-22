@@ -1,51 +1,51 @@
-import { StyleSheet, Text, View, BackHandler } from "react-native";
-import React, { useState, useEffect } from "react";
+import {StyleSheet, Text, View, BackHandler} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-import paypalApi from "../../../api/paypalApi";
-import WebView from "react-native-webview";
-import GoogleButton from "../../../components/Button/GoogleButton";
-const queryString = require("query-string");
-import Loader from "../../../components/Loader/Loader";
+import paypalApi from '../../../api/paypalApi';
+import WebView from 'react-native-webview';
+import GoogleButton from '../../../components/Button/GoogleButton';
+const queryString = require('query-string');
+import Loader from '../../../components/Loader/Loader';
 import {
   post_Promotions,
   post_Promotions_new,
   post_verification_detail,
   send_new_banner_req_to_admin,
   send_new_verification_req_to_admin,
-} from "../../../api/Sales&Promotions";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import { appImages } from "../../../constant/images";
-import CustomModal from "../../../components/Modal/CustomModal";
-import { BASE_URL } from "../../../utills/ApiRootUrl";
+} from '../../../api/Sales&Promotions';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import {appImages} from '../../../constant/images';
+import CustomModal from '../../../components/Modal/CustomModal';
+import {BASE_URL} from '../../../utills/ApiRootUrl';
 
-import { Snackbar } from "react-native-paper";
-import { useSelector } from "react-redux";
+import {Snackbar} from 'react-native-paper';
+import {useSelector} from 'react-redux';
 import {
   add_User_Stripe_Credentials,
   create_order_Listings,
   create_order_Transcation_Listings,
-} from "../../../api/Offer";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { updateListingDetails } from "../../../api/PostApis";
-import firestore from "@react-native-firebase/firestore";
+} from '../../../api/Offer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {updateListingDetails} from '../../../api/PostApis';
+import firestore from '@react-native-firebase/firestore';
 
-const PaypalPayment = ({ navigation, route }) => {
-  const { exchange_other_listing } = useSelector((state) => state.userReducer);
-  const { login_user_shipping_address } = useSelector(
-    (state) => state.loginuserReducer
+const PaypalPayment = ({navigation, route}) => {
+  const {exchange_other_listing} = useSelector(state => state.userReducer);
+  const {login_user_shipping_address} = useSelector(
+    state => state.loginuserReducer,
   );
   // paypal
   const [loading, setLoading] = useState(false);
   const [isWebViewopen, setIsWebViewopen] = useState(false);
-  const [payPalUrl, setPayPalUrl] = useState("");
-  const [accessToken, setAccessToken] = useState("");
+  const [payPalUrl, setPayPalUrl] = useState('');
+  const [accessToken, setAccessToken] = useState('');
   const [paypalOrderDetail, setPaypalOrderDetail] = useState({});
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,8 +61,8 @@ const PaypalPayment = ({ navigation, route }) => {
     };
 
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
+      'hardwareBackPress',
+      backAction,
     );
 
     return () => backHandler.remove();
@@ -72,7 +72,7 @@ const PaypalPayment = ({ navigation, route }) => {
     try {
       setLoading(true);
       const token = await paypalApi.generateToken();
-      console.log("Access Token :  ", token);
+      console.log('Access Token :  ', token);
       setAccessToken(token);
       //pass type i.e hospital or doctor
       // const rate = await getSubscriptionRate("doctor");
@@ -84,8 +84,8 @@ const PaypalPayment = ({ navigation, route }) => {
       } else {
         // setSubscriptionRateID(rate?._id ? rate?._id : "");
         // value: rate?.rate,
-        console.log("route?.params?.fee  : ", route?.params?.fee);
-        let fees = route?.params?.fee ? route?.params?.fee : "1.00";
+        console.log('route?.params?.fee  : ', route?.params?.fee);
+        let fees = route?.params?.fee ? route?.params?.fee : '1.00';
         // let fees = "1.00";
         let shipping_cost = exchange_other_listing?.shipping_cost
           ? exchange_other_listing?.shipping_cost
@@ -93,30 +93,30 @@ const PaypalPayment = ({ navigation, route }) => {
         fees = parseInt(fees) + parseInt(shipping_cost);
         // let fees = "1.00";
         fees = parseFloat(fees).toFixed(2).toString();
-        console.log("fees  ____________________", fees);
+        console.log('fees  ____________________', fees);
         let orderDetail = {
-          intent: "CAPTURE",
+          intent: 'CAPTURE',
           purchase_units: [
             {
               items: [
                 {
-                  name: "testet name",
-                  description: "test description",
-                  quantity: "1",
+                  name: 'testet name',
+                  description: 'test description',
+                  quantity: '1',
                   unit_amount: {
-                    currency_code: "USD",
+                    currency_code: 'USD',
                     // value: "1.00",
                     value: fees,
                   },
                 },
               ],
               amount: {
-                currency_code: "USD",
+                currency_code: 'USD',
                 // value: "1.00",
                 value: fees,
                 breakdown: {
                   item_total: {
-                    currency_code: "USD",
+                    currency_code: 'USD',
                     // value: "1.00",
                     value: fees,
                   },
@@ -125,51 +125,51 @@ const PaypalPayment = ({ navigation, route }) => {
             },
           ],
           application_context: {
-            return_url: "https://example.com/return",
-            cancel_url: "https://example.com/cancel",
+            return_url: 'https://example.com/return',
+            cancel_url: 'https://example.com/cancel',
           },
         };
         setPaypalOrderDetail(orderDetail);
         const res = await paypalApi
           .createOrder(token, orderDetail)
-          .then((res) => {
-            console.log("create order response::::", res);
+          .then(res => {
+            console.log('create order response::::', res);
             //order id  =  res.id
             if (res?.links) {
-              const link = res?.links?.find((data) => data?.rel == "approve");
-              console.log("link  : ", link);
-              setPayPalUrl(link?.href ? link?.href : "");
+              const link = res?.links?.find(data => data?.rel == 'approve');
+              console.log('link  : ', link);
+              setPayPalUrl(link?.href ? link?.href : '');
               setIsWebViewopen(true);
             }
           })
-          .catch((err) => {
-            console.log("error in create order...", err);
+          .catch(err => {
+            console.log('error in create order...', err);
           })
           .finally(() => {
             setLoading(false);
           });
       }
     } catch (error) {
-      console.log("error ", error);
+      console.log('error ', error);
       setLoading(false);
     }
   };
 
-  const onUrlChange = (webviewState) => {
+  const onUrlChange = webviewState => {
     try {
-      console.log(":::::::::::::::::::::::::::");
-      console.log("webviewstate", webviewState);
-      if (webviewState?.url?.includes("https://example.com/cancel")) {
-        console.log("here....");
+      console.log(':::::::::::::::::::::::::::');
+      console.log('webviewstate', webviewState);
+      if (webviewState?.url?.includes('https://example.com/cancel')) {
+        console.log('here....');
         clearPaypalState();
         return;
       }
 
-      if (webviewState?.url?.includes("https://example.com/return")) {
-        console.log("sfjksdfksdjf__________________", webviewState?.url);
+      if (webviewState?.url?.includes('https://example.com/return')) {
+        console.log('sfjksdfksdjf__________________', webviewState?.url);
         const urlValues = queryString.parseUrl(webviewState?.url);
-        console.log("urlValues", urlValues);
-        const { PayerID, token } = urlValues.query;
+        console.log('urlValues', urlValues);
+        const {PayerID, token} = urlValues.query;
         if (token) {
           paymentSuccess(token, PayerID);
           clearPaypalState();
@@ -178,11 +178,11 @@ const PaypalPayment = ({ navigation, route }) => {
         return;
       }
     } catch (error) {
-      console.log("Error Raised : ", error);
+      console.log('Error Raised : ', error);
     }
   };
   const clearPaypalState = () => {
-    setPayPalUrl("");
+    setPayPalUrl('');
     setIsWebViewopen(false);
   };
 
@@ -191,32 +191,36 @@ const PaypalPayment = ({ navigation, route }) => {
       setLoading(true);
       const res = await paypalApi
         .capturePayment(id, accessToken, paypalOrderDetail)
-        .then((res) => {
-          console.log("resopnse...", res);
-          console.log("res?.status...", res?.status);
-          console.log("Payment Done");
+        .then(res => {
+          console.log('resopnse...', res);
+          console.log('res?.status...', res?.status);
+          console.log('Payment Done');
+          console.log(
+            'route?.params?.type  ______________________ : ',
+            route?.params?.type,
+          );
           //   alert("Payment Done");
-          if (route?.params?.type == "promote") {
+          if (route?.params?.type == 'promote') {
             CreatePromotion();
-          } else if (route?.params?.type == "addbanner") {
+          } else if (route?.params?.type == 'addbanner') {
             CreateBanner();
-          } else if (route?.params?.type == "account_verify") {
+          } else if (route?.params?.type == 'account_verify') {
             SubmitVerificationDocument();
-          } else if (route?.params?.type == "listing_paypal") {
+          } else if (route?.params?.type == 'listing_paypal') {
             //handle listing payment
             createListingOrder(PayerID);
           } else {
-            console.log("route?.params?.type  not found", route?.params?.type);
+            console.log('route?.params?.type  not found', route?.params?.type);
           }
           setLoading(false);
         })
-        .catch((error) => {
-          console.log("error", error);
+        .catch(error => {
+          console.log('error', error);
           setLoading(false);
         });
     } catch (error) {
       setLoading(false);
-      console.log("error ", error);
+      console.log('error ', error);
     }
   };
 
@@ -236,9 +240,9 @@ const PaypalPayment = ({ navigation, route }) => {
       promotionID,
       promotionType,
       start_date,
-      expiry_date
-    ).then((response) => {
-      console.log("hessdsre we go in:", response.data);
+      expiry_date,
+    ).then(response => {
+      console.log('hessdsre we go in:', response.data);
       //setModalVisible(true)
       setModalVisible(true);
     });
@@ -246,24 +250,24 @@ const PaypalPayment = ({ navigation, route }) => {
 
   //banner ads
   const CreateBanner = async () => {
-    console.log("CreateBanner function called...");
+    console.log('CreateBanner function called...');
     var formdata = new FormData();
-    formdata.append("user_id", route?.params?.user_id);
-    formdata.append("start_date", route?.params?.start_date);
-    formdata.append("end_date", route?.params?.end_date);
-    formdata.append("app_img", route?.params?.app_img);
-    formdata.append("app_img_link", route?.params?.app_img_link);
-    formdata.append("cast", route?.params?.cast);
+    formdata.append('user_id', route?.params?.user_id);
+    formdata.append('start_date', route?.params?.start_date);
+    formdata.append('end_date', route?.params?.end_date);
+    formdata.append('app_img', route?.params?.app_img);
+    formdata.append('app_img_link', route?.params?.app_img_link);
+    formdata.append('cast', route?.params?.cast);
 
     var requestOptions = {
-      method: "POST",
+      method: 'POST',
       body: formdata,
-      redirect: "follow",
+      redirect: 'follow',
     };
 
-    fetch(BASE_URL + "bannerAdApi.php", requestOptions)
-      .then((response) => response.json())
-      .then((response) => {
+    fetch(BASE_URL + 'bannerAdApi.php', requestOptions)
+      .then(response => response.json())
+      .then(response => {
         if (response?.status == true) {
           //   setsnackbarValue({
           //     value: "Banner Ad created successfully!",
@@ -277,57 +281,57 @@ const PaypalPayment = ({ navigation, route }) => {
           setModalVisible(true);
           //sending notification to admin to noti new banner is created
           send_new_banner_req_to_admin()
-            .then((res) => {
-              console.log("banner notification response : ", res?.data);
+            .then(res => {
+              console.log('banner notification response : ', res?.data);
             })
-            .catch((err) => {
-              console.log("error raised while sending banner notification");
+            .catch(err => {
+              console.log('error raised while sending banner notification');
             });
         } else {
-          setsnackbarValue({ value: response?.message, color: "red" });
+          setsnackbarValue({value: response?.message, color: 'red'});
           setVisible(true);
         }
       })
-      .catch((error) => console.log("error in create banner api", error));
+      .catch(error => console.log('error in create banner api', error));
   };
 
   //verify_account
   const SubmitVerificationDocument = async () => {
-    console.log("SubmitVerificationDocument  :___________________________");
+    console.log('SubmitVerificationDocument  :___________________________');
     const formData = new FormData();
-    formData.append("user_id", route?.params?.user_id);
-    formData.append("cnic", route?.params?.cnic);
-    formData.append("live_image", route?.params?.live_image);
+    formData.append('user_id', route?.params?.user_id);
+    formData.append('cnic', route?.params?.cnic);
+    formData.append('live_image', route?.params?.live_image);
 
-    formData.append("bitcoin", route?.params?.bitcoin);
-    formData.append("paypal", route?.params?.paypal);
-    formData.append("bank", route?.params?.bankAccount);
+    formData.append('bitcoin', route?.params?.bitcoin);
+    formData.append('paypal', route?.params?.paypal);
+    formData.append('bank', route?.params?.bankAccount);
 
-    let url = BASE_URL + "accountVerify.php";
+    let url = BASE_URL + 'accountVerify.php';
     fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "multipart/form-data" },
+      method: 'POST',
+      headers: {'Content-Type': 'multipart/form-data'},
       body: formData,
     })
-      .then((response) => response.json())
-      .then((response) => {
-        console.log("response of SubmitVerificationDocument :  ", response);
+      .then(response => response.json())
+      .then(response => {
+        console.log('response of SubmitVerificationDocument :  ', response);
         if (response?.status == true) {
           submit_varification_details();
           setsnackbarValue({
-            value: "Verification document submitted successfully!",
-            color: "green",
+            value: 'Verification document submitted successfully!',
+            color: 'green',
           });
           setVisible(true);
 
           //sending notification to admin to notify new verification is created
           send_new_verification_req_to_admin()
-            .then((res) => {
-              console.log("verification notification response : ", res?.data);
+            .then(res => {
+              console.log('verification notification response : ', res?.data);
             })
-            .catch((err) => {
+            .catch(err => {
               console.log(
-                "error raised while sending verification notification"
+                'error raised while sending verification notification',
               );
             });
 
@@ -337,23 +341,23 @@ const PaypalPayment = ({ navigation, route }) => {
         } else {
           setsnackbarValue({
             value: response?.message,
-            color: "red",
+            color: 'red',
           });
           setVisible(true);
         }
       })
-      .catch((err) => {
-        console.log("error : ", err);
+      .catch(err => {
+        console.log('error : ', err);
         setsnackbarValue({
-          value: "Something went wrong",
-          color: "red",
+          value: 'Something went wrong',
+          color: 'red',
         });
         setVisible(true);
       });
   };
 
   const submit_varification_details = async () => {
-    console.log("submit_varification_details______________________________");
+    console.log('submit_varification_details______________________________');
     if (
       route?.params?.paypal != true &&
       route?.params?.bitcoin != true &&
@@ -362,49 +366,49 @@ const PaypalPayment = ({ navigation, route }) => {
       return false;
     }
     let paymentList = [];
-    if (route?.params?.paypal == true) paymentList.push("paypal");
-    if (route?.params?.bitcoin == true) paymentList.push("bitcoin");
-    if (route?.params?.bankAccount == true) paymentList.push("bank_account");
-    var user_id = await AsyncStorage.getItem("Userid");
+    if (route?.params?.paypal == true) paymentList.push('paypal');
+    if (route?.params?.bitcoin == true) paymentList.push('bitcoin');
+    if (route?.params?.bankAccount == true) paymentList.push('bank_account');
+    var user_id = await AsyncStorage.getItem('Userid');
     let obj = {
       payment_types: paymentList,
       user_id: user_id,
       paypal: {
         paypal_email:
-          route?.params?.paypal == true ? route?.params?.paypalEmail : "",
+          route?.params?.paypal == true ? route?.params?.paypalEmail : '',
       },
       bitcoin:
-        route?.params?.bitcoin == true ? route?.params?.bitcoinWally : "",
+        route?.params?.bitcoin == true ? route?.params?.bitcoinWally : '',
       bank_account: {
         account_number:
           route?.params?.bankAccount == true
             ? route?.params?.bankAccountNumber
-            : "",
+            : '',
         ZipCode:
-          route?.params?.bankAccount == true ? route?.params?.zipCode : "",
+          route?.params?.bankAccount == true ? route?.params?.zipCode : '',
         AccountHolder:
           route?.params?.bankAccount == true
             ? route?.params?.accountHolderName
-            : "",
+            : '',
         BankName:
-          route?.params?.bankAccount == true ? route?.params?.bankName : "",
+          route?.params?.bankAccount == true ? route?.params?.bankName : '',
       },
     };
 
-    console.log("obj  ::::::::::::::::::::::::::::", obj);
+    console.log('obj  ::::::::::::::::::::::::::::', obj);
 
     post_verification_detail(obj)
-      .then((response) => {
-        console.log("response_________: " + response);
+      .then(response => {
+        console.log('response_________: ' + response);
       })
-      .catch((err) => {
-        console.log("Errr : ", err);
+      .catch(err => {
+        console.log('Errr : ', err);
       });
   };
 
   //listing order
-  const createListingOrder = async (PayerID) => {
-    console.log("createListingOrder  _________________________called...");
+  const createListingOrder = async PayerID => {
+    console.log('createListingOrder  _________________________called...');
     createListingTranscation(PayerID);
     updateListing();
     // create_order_Listings(
@@ -425,13 +429,13 @@ const PaypalPayment = ({ navigation, route }) => {
     // });
   };
 
-  const createListingTranscation = async (PayerID) => {
+  const createListingTranscation = async PayerID => {
     //   order_id,
     // mode,
     // transaction_id,
     // seller_id,
     // amount
-    let fees = route?.params?.fee ? route?.params?.fee : "1.00";
+    let fees = route?.params?.fee ? route?.params?.fee : '1.00';
     let shipping_cost = exchange_other_listing?.shipping_cost
       ? exchange_other_listing?.shipping_cost
       : 0;
@@ -443,41 +447,37 @@ const PaypalPayment = ({ navigation, route }) => {
 
     let order_id = route?.params?.order_details?.order_id;
     let transaction_id = PayerID;
-    let mode = "stripe";
+    let mode = 'stripe';
     let seller_id = exchange_other_listing.user_id;
     create_order_Transcation_Listings(
       order_id,
       mode,
       transaction_id,
       seller_id,
-      fees
+      fees,
     )
-      .then((res) => {
-        console.log("res : ", res?.data);
+      .then(res => {
+        console.log('res : ', res?.data);
         if (res?.data?.status == true) {
           setModalVisible(true);
         } else {
-          console.log("create order response :  ", res?.data);
+          console.log('create order response :  ', res?.data);
           setsnackbarValue({
-            value: "Something went wrong",
-            color: "red",
+            value: 'Something went wrong',
+            color: 'red',
           });
           setVisible(true);
         }
       })
-      .catch((err) => {
-        console.log("error : ", err);
+      .catch(err => {
+        console.log('error : ', err);
       });
   };
 
   const updateListing = async () => {
     // console.log("exchange_other_listing?.category  : ", exchange_other_listing);
     // return;
-    console.log(
-      "fees.______________________________________",
-      route?.params?.fees
-    );
-    if (route?.params?.buy_type == "live_stream") {
+    if (route?.params?.buy_type == 'live_stream') {
       let listing_quantity = exchange_other_listing?.quantity
         ? exchange_other_listing?.quantity
         : 0;
@@ -485,8 +485,8 @@ const PaypalPayment = ({ navigation, route }) => {
       let remaining_quantity =
         parseInt(listing_quantity) - parseInt(buy_quantity);
       console.log(
-        "remaining_quantity  _______________________ : ",
-        remaining_quantity
+        'remaining_quantity  _______________________ : ',
+        remaining_quantity,
       );
       var data1 = {
         id: exchange_other_listing?.id,
@@ -512,28 +512,28 @@ const PaypalPayment = ({ navigation, route }) => {
       };
 
       updateListingDetails(data1)
-        .then((response) => {
-          console.log("update listing response : ", response?.data);
+        .then(response => {
+          console.log('update listing response : ', response?.data);
           firestore()
-            .collection("live_stream")
+            .collection('live_stream')
             .doc(route?.params?.streamId)
-            .collection("last_purchase")
+            .collection('last_purchase')
             .doc(route?.params?.streamId)
             .set(
               {
                 updatedDate: new Date(),
               },
-              { merge: true }
+              {merge: true},
             );
         })
-        .catch((err) => {
-          console.log("error in updating listing quantity : ", err);
+        .catch(err => {
+          console.log('error in updating listing quantity : ', err);
         });
     }
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{flex: 1, backgroundColor: '#fff'}}>
       {/* <GoogleButton
         title="pay with paypal"
         onPress={() => testPayPalPayment()}
@@ -541,7 +541,7 @@ const PaypalPayment = ({ navigation, route }) => {
       <Loader isLoading={loading} />
       {isWebViewopen && (
         <WebView
-          source={{ uri: payPalUrl }}
+          source={{uri: payPalUrl}}
           onNavigationStateChange={onUrlChange}
           style={{
             height: hp(100),
@@ -558,8 +558,7 @@ const PaypalPayment = ({ navigation, route }) => {
           backgroundColor: snackbarValue.color,
           marginBottom: hp(20),
           zIndex: 999,
-        }}
-      >
+        }}>
         {snackbarValue.value}
       </Snackbar>
 
@@ -571,14 +570,14 @@ const PaypalPayment = ({ navigation, route }) => {
         subtext={TranslationStrings.PAYED_SUCCESSFULLY}
         buttontext={TranslationStrings.OK}
         onPress={() => {
-          if (route?.params?.type == "promote") {
-            navigation.replace("Promotions");
-          } else if (route?.params?.type == "addbanner") {
+          if (route?.params?.type == 'promote') {
+            navigation.replace('Promotions');
+          } else if (route?.params?.type == 'addbanner') {
             navigation?.goBack();
             setModalVisible(false);
           } else {
             // navigation.navigate("BottomTab")
-            navigation.replace("SalesOrders");
+            navigation.replace('SalesOrders');
             setModalVisible(false);
           }
         }}
