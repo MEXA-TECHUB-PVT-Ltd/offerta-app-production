@@ -37,6 +37,7 @@ const CommentInput = ({value, onChangeValue, onPress}) => {
       hideSubscription.remove();
     };
   }, []);
+
   return (
     <View
       style={{

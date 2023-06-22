@@ -395,7 +395,6 @@ const WatchLiveStream = ({navigation, route}) => {
       .doc(stream_id?.toString())
       .collection('comments');
     // .orderBy("createdAt", "asc");
-
     commentRef.onSnapshot(querySnap => {
       const allmsg = querySnap?.docs?.map(docsnap => {
         const data = docsnap.data();

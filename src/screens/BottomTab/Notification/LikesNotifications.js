@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -11,66 +11,61 @@ import {
   StatusBar,
   RefreshControl,
   useWindowDimensions,
-} from "react-native";
+} from 'react-native';
 
 ////////////////app components///////////
-import CustomHeader from "../../../components/Header/CustomHeader";
+import CustomHeader from '../../../components/Header/CustomHeader';
 
 /////////////app styles///////////////////
-import styles from "./styles";
-import Colors from "../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import { BASE_URL, IMAGE_URL } from "../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { appImages } from "../../../constant/images";
+import axios from 'axios';
+import {BASE_URL, IMAGE_URL} from '../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {appImages} from '../../../constant/images';
 
 ////////////////////api function/////////////
-import {
-  get_Notifications,
-  get_like_notifications,
-} from "../../../api/GetApis";
-import { useDispatch, useSelector } from "react-redux";
+import {get_Notifications, get_like_notifications} from '../../../api/GetApis';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   setChatCount,
   setExchangeOffer_OtherListing,
   setListingId,
   setNotificationCount,
   setNotificationList,
-} from "../../../redux/actions";
-import Loader from "../../../components/Loader/Loader";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+} from '../../../redux/actions';
+import Loader from '../../../components/Loader/Loader';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
-import BlockUserView from "../../../components/BlockUserView";
-import { get_user_status } from "../../../api/GetApis";
+import BlockUserView from '../../../components/BlockUserView';
+import {get_user_status} from '../../../api/GetApis';
 
-import moment from "moment";
-import "moment-timezone";
+import moment from 'moment';
+import 'moment-timezone';
 
-import TranslationStrings from "../../../utills/TranslationStrings";
-import { Avatar } from "react-native-paper";
+import TranslationStrings from '../../../utills/TranslationStrings';
+import {Avatar} from 'react-native-paper';
 import {
   update_like_notification,
   update_notification,
-} from "../../../api/PostApis";
+} from '../../../api/PostApis';
 
-import { TabView, SceneMap, TabBar } from "react-native-tab-view";
-import NoNotificationFound from "./NoNotificationFound";
+import {TabView, SceneMap, TabBar} from 'react-native-tab-view';
+import NoNotificationFound from './NoNotificationFound';
 
 const LikesNotifications = ({}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { chatCount, notificationList } = useSelector(
-    (state) => state.userReducer
-  );
+  const {chatCount, notificationList} = useSelector(state => state.userReducer);
 
   ///////////////////data state///////////
-  const [notification, setNotification] = useState("");
+  const [notification, setNotification] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showBlockModal, setShowBlockModal] = useState(false);
@@ -83,10 +78,10 @@ const LikesNotifications = ({}) => {
   useFocusEffect(
     React.useCallback(() => {
       get_user_notifications();
-    }, [])
+    }, []),
   );
 
-  const convertUTCToLocalTime = (dateString) => {
+  const convertUTCToLocalTime = dateString => {
     try {
       let date = new Date(dateString);
       const milliseconds = Date.UTC(
@@ -95,25 +90,25 @@ const LikesNotifications = ({}) => {
         date.getDate(),
         date.getHours(),
         date.getMinutes(),
-        date.getSeconds()
+        date.getSeconds(),
       );
       const localTime = new Date(milliseconds);
       // localTime.getDate(); // local date
       // let hours = localTime.getHours(); // local hour
       return moment(localTime).fromNow();
     } catch (error) {
-      return "";
+      return '';
     }
   };
 
   const get_user_notifications = async () => {
-    console.log("getting like notifications....");
+    console.log('getting like notifications....');
     get_like_notifications()
-      .then(async (response) => {
+      .then(async response => {
         //setData(response.data)
         if (
-          response.data.msg === "No Result" ||
-          response?.data[0]?.message == "No record found"
+          response.data.msg === 'No Result' ||
+          response?.data[0]?.message == 'No record found'
         ) {
           // setNotification("");
           setData([]);
@@ -122,7 +117,7 @@ const LikesNotifications = ({}) => {
             let notificationList1 = response.data;
             // let sorted_list = notificationList1.reverse();
             let sorted_list = notificationList1.sort(
-              (a, b) => new Date(b?.created_at) - new Date(a.created_at)
+              (a, b) => new Date(b?.created_at) - new Date(a.created_at),
             );
 
             setData(sorted_list);
@@ -146,8 +141,8 @@ const LikesNotifications = ({}) => {
           }
         }
       })
-      .catch((err) => {
-        console.log("Error : ", err);
+      .catch(err => {
+        console.log('Error : ', err);
       })
       .finally(() => {
         setRefreshing(false);
@@ -160,29 +155,29 @@ const LikesNotifications = ({}) => {
     get_user_notifications();
   };
 
-  const handleNotificationPress = async (item) => {
+  const handleNotificationPress = async item => {
     try {
       dispatch(setNotificationCount(0));
 
       updateNotificationStatus(item?.id);
       dispatch(setExchangeOffer_OtherListing(item?.listing));
       dispatch(setListingId(item?.listing?.id));
-      navigation.navigate("MainListingsDetails", {
+      navigation.navigate('MainListingsDetails', {
         listing_id: item?.listing?.id,
       });
-      console.log("notificationPress :  ", item?.id);
+      console.log('notificationPress :  ', item?.id);
     } catch (error) {
-      console.log("Error raised in notification press : ", error);
+      console.log('Error raised in notification press : ', error);
     }
   };
 
-  const updateNotificationStatus = async (id) => {
-    console.log("id pass to update like notification status : ", id);
+  const updateNotificationStatus = async id => {
+    console.log('id pass to update like notification status : ', id);
     setLoading(true);
     update_like_notification(id)
-      .then((response) => {
-        console.log("update like noti response : ", response?.data);
-        const newData = data?.map((item) => {
+      .then(response => {
+        console.log('update like noti response : ', response?.data);
+        const newData = data?.map(item => {
           if (item?.id == id) {
             return {
               ...item,
@@ -198,13 +193,13 @@ const LikesNotifications = ({}) => {
         // dispatch(setNotificationList(newData));
         setData(newData);
       })
-      .catch((err) => {
-        console.log("err : ", err);
+      .catch(err => {
+        console.log('err : ', err);
       })
       .finally(() => setLoading(false));
   };
 
-  const renderItem = (item) => {
+  const renderItem = item => {
     return (
       <TouchableOpacity
         style={{
@@ -214,32 +209,29 @@ const LikesNotifications = ({}) => {
           paddingHorizontal: 15,
           marginBottom: 2,
           backgroundColor:
-            item?.item?.status == "false" || item?.item?.status == false
-              ? "#EFF6FF"
-              : "transparent",
+            item?.item?.status == 'false' || item?.item?.status == false
+              ? '#EFF6FF'
+              : 'transparent',
           minHeight: 65,
         }}
         onPress={() => {
           handleNotificationPress(item?.item);
-        }}
-      >
+        }}>
         <View
-          style={{ flexDirection: "row", alignItems: "center", width: wp(100) }}
-        >
+          style={{flexDirection: 'row', alignItems: 'center', width: wp(100)}}>
           <Avatar.Image
             size={wp(12)}
-            source={{ uri: IMAGE_URL + item.item?.user?.image }}
+            source={{uri: IMAGE_URL + item.item?.user?.image}}
           />
-          <View style={{ marginLeft: wp(3), flex: 0.9, paddingRight: 10 }}>
+          <View style={{marginLeft: wp(3), flex: 0.9, paddingRight: 10}}>
             <View
               style={{
                 flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Text style={{ ...styles.username }}>
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}>
+              <Text style={{...styles.username}}>
                 {item?.item?.user?.full_name}
               </Text>
               {/* <Text
@@ -249,9 +241,7 @@ const LikesNotifications = ({}) => {
                   convertUTCToLocalTime(item?.item?.created_at)}
               </Text> */}
             </View>
-            <Text
-              style={[styles.recomend, { color: "#7A8FA6", width: wp(57) }]}
-            >
+            <Text style={[styles.recomend, {color: '#7A8FA6', width: wp(57)}]}>
               {item?.item?.Message}
             </Text>
           </View>
@@ -272,7 +262,7 @@ const LikesNotifications = ({}) => {
       /> */}
       <BlockUserView visible={showBlockModal} setVisible={setShowBlockModal} />
 
-      <View style={{ ...styles.postcard, marginTop: 0, marginBottom: hp(13) }}>
+      <View style={{...styles.postcard, marginTop: 0}}>
         <Loader isLoading={loading} />
         <FlatList
           style={{
@@ -293,6 +283,7 @@ const LikesNotifications = ({}) => {
           showsHorizontalScrollIndicator={false}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={<NoNotificationFound loading={loading} />}
+          ListFooterComponent={() => <View style={{marginBottom: hp(13)}} />}
         />
       </View>
     </SafeAreaView>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,57 +8,57 @@ import {
   TouchableOpacity,
   FlatList,
   BackHandler,
-} from "react-native";
+} from 'react-native';
 
 ////////navigation////////////////
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from '@react-navigation/native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../../../components/Header/CustomHeader";
-import CustomButtonhere from "../../../../../components/Button/CustomButton";
-import CustomTextInput from "../../../../../components/TextInput/CustomTextInput";
-import ShippingAddressCard from "../../../../../components/CustomCards/ShippingAddressCard";
-import NoDataFound from "../../../../../components/NoDataFound/NoDataFound";
+import CustomHeader from '../../../../../components/Header/CustomHeader';
+import CustomButtonhere from '../../../../../components/Button/CustomButton';
+import CustomTextInput from '../../../../../components/TextInput/CustomTextInput';
+import ShippingAddressCard from '../../../../../components/CustomCards/ShippingAddressCard';
+import NoDataFound from '../../../../../components/NoDataFound/NoDataFound';
 
 ////////////////country picker package/////////////
-import CountryPicker from "react-native-country-picker-modal";
+import CountryPicker from 'react-native-country-picker-modal';
 
 /////////////app styles////////////////
-import styles from "./styles";
-import Colors from "../../../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import { BASE_URL } from "../../../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import {BASE_URL} from '../../../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //////////////api function//////////
-import { get_Shipping_Address } from "../../../../../api/ShippingAddress";
+import {get_Shipping_Address} from '../../../../../api/ShippingAddress';
 
 ////////////////redux//////////////
 import {
   setOrderShippingAddress,
   setLoginUserShippingAddress,
-} from "../../../../../redux/LoginUserActions";
-import { useDispatch, useSelector } from "react-redux";
+} from '../../../../../redux/LoginUserActions';
+import {useDispatch, useSelector} from 'react-redux';
 
-import { Snackbar } from "react-native-paper";
-import TranslationStrings from "../../../../../utills/TranslationStrings";
+import {Snackbar} from 'react-native-paper';
+import TranslationStrings from '../../../../../utills/TranslationStrings';
 import {
   checkout,
   create_order_Listings,
   create_order_Listings_new,
   create_order_Transcation_Listings,
-} from "../../../../../api/Offer";
-import Loader from "../../../../../components/Loader/Loader";
-import { updateListingDetails } from "../../../../../api/PostApis";
-import firestore from "@react-native-firebase/firestore";
+} from '../../../../../api/Offer';
+import Loader from '../../../../../components/Loader/Loader';
+import {updateListingDetails} from '../../../../../api/PostApis';
+import firestore from '@react-native-firebase/firestore';
 
-const ConfirmAddress = ({ navigation, route }) => {
+const ConfirmAddress = ({navigation, route}) => {
   ///////////////data states////////////////////
   const [cardno, setCardNo] = React.useState();
   const [expirydate, setExpiryDate] = React.useState();
@@ -67,8 +67,8 @@ const ConfirmAddress = ({ navigation, route }) => {
 
   ////////////country picker states/////////////
   const [CountryPickerView, setCountryPickerView] = useState(false);
-  const [countryCode, setCountryCode] = useState("92");
-  const [countryname, setCountryName] = useState("Pak");
+  const [countryCode, setCountryCode] = useState('92');
+  const [countryname, setCountryName] = useState('Pak');
 
   ////////////////navigation/////////////////
   const isFocused = useIsFocused();
@@ -77,20 +77,20 @@ const ConfirmAddress = ({ navigation, route }) => {
   // const { exchange_other_listing } = useSelector(
   //   (state) => state.loginuserReducer
   // );
-  const { exchange_other_listing } = useSelector((state) => state.userReducer);
+  const {exchange_other_listing} = useSelector(state => state.userReducer);
 
   const dispatch = useDispatch();
-  const { login_user_shipping_address } = useSelector(
-    (state) => state.loginuserReducer
+  const {login_user_shipping_address} = useSelector(
+    state => state.loginuserReducer,
   );
 
   ////////////list state////////////
   const [shippinglist, setshippinglist] = useState([]);
 
-  const [selectedAddress, setSelectedAddress] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState('');
 
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
 
   const [loading, setLoading] = useState(false);
@@ -102,20 +102,20 @@ const ConfirmAddress = ({ navigation, route }) => {
     };
 
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
+      'hardwareBackPress',
+      backAction,
     );
 
     return () => backHandler.remove();
   }, []);
 
   useEffect(() => {
-    console.log("useEffect  : ", isFocused);
+    console.log('useEffect  : ', isFocused);
     if (isFocused) {
       get_Shipping_Address()
-        .then((response) => {
-          console.log("get shipping adress repnse  :  ", response?.data);
-          if (response.data.msg === "No Result") {
+        .then(response => {
+          console.log('get shipping adress repnse  :  ', response?.data);
+          if (response.data.msg === 'No Result') {
             setshippinglist([]);
           } else {
             setshippinglist(response.data);
@@ -124,8 +124,8 @@ const ConfirmAddress = ({ navigation, route }) => {
             }
           }
         })
-        .catch((err) =>
-          console.log("errr raised while getting shipping address : ", err)
+        .catch(err =>
+          console.log('errr raised while getting shipping address : ', err),
         );
     }
   }, [isFocused]);
@@ -137,8 +137,8 @@ const ConfirmAddress = ({ navigation, route }) => {
     // return;
     if (shippinglist?.length == 0) {
       setsnackbarValue({
-        value: "Please Add Shipping Address to continue",
-        color: "red",
+        value: 'Please Add Shipping Address to continue',
+        color: 'red',
       });
       setVisible(true);
     } else {
@@ -146,10 +146,10 @@ const ConfirmAddress = ({ navigation, route }) => {
       if (!login_user_shipping_address) {
         dispatch(setLoginUserShippingAddress(shippinglist[0]));
       } else {
-        console.log("address mil gya..");
+        console.log('address mil gya..');
       }
 
-      navigation.replace("Checkout", {
+      navigation.replace('Checkout', {
         payment_type: route?.params?.payment_type,
         type: route?.params?.type,
         //live streaming params
@@ -158,81 +158,84 @@ const ConfirmAddress = ({ navigation, route }) => {
         buy_type: route?.params?.buy_type,
         quantity: route?.params?.quantity,
         streamId: route?.params?.streamId,
+        //counter offer
+        buy_type: route?.params?.buy_type,
+        counter_fee: route?.params?.counter_fee,
       });
     }
   };
 
   const handleSubmit = async () => {
-    console.log("route?.params?.streamId :  ", route?.params?.streamId);
+    console.log('route?.params?.streamId :  ', route?.params?.streamId);
     //test
     // updateListingQuantity();
 
-    if (route?.params?.type == "giveaway") {
+    if (route?.params?.type == 'giveaway') {
       //handle give away scenario
-      createListingOrder("giveaway");
+      createListingOrder('giveaway');
       return;
     } else if (
-      route?.params?.type == "pay_on_delivery" ||
-      route?.params?.type == "pay_on_pickup"
+      route?.params?.type == 'pay_on_delivery' ||
+      route?.params?.type == 'pay_on_pickup'
     ) {
       createListingOrder(route?.params?.type);
       return;
     }
-    let type = "";
+    let type = '';
     if (route?.params?.index == 2) {
-      type = "pay_on_delivery";
+      type = 'pay_on_delivery';
     } else if (route?.params?.index == 3) {
-      type = "pay_on_pickup";
+      type = 'pay_on_pickup';
     }
     if (shippinglist?.length == 0) {
       setsnackbarValue({
-        value: "Please Add Shipping Address to continue",
-        color: "red",
+        value: 'Please Add Shipping Address to continue',
+        color: 'red',
       });
       setVisible(true);
     } else if (type) {
-      let user_id = await AsyncStorage.getItem("Userid");
+      let user_id = await AsyncStorage.getItem('Userid');
       let obj = {
         user_id: user_id,
         listing_id: exchange_other_listing?.id,
-        currency: "inr",
+        currency: 'inr',
         type: type,
       };
 
       create_order_Listings(
         exchange_other_listing.user_id,
         exchange_other_listing.id,
-        login_user_shipping_address.id
+        login_user_shipping_address.id,
       )
-        .then((res) => {
-          console.log("create order response : ", res);
-          checkout(obj).then((response) => {
-            console.log("checkout response :  ", response?.data);
+        .then(res => {
+          console.log('create order response : ', res?.data);
+          checkout(obj).then(response => {
+            console.log('checkout response :  ', response?.data);
             if (response?.data?.status == true) {
               setsnackbarValue({
-                value: "Order Confirmed",
-                color: "green",
+                value: 'Order Confirmed',
+                color: 'green',
               });
               setVisible(true);
               setTimeout(() => {
                 // navigation.navigate("BottomTab");
-                navigation.replace("SalesOrders");
+                navigation.replace('SalesOrders');
               }, 500);
             } else {
               setsnackbarValue({
-                value: "Something went wrong",
-                color: "red",
+                value: 'Something went wrong',
+                color: 'red',
               });
               setVisible(true);
             }
           });
         })
-        .catch((err) => {
-          console.log("err ", err);
+        .catch(err => {
+          console.log('err ', err);
         });
     } else {
       //do nothing type is not valid
-      console.log("do nothing type is not valid");
+      console.log('do nothing type is not valid');
     }
 
     // checkout(obj)
@@ -255,9 +258,9 @@ const ConfirmAddress = ({ navigation, route }) => {
     // });
   };
 
-  const createListingOrder = async (type) => {
+  const createListingOrder = async type => {
     try {
-      console.log("createListingOrder  _________________________called...");
+      console.log('createListingOrder  _________________________called...');
 
       setLoading(true);
 
@@ -266,37 +269,42 @@ const ConfirmAddress = ({ navigation, route }) => {
         exchange_other_listing.id,
         login_user_shipping_address.id,
         type,
-        "no_payment_mode"
+        'no_payment_mode',
       )
-        .then((response) => {
-          console.log("create order response :  ", response?.data);
+        .then(response => {
+          console.log('create order response :  ', response?.data);
           if (response?.data?.success == true) {
             //order created successfully
             let order_id = response?.data?.order_id;
             createListingTranscation(order_id, type);
             updateListing();
           } else {
-            alert("Something went wrong");
+            alert('Something went wrong');
           }
         })
-        .catch((err) => {
-          console.log("err : ", err);
+        .catch(err => {
+          console.log('err : ', err);
         })
         .finally(() => {
           setLoading(false);
         });
     } catch (error) {
-      console.log("error : ", error);
+      console.log('error : ', error);
     }
   };
 
   const createListingTranscation = async (order_id1, type) => {
-    console.log("order_id1_____________________________", order_id1);
+    console.log('order_id1_____________________________', order_id1);
     setLoading(true);
     let amount = 0;
 
-    if (type == "giveaway") {
+    if (type == 'giveaway') {
       amount = 0;
+    } else if (route?.params?.buy_type == 'counter_offer') {
+      let shipping_cost = exchange_other_listing?.shipping_cost
+        ? parseInt(exchange_other_listing?.shipping_cost)
+        : 0;
+      amount = parseInt(route?.params?.counter_fee) + parseInt(shipping_cost);
     } else {
       let shipping_cost = exchange_other_listing?.shipping_cost
         ? parseInt(exchange_other_listing?.shipping_cost)
@@ -304,39 +312,39 @@ const ConfirmAddress = ({ navigation, route }) => {
       amount =
         parseInt(exchange_other_listing?.price) + parseInt(shipping_cost);
     }
-    console.log("amount  : ", amount);
+    console.log('amount_______________________________________  : ', amount);
 
     let order_id = order_id1;
     let transaction_id = null;
-    let mode = "no_payment_mode";
+    let mode = 'no_payment_mode';
     let seller_id = exchange_other_listing.user_id;
     create_order_Transcation_Listings(
       order_id,
       mode,
       transaction_id,
       seller_id,
-      amount
+      amount,
     )
-      .then((res) => {
-        console.log("res : ", res?.data);
+      .then(res => {
+        console.log('res : ', res?.data);
         if (res?.data?.status == true) {
           setsnackbarValue({
-            value: "Order submitted successfully",
-            color: "green",
+            value: 'Order submitted successfully',
+            color: 'green',
           });
           setVisible(true);
-          navigation.replace("SalesOrders");
+          navigation.replace('SalesOrders');
         } else {
-          console.log("create order response :  ", res?.data);
+          console.log('create order response :  ', res?.data);
           setsnackbarValue({
-            value: "Something went wrong",
-            color: "red",
+            value: 'Something went wrong',
+            color: 'red',
           });
           setVisible(true);
         }
       })
-      .catch((err) => {
-        console.log("error : ", err);
+      .catch(err => {
+        console.log('error : ', err);
       })
       .finally(() => {
         setLoading(false);
@@ -346,7 +354,7 @@ const ConfirmAddress = ({ navigation, route }) => {
   const updateListing = async () => {
     // console.log("exchange_other_listing?.category  : ", exchange_other_listing);
     // return;
-    if (route?.params?.buy_type == "live_stream") {
+    if (route?.params?.buy_type == 'live_stream') {
       let listing_quantity = exchange_other_listing?.quantity
         ? exchange_other_listing?.quantity
         : 0;
@@ -377,26 +385,26 @@ const ConfirmAddress = ({ navigation, route }) => {
       };
 
       updateListingDetails(data1)
-        .then((response) => {
-          console.log("update listing response : ", response?.data);
+        .then(response => {
+          console.log('update listing response : ', response?.data);
           console.log(
-            "route?.params?.streamId  ______________________________ : ",
-            route?.params?.streamId
+            'route?.params?.streamId  ______________________________ : ',
+            route?.params?.streamId,
           );
           firestore()
-            .collection("live_stream")
+            .collection('live_stream')
             .doc(route?.params?.streamId)
-            .collection("last_purchase")
+            .collection('last_purchase')
             .doc(route?.params?.streamId)
             .set(
               {
                 updatedDate: new Date(),
               },
-              { merge: true }
+              {merge: true},
             );
         })
-        .catch((err) => {
-          console.log("error in updating listing quantity : ", err);
+        .catch(err => {
+          console.log('error in updating listing quantity : ', err);
         });
     }
   };
@@ -405,8 +413,7 @@ const ConfirmAddress = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+        showsHorizontalScrollIndicator={false}>
         {CountryPickerView == true ? (
           <CountryPicker
             withFilter={true}
@@ -415,15 +422,15 @@ const ConfirmAddress = ({ navigation, route }) => {
             withFlag={true}
             withFlagButton={true}
             withCountryNameButton={true}
-            onSelect={(e) => {
-              console.log("country here", e);
-              var name = e.name.substring("4");
+            onSelect={e => {
+              console.log('country here', e);
+              var name = e.name.substring('4');
               setCountryPickerView(false);
-              if (e.name === "Antarctica") {
-                setCountryCode("672");
+              if (e.name === 'Antarctica') {
+                setCountryCode('672');
               }
-              if (e.name === "Bouvet Island") {
-                setCountryCode("55");
+              if (e.name === 'Bouvet Island') {
+                setCountryCode('55');
               } else {
                 setCountryCode(JSON.parse(e.callingCode));
               }
@@ -431,7 +438,7 @@ const ConfirmAddress = ({ navigation, route }) => {
               //setCountryCode(JSON.parse(e.callingCode))
               setCountryName(e.name);
             }}
-            onClose={(e) => {
+            onClose={e => {
               setCountryPickerView(false);
             }}
             visible={CountryPickerView}
@@ -444,7 +451,7 @@ const ConfirmAddress = ({ navigation, route }) => {
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
         <Loader isLoading={loading} />
 
@@ -454,62 +461,57 @@ const ConfirmAddress = ({ navigation, route }) => {
             {
               marginLeft: wp(0),
             },
-          ]}
-        >
+          ]}>
           {route?.params?.index == 0 ? (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingHorizontal: wp(8),
-              }}
-            >
+              }}>
               <View style={styles.timelineinnerview}></View>
-              <View style={[styles.timeline, { width: wp(79) }]}></View>
+              <View style={[styles.timeline, {width: wp(79)}]}></View>
             </View>
           ) : (
             <View
               style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
                 paddingHorizontal: wp(8),
-              }}
-            >
+              }}>
               <View style={styles.timelineinnerview}></View>
-              <View style={[styles.filedtimeline, { width: wp(34.5) }]}></View>
+              <View style={[styles.filedtimeline, {width: wp(34.5)}]}></View>
               <View style={styles.timelineinnerview}></View>
-              <View style={[styles.filedtimeline, { width: wp(34.5) }]}></View>
+              <View style={[styles.filedtimeline, {width: wp(34.5)}]}></View>
               <View style={styles.timelineinnerview}></View>
             </View>
           )}
 
           <View
             style={{
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginHorizontal: wp("2%"),
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginHorizontal: wp('2%'),
               //backgroundColor: 'red'
-            }}
-          ></View>
+            }}></View>
         </View>
         <View
           style={{
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
             marginVertical: hp(0),
-          }}
-        >
+          }}>
           <Text style={styles.timelinetext}>
             {TranslationStrings.CONFIRM_ADDRESS}
           </Text>
         </View>
         {shippinglist?.length == 0 ? (
-          <View style={{ marginBottom: hp(14) }}>
+          <View style={{marginBottom: hp(14)}}>
             <NoDataFound
-              icon={"exclamation-thick"}
+              icon={'exclamation-thick'}
               text={
                 TranslationStrings.NO_ADDRESS_ADDED_FIRST_ADD_SHIPPING_ADDRESS
               }
@@ -519,28 +521,27 @@ const ConfirmAddress = ({ navigation, route }) => {
                 backgroundColor: Colors.Appthemecolor,
                 width: wp(50),
                 height: hp(6),
-                alignSelf: "center",
-                alignItems: "center",
-                justifyContent: "center",
+                alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
                 borderRadius: wp(3),
               }}
               onPress={() =>
-                navigation.navigate("ShippingAddress", {
-                  navtype: "Buy",
+                navigation.navigate('ShippingAddress', {
+                  navtype: 'Buy',
                   index: route?.params?.index,
                 })
-              }
-            >
-              <Text style={[styles.timelinetext, { color: "white" }]}>
+              }>
+              <Text style={[styles.timelinetext, {color: 'white'}]}>
                 {TranslationStrings.ADD_ADDRESS}
               </Text>
             </TouchableOpacity>
           </View>
         ) : (
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <FlatList
               data={shippinglist}
-              renderItem={({ item }) => (
+              renderItem={({item}) => (
                 <ShippingAddressCard
                   style={{
                     elevation: item?.id == selectedAddress ? 10 : 1,
@@ -554,13 +555,13 @@ const ConfirmAddress = ({ navigation, route }) => {
                   city={item.city}
                   state={item.state}
                   country={item.country}
-                  type={"Buy"}
+                  type={'Buy'}
                   cardonpress={() => {
                     dispatch(setLoginUserShippingAddress(item));
                   }}
                   onpress={() => {
                     dispatch(setLoginUserShippingAddress(item));
-                    navigation.navigate("UpdateShippingAddress", {
+                    navigation.navigate('UpdateShippingAddress', {
                       index: route?.params?.index,
                     });
                   }}
@@ -584,8 +585,7 @@ const ConfirmAddress = ({ navigation, route }) => {
             backgroundColor: snackbarValue.color,
             marginBottom: hp(20),
             zIndex: 999,
-          }}
-        >
+          }}>
           {snackbarValue.value}
         </Snackbar>
 
@@ -660,7 +660,7 @@ const ConfirmAddress = ({ navigation, route }) => {
               onTermChange={(newCvv) => setCvv(newCvv)}
             />
           </View> */}
-        <View style={{ marginBottom: hp(15) }}>
+        <View style={{marginBottom: hp(15)}}>
           {route?.params?.index == 0 ? (
             <CustomButtonhere
               title={TranslationStrings.NEXT}
@@ -675,9 +675,9 @@ const ConfirmAddress = ({ navigation, route }) => {
                 handleNext();
               }}
             />
-          ) : (route?.params?.type == "pay_on_delivery" ||
-              route?.params?.type == "pay_on_pickup") &&
-            exchange_other_listing?.shipping_cost != "0.0" ? (
+          ) : (route?.params?.type == 'pay_on_delivery' ||
+              route?.params?.type == 'pay_on_pickup') &&
+            exchange_other_listing?.shipping_cost != '0.0' ? (
             // <CustomButtonhere
             //   title={TranslationStrings.NEXT}
             //   widthset={80}
