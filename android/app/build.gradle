@@ -93,13 +93,13 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.ofertasvappmtechub"
+    namespace "com.ofertasvAppMtechub"
     defaultConfig {
-        applicationId "com.ofertasvappmtechub"
+        applicationId "com.ofertasvAppMtechub"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 20
-        versionName "20.0"
+        versionCode 23
+        versionName "23.0"
     }
     //add this
      packagingOptions {

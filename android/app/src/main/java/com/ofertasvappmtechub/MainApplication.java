@@ -1,4 +1,4 @@
-package com.ofertasvappmtechub;
+package com.ofertasvAppMtechub;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

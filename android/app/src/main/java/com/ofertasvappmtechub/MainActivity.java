@@ -1,4 +1,4 @@
-package com.ofertasvappmtechub;
+package com.ofertasvAppMtechub;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
