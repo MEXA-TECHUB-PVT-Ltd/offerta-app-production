@@ -1,43 +1,93 @@
 {
   "project_info": {
-    "project_number": "402130171045",
-    "firebase_url": "https://ofertasv-eb98f-default-rtdb.firebaseio.com",
-    "project_id": "ofertasv-eb98f",
-    "storage_bucket": "ofertasv-eb98f.appspot.com"
+    "project_number": "308500907524",
+    "project_id": "offerta-409fa",
+    "storage_bucket": "offerta-409fa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:402130171045:android:c67e332e2dc24c2ed4494c",
+        "mobilesdk_app_id": "1:308500907524:android:6103d06411757af4195751",
         "android_client_info": {
-          "package_name": "com.ofertasvappmtechub"
+          "package_name": "com.ofertasvAppMtechub"
         }
       },
       "oauth_client": [
         {
-          "client_id": "402130171045-4erqjanm9s31injbvp038pkmv42kojr8.apps.googleusercontent.com",
+          "client_id": "308500907524-kpofnc0en7ar7mnjvotekahro8i50r80.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ofertasvappmtechub",
-            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+            "package_name": "com.ofertasvAppMtechub",
+            "certificate_hash": "fd33fc49d1e4ca70f67fd2676fba33e739dd5365"
           }
         },
         {
-          "client_id": "402130171045-3lrgfuffpgpmja2c6amsncob1ii43m7a.apps.googleusercontent.com",
+          "client_id": "308500907524-tdve7467rtmcm13ecjdodocvsdeo0c2l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ofertasvAppMtechub",
+            "certificate_hash": "f3c8b9de9568c8fb019f0c2931a959c0d6d58d2e"
+          }
+        },
+        {
+          "client_id": "308500907524-9fir9mpslr5qvka1cd8epe1oqk2kpvk2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA6llogH9tC8ABvO-CJcoob4ntUoFUJYmM"
+          "current_key": "AIzaSyB-xRtPFBQGO8xJmkcU3iviA18XEH8LUVc"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "402130171045-2hdktmlp0f9b99pk4tdpu76hjcvemgqa.apps.googleusercontent.com",
+              "client_id": "308500907524-9fir9mpslr5qvka1cd8epe1oqk2kpvk2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "308500907524-1obshpcrhjp02k95421l886ulf3r76s6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ofertasvappmtechub"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:308500907524:android:4623ab6fe8e0edee195751",
+        "android_client_info": {
+          "package_name": "com.ofertasvappmtechub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "308500907524-9fir9mpslr5qvka1cd8epe1oqk2kpvk2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-xRtPFBQGO8xJmkcU3iviA18XEH8LUVc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "308500907524-9fir9mpslr5qvka1cd8epe1oqk2kpvk2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "308500907524-1obshpcrhjp02k95421l886ulf3r76s6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ofertasvappmtechub"
+              }
             }
           ]
         }
