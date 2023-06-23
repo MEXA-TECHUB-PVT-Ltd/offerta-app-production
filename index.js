@@ -118,34 +118,6 @@ const countUnreadMessages_OF_Specific_User = async (user_id) => {
   });
 };
 
-// const countUnreadMessages_OF_Specific_User = async (user_id) => {
-//   return new Promise(async (resolve, reject) => {
-//     try {
-//       var user = await AsyncStorage.getItem("Userid");
-//       let unread_count = 0;
-//       let docid = user_id > user ? user + "-" + user_id : user_id + "-" + user;
-//       const user_list = firestore()
-//         .collection("chats")
-//         .doc(docid)
-//         .collection("messages");
-//       user_list
-//         .where("read", "==", false)
-//         .get()
-//         .then((snapshots) => {
-//           let myArr = [];
-//           snapshots.forEach((item) => {
-//             if (item?._data?.user?._id != user) {
-//               myArr.push(item);
-//             }
-//           });
-//           resolve(myArr?.length);
-//         });
-//     } catch (error) {
-//       resolve(0);
-//     }
-//   });
-// };
-
 const getDetails = async () => {
   get_Chat_Users().then(async (response) => {
     if (response.data.msg === "No Result") {

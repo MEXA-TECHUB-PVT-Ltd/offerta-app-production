@@ -69,7 +69,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import VideoPlayer from "react-native-video-player";
 import VideoBottomSheet from "../../../components/CameraBottomSheet/VideoBottomSheet";
 
-import { Video } from "react-native-compressor";
+// import { Video } from "react-native-compressor";
 
 const UploadItem = ({ navigation, route }) => {
   const refRBSheetSubCat = useRef(null);

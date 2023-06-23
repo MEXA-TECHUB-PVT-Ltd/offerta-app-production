@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   PermissionsAndroid,
   Alert,
+  Platform,
 } from "react-native";
 import { Divider } from "react-native-paper";
 
@@ -42,7 +43,7 @@ import { Image } from "react-native-compressor";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import TranslationStrings from "../../utills/TranslationStrings";
 
-import Permissions from "react-native-permissions";
+import Permissions, { check, PERMISSIONS } from "react-native-permissions";
 
 const CamerBottomSheet = (props) => {
   const navigation = useNavigation();
@@ -90,7 +91,7 @@ const CamerBottomSheet = (props) => {
   // };
 
   useEffect(() => {
-    requestCameraPermission();
+    Platform.OS=='android'? requestCameraPermission():{}
   }, []);
 
   const requestCameraPermission = async () => {
@@ -127,9 +128,35 @@ const CamerBottomSheet = (props) => {
       console.warn(err);
     }
   };
+  // const requestCameraPermissionIos = async () => {
+  //   try {
+  //     const granted = await check(PERMISSIONS.IOS.PHOTO_LIBRARY)
+  
+  //     if (granted === 'granted') {
+  //       // Camera permission granted
+  //     } else if (granted === 'denied') {
+  //       Alert.alert(
+  //         'Camera Permission denied',
+  //         'Please open Settings to allow Camera permissions.',
+  //         [
+  //           {
+  //             text: 'Cancel',
+  //             onPress: () => console.log('Cancel Pressed'),
+  //             style: 'cancel',
+  //           },
+  //           { text: 'Open Setting', onPress: PermissionsIOS.openSettings },
+  //         ]
+  //       );
+  //     } else {
+  //       console.log('Camera permission denied');
+  //     }
+  //   } catch (err) {
+  //     console.warn(err);
+  //   }
+  // };
 
   const takePhotoFromCamera = async () => {
-    requestCameraPermission();
+    Platform.OS=='ios'?{}: requestCameraPermission();
     var options = {
       storageOptions: {
         skipBackup: true,
@@ -384,8 +411,8 @@ const CamerBottomSheet = (props) => {
             props.type === "Chat_image" ||
             props.type === "verify"
               ? choosePhotoFromLibrary()
-              : navigation.navigate("CameraViewScreen", "Take Photo"),
-              props.refRBSheet.current.close();
+              : navigation.navigate("CameraViewScreen", "Take Photo")
+              // props.refRBSheet.current.close();
           }}
           style={styles.modaltextview}
         >

@@ -55,7 +55,6 @@ const appId = '2103cc766ad141bf90843544931573d8';
 //   "0062103cc766ad141bf90843544931573d8IAB139ED8dXWCWJ+mjRaQrbGkRJDFIpBkWp/NLOaXjfZe2e6juvwa+luIgBdHQAA+LGNZAQAAQCIboxkAwCIboxkAgCIboxkBACIboxk";
 // const uid = 94;
 
-import AgoraUIKit from 'agora-rn-uikit';
 import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
 
 import {doc, onSnapshot} from 'firebase/firestore';
@@ -720,10 +719,6 @@ const WatchLiveStream = ({navigation, route}) => {
               //   alignItems: "center",
               justifyContent: 'center',
             }}>
-            {/* <AgoraUIKit
-              connectionData={connectionData}
-              rtcCallbacks={rtcCallbacks}
-            /> */}
             {isJoined && isHost ? (
               <React.Fragment key={0}>
                 <RtcSurfaceView canvas={{uid: 0}} style={styles.videoView} />
@@ -836,7 +831,7 @@ const WatchLiveStream = ({navigation, route}) => {
               style={{
                 alignSelf: 'center',
                 marginTop: 8,
-                marginBottom: -20,
+                // marginBottom: -20,
               }}>
               <BannerAd
                 unitId={TestIds.BANNER}

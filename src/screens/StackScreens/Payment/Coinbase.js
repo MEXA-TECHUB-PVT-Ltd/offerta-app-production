@@ -2,7 +2,6 @@ import React, {useMemo, useState, useCallback, useEffect} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import {WebView} from 'react-native-webview';
 // import { generateOnRampURL } from "@coinbase/cbpay-js";
-import 'react-native-url-polyfill/auto';
 
 import {Appbar} from 'react-native-paper';
 import Colors from '../../../utills/Colors';

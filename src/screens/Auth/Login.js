@@ -337,7 +337,11 @@ const Login = ({navigation}) => {
   };
 
   useEffect(() => {
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+        androidClientId: 'ADD_YOUR_ANDROID_CLIENT_ID_HERE',
+        iosClientId:
+        '286361072761-467kea81cknl1pl9o1i5gllujnb9afu5.apps.googleusercontent.com',
+    });
   }, []);
 
   //////////////Google Login Api Calling////////////////////

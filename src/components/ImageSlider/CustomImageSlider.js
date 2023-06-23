@@ -9,7 +9,6 @@ import {
   Linking,
   ImageBackground,
 } from "react-native";
-// import Carousel, { Pagination } from "react-native-snap-carousel";
 
 import { SwiperFlatList } from "react-native-swiper-flatlist";
 import { Pagination } from "react-native-swiper-flatlist/src/components";

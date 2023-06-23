@@ -95,7 +95,7 @@ const Location = ({ navigation, route }) => {
       {pinlat && pinlog > 0 ? (
         <MapView
           style={[styles.mapStyle]}
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+          // provider={PROVIDER_GOOGLE} // remove if not using Google Maps
           region={{
             latitude: pinlat,
             longitude: pinlog,

@@ -73,9 +73,9 @@ const PrivacyTerms = ({ navigation }) => {
           <Text style={styles.text}>
             <View
               style={{
-                alignItems: "center",
+                // alignItems: "center",
                 //backgroundColor: "orange",
-                alignSelf: "center",
+                // alignSelf: "center",
                 marginHorizontal: wp(5),
               }}
             >

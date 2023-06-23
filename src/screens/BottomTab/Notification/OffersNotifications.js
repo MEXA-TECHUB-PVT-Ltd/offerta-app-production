@@ -46,7 +46,6 @@ import BlockUserView from "../../../components/BlockUserView";
 import { get_user_status } from "../../../api/GetApis";
 
 import moment from "moment";
-import "moment-timezone";
 
 import TranslationStrings from "../../../utills/TranslationStrings";
 import { Avatar } from "react-native-paper";

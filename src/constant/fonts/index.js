@@ -5,6 +5,6 @@ const fontFamily = {
   Poppins_Bold: 'Poppins-Bold',
   Poppins_SemiBold: 'Poppins-SemiBold',
   Poppins_Medium:'Poppins-Medium',
-  Rockwell:'ROCK'
+  Rockwell:'Poppins-Medium'
   }
   export {fontFamily};
