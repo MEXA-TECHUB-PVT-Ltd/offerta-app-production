@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -8,75 +8,79 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-} from "react-native";
+} from 'react-native';
 
-import { Checkbox } from "react-native-paper";
+import {Checkbox} from 'react-native-paper';
 //////////////////app components///////////////
-import CustomHeader from "../../../components/Header/CustomHeader";
+import CustomHeader from '../../../components/Header/CustomHeader';
 
 /////////////app styles////////////////
-import Colors from "../../../utills/Colors";
+import Colors from '../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
-import { fontFamily } from "../../../constant/fonts";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import { get_specific_user_detail } from "../../../api/GetApis";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Loader from "../../../components/Loader/Loader";
+import {fontFamily} from '../../../constant/fonts';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import {get_specific_user_detail} from '../../../api/GetApis';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../../components/Loader/Loader';
 
-const PaymentMethods = ({ navigation, route }) => {
+const PaymentMethods = ({navigation, route}) => {
   const [selected_index, setSelected_index] = useState(-1);
   const [loading, setLoading] = useState(false);
 
-  const handlePress = async (index) => {
+  const handlePress = async index => {
     //credit_card  : 0
     //paypal  : 1
     //crypto  : 2
 
-    console.log("index : ", index);
+    console.log('index : ', index);
 
     setSelected_index(index);
 
     if (index === 0) {
-      navigation.replace("StripePayment", route?.params);
+      if (route?.params?.type == 'account_verify') {
+        navigation?.navigate('StripeMonthlySubscription', route?.params);
+      } else {
+        navigation.replace('StripePayment', route?.params);
+      }
     }
     if (index == 1) {
       //paypal payment
-      if (route?.params?.type == "account_verify") {
-        navigation?.replace("PaypalMonthlySubscription", route?.params);
+      if (route?.params?.type == 'account_verify') {
+        navigation?.replace('PaypalMonthlySubscription', route?.params);
       } else {
-        navigation.navigate("PaypalPayment", route?.params);
+        navigation.navigate('PaypalPayment', route?.params);
       }
     }
     if (index === 2) {
       getDAta();
     }
 
-    console.log("index ::: ", index);
+    console.log('index ::: ', index);
   };
   const getDAta = async () => {
     setLoading(true);
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     let user_detail = await get_specific_user_detail(user_id);
-    console.log("user_detail  :  ", user_detail?.user_name);
+    console.log('user_detail  :  ', user_detail?.user_name);
 
     let url = `http://ofertasvapp.com/testing/offerta-sv/offerta-backend/v1/payment/cryptoInit.php?amount=1&customer_name=${user_detail?.user_name}`;
-    console.log("url : ", url);
+    console.log('url : ', url);
     fetch(url)
-      .then((res) => res.json())
-      .then((response) => {
-        console.log("response : ", response);
+      .then(res => res.json())
+      .then(response => {
+        console.log('response : ', response);
         let payment_url = response[0]?.payment_url;
-        console.log("payment_url  : ", payment_url);
+        console.log('payment_url  : ', payment_url);
         // navigation.navigate("Coinbase", route?.params);
-        navigation.navigate("Coinbase", {
+        navigation.navigate('Coinbase', {
           payment_url: payment_url,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         alert(err);
       })
       .finally(() => {
@@ -87,8 +91,7 @@ const PaymentMethods = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+        showsHorizontalScrollIndicator={false}>
         <CustomHeader
           //   headerlabel={TranslationStrings.BUY}
           // headerlabel={"Payment Method"}
@@ -96,10 +99,10 @@ const PaymentMethods = ({ navigation, route }) => {
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
         <Loader isLoading={loading} />
-        <View style={{ flex: 1, alignItems: "center" }}>
+        <View style={{flex: 1, alignItems: 'center'}}>
           {/* <Text
             style={{
               fontSize: 18,
@@ -116,15 +119,15 @@ const PaymentMethods = ({ navigation, route }) => {
             </Text>
             {selected_index == 0 && (
               <View style={styles1.checkedView}>
-                <Checkbox status={"checked"} />
+                <Checkbox status={'checked'} />
               </View>
             )}
 
-            {route?.params?.type == "account_verify" && (
+            {route?.params?.type == 'account_verify' && (
               <View style={styles.feeView}>
                 <Text style={styles.feeText}>
                   {TranslationStrings.ACCOUNT_FEE} :{route?.params?.stripeFee}
-                  {"$/Month"}
+                  {'$/Month'}
                 </Text>
               </View>
             )}
@@ -134,15 +137,15 @@ const PaymentMethods = ({ navigation, route }) => {
             <Text style={styles1.btnText}>Paypal</Text>
             {selected_index == 1 && (
               <View style={styles1.checkedView}>
-                <Checkbox status={"checked"} />
+                <Checkbox status={'checked'} />
               </View>
             )}
 
-            {route?.params?.type == "account_verify" && (
+            {route?.params?.type == 'account_verify' && (
               <View style={styles.feeView}>
                 <Text style={styles.feeText}>
                   {TranslationStrings.ACCOUNT_FEE} :{route?.params?.paypalFee}
-                  {"$/Month"}
+                  {'$/Month'}
                 </Text>
               </View>
             )}
@@ -154,15 +157,15 @@ const PaymentMethods = ({ navigation, route }) => {
             </Text>
             {selected_index == 2 && (
               <View style={styles1.checkedView}>
-                <Checkbox status={"checked"} />
+                <Checkbox status={'checked'} />
               </View>
             )}
 
-            {route?.params?.type == "account_verify" && (
+            {route?.params?.type == 'account_verify' && (
               <View style={styles.feeView}>
                 <Text style={styles.feeText}>
                   {TranslationStrings.ACCOUNT_FEE} :{route?.params?.coinbaseFee}
-                  {"$/Month"}
+                  {'$/Month'}
                 </Text>
               </View>
             )}
@@ -181,50 +184,50 @@ const styles1 = StyleSheet.create({
     borderRadius: wp(3),
     borderWidth: 1,
     borderColor: Colors.Appthemecolor,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
   },
   btnText: {
-    color: "#000",
+    color: '#000',
     fontSize: 18,
   },
-  checkedView: { position: "absolute", top: hp(15) / 3, left: 0 },
+  checkedView: {position: 'absolute', top: hp(15) / 3, left: 0},
 
   //
 });
 const styles = StyleSheet.create({
   ////////////////////////timeline////////////////
   timelineflex: {
-    justifyContent: "center",
+    justifyContent: 'center',
 
     //backgroundColor:'green'
   },
   timelinemainview: {
-    width: wp("9%"),
-    height: wp("9%"),
+    width: wp('9%'),
+    height: wp('9%'),
     borderRadius: 80,
-    borderColor: "#DDDDDD",
+    borderColor: '#DDDDDD',
     borderWidth: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   timelineinnerview: {
-    width: wp("5%"),
-    height: wp("5%"),
+    width: wp('5%'),
+    height: wp('5%'),
     borderRadius: 50,
     //borderColor: 'black',
     // borderWidth: 1,
-    alignSelf: "center",
+    alignSelf: 'center',
     backgroundColor: Colors.activetextinput,
   },
   timeline: {
-    width: wp("31%"),
-    borderColor: "#C7D8EB",
+    width: wp('31%'),
+    borderColor: '#C7D8EB',
     borderTopWidth: 5,
   },
   filedtimeline: {
-    width: wp("31%"),
+    width: wp('31%'),
     borderColor: Colors.activetextinput,
     borderTopWidth: 5,
   },
@@ -232,7 +235,7 @@ const styles = StyleSheet.create({
     color: Colors.Appthemecolor,
     fontSize: hp(1.8),
     fontFamily: fontFamily.Poppins_Medium,
-    marginTop: wp("2%"),
+    marginTop: wp('2%'),
   },
   feeView: {},
   feeText: {
