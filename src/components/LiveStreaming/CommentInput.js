@@ -9,6 +9,7 @@ import {
 import React, {useState, useEffect} from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {fontFamily} from '../../constant/fonts';
+import TranslationStrings from '../../utills/TranslationStrings';
 
 const CommentInput = ({value, onChangeValue, onPress}) => {
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -46,7 +47,7 @@ const CommentInput = ({value, onChangeValue, onPress}) => {
           keyboardHeight == 0 || isFocus == false ? 0 : keyboardHeight * 0.96,
       }}>
       <TextInput
-        placeholder="Type Something..."
+        placeholder={`${TranslationStrings.TYPE_SOMETHING}...`}
         placeholderTextColor={'white'}
         value={value}
         onChangeText={text => onChangeValue(text)}

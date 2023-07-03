@@ -43,6 +43,7 @@ import CustomTextInput from '../../components/TextInput/CustomTextInput';
 import CustomButtonhere from '../../components/Button/CustomButton';
 import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TranslationStrings from '../../utills/TranslationStrings';
 
 const LiveUsers = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
@@ -111,14 +112,16 @@ const LiveUsers = ({navigation, route}) => {
 
   const getLiveStreamsData = async () => {
     getALLLiveStreams()
-      .then(response => {
+      .then(async response => {
         let list = [];
+        var user_id = await AsyncStorage.getItem('Userid');
         if (response?.data?.error == false) {
           for (const item of response?.data?.stream) {
             if (
               item?.active_status == 'active' &&
               item?.uid != '0' &&
-              item?.user != null
+              item?.user != null &&
+              item?.user[0]?.id != user_id
             ) {
               let obj = {
                 stream: [
@@ -229,7 +232,7 @@ const LiveUsers = ({navigation, route}) => {
           ListHeaderComponent={
             <CustomHeader
               type={'profile'}
-              headerlabel={'Live Streaming'}
+              headerlabel={TranslationStrings.LIVE_STREAMING}
               iconPress={() => {
                 navigation.goBack();
               }}
@@ -345,7 +348,7 @@ const LiveUsers = ({navigation, route}) => {
           style={styles.btn}
           onPress={() => navigation.navigate('CreateLive')}>
           <AntDesign name="plus" color={'white'} size={20} />
-          <Text style={styles.btnText}>Start Live</Text>
+          <Text style={styles.btnText}>{TranslationStrings.START_LIVE}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

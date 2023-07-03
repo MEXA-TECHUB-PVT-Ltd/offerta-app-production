@@ -23,8 +23,9 @@ import {
   widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import Loader from '../../components/Loader/Loader';
+import TranslationStrings from '../../utills/TranslationStrings';
 
-const ProductList = ({data, isHost, streamId}) => {
+const ProductList = ({data, isHost, streamId, response}) => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -68,6 +69,8 @@ const ProductList = ({data, isHost, streamId}) => {
           buy_type: 'live_stream',
           quantity: quantity,
           streamId: streamId,
+          response: response,
+          host: isHost,
         });
       } else {
         // navigation.navigate("ConfirmAddress");
@@ -77,6 +80,8 @@ const ProductList = ({data, isHost, streamId}) => {
           buy_type: 'live_stream',
           quantity: quantity,
           streamId: streamId,
+          response: response,
+          host: isHost,
         });
       }
     }
@@ -84,32 +89,35 @@ const ProductList = ({data, isHost, streamId}) => {
 
   return (
     <View style={{flex: 1, justifyContent: 'flex-end'}}>
-      <View
-        style={{
-          position: 'absolute',
-          left: -20,
-          right: 0,
-          top: -heightPercentageToDP(45),
-          bottom: 0,
-          height: heightPercentageToDP(100) + 50,
-          width: widthPercentageToDP(100),
-          zIndex: showQuantityModal ? 999 : 0,
-        }}>
-        <QuantityModal
-          visible={showQuantityModal}
-          setVisible={setShowQuantityModal}
-          value={quantity}
-          setValue={setQuantity}
-          onPress={() => {
-            handleBuyNow(
-              selectedItem?.giveaway,
-              selectedItem?.user_id,
-              selectedItem,
-              quantity,
-            );
-          }}
-        />
-      </View>
+      {showQuantityModal && (
+        <View
+          style={{
+            position: 'absolute',
+            left: -20,
+            right: 0,
+            top: -heightPercentageToDP(45),
+            bottom: 0,
+            height: heightPercentageToDP(100) + 50,
+            width: widthPercentageToDP(100),
+            zIndex: showQuantityModal ? 888 : 0,
+          }}>
+          <QuantityModal
+            visible={showQuantityModal}
+            setVisible={setShowQuantityModal}
+            value={quantity}
+            setValue={setQuantity}
+            onPress={() => {
+              handleBuyNow(
+                selectedItem?.giveaway,
+                selectedItem?.user_id,
+                selectedItem,
+                quantity,
+              );
+            }}
+          />
+        </View>
+      )}
+
       <Loader isLoading={loading} />
       <View>
         <FlatList
@@ -126,7 +134,8 @@ const ProductList = ({data, isHost, streamId}) => {
                     opacity:
                       item?.quantity == '0' ||
                       item?.quantity?.length == 0 ||
-                      item?.quantity == 0
+                      item?.quantity == 0 ||
+                      item?.quantity <= 0
                         ? 0.5
                         : 1,
                   }}>
@@ -159,7 +168,7 @@ const ProductList = ({data, isHost, streamId}) => {
                       </View>
                       <View style={styles.rowView}>
                         <Text style={styles.mediumText}>
-                          Quantity:
+                          {TranslationStrings.QUANTITY}:
                           <Text style={styles.lightText}>
                             {item?.quantity ? item?.quantity : 0}
                           </Text>
@@ -173,7 +182,9 @@ const ProductList = ({data, isHost, streamId}) => {
                               setSelectedItem(item);
                               setShowQuantityModal(true);
                             }}>
-                            <Text style={styles.tagText}>Buy</Text>
+                            <Text style={styles.tagText}>
+                              {TranslationStrings.BUY}
+                            </Text>
                           </TouchableOpacity>
                         )}
                       </View>
@@ -182,7 +193,8 @@ const ProductList = ({data, isHost, streamId}) => {
                 </Card>
                 {(item?.quantity == '0' ||
                   item?.quantity?.length == 0 ||
-                  item?.quantity == 0) && (
+                  item?.quantity == 0 ||
+                  item?.quantity <= 0) && (
                   <View
                     style={{
                       position: 'absolute',

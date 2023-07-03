@@ -105,7 +105,9 @@ const Checkout = ({navigation, route}) => {
                 buy_type: route?.params?.buy_type,
                 quantity: route?.params?.quantity,
                 streamId: route?.params?.streamId,
-
+                //live stream
+                response: route?.params?.response,
+                host: route?.params?.host,
                 //counter offer
                 // buy_type: route?.params?.buy_type,
                 // counter_fee: route?.params?.counter_fee,
@@ -123,6 +125,9 @@ const Checkout = ({navigation, route}) => {
                 buy_type: route?.params?.buy_type,
                 quantity: route?.params?.quantity,
                 streamId: route?.params?.streamId,
+                //live stream
+                response: route?.params?.response,
+                host: route?.params?.host,
               });
             }
           } else {

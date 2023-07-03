@@ -75,6 +75,7 @@ const Listings = ({navigation, route}) => {
   const renderItem = ({item}) => (
     <DashboardCard
       image={item?.images?.length == 0 ? null : IMAGE_URL + item.images[0]}
+      video={item?.video}
       maintext={item.title}
       subtext={item.location}
       sold={item?.sold}

@@ -15,7 +15,7 @@ const Header = ({userName, profile, totalViewers, duration, onBackPress}) => {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-      <View style={{alignItems: 'center', flexDirection: 'row'}}>
+      <View style={{alignItems: 'center', flexDirection: 'row', zIndex: 999}}>
         <TouchableOpacity onPress={onBackPress}>
           <AntDesign name="arrowleft" color={'white'} size={22} />
         </TouchableOpacity>
@@ -38,9 +38,20 @@ const Header = ({userName, profile, totalViewers, duration, onBackPress}) => {
           <Ionicons name="md-eye-outline" color={'#0A0932'} size={17} />
           <Text style={styles.viewersText}>{totalViewers}</Text>
         </View>
-        <View style={styles.totalViewsContainer}>
+        <View style={{...styles.totalViewsContainer, marginBottom: 8}}>
           <Text style={styles.viewersText}>{duration}</Text>
         </View>
+        {/* <View
+          style={{
+            ...styles.totalViewsContainer,
+            backgroundColor: 'red',
+            width: 85,
+            paddingVertical: 8,
+          }}>
+          <Text style={{...styles.viewersText, fontSize: 10, color: 'white'}}>
+            End Stream
+          </Text>
+        </View> */}
       </View>
     </View>
   );

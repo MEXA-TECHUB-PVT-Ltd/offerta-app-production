@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
-import AntDesign from "react-native-vector-icons/AntDesign";
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import React from 'react';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import TranslationStrings from '../../utills/TranslationStrings';
 
-const BottomTabs = ({ selectedTab, onTabPress, showBottomView }) => {
+const BottomTabs = ({selectedTab, onTabPress, showBottomView}) => {
   return (
     <View style={styles.bottomTabContainer}>
       <TouchableOpacity
@@ -12,9 +13,8 @@ const BottomTabs = ({ selectedTab, onTabPress, showBottomView }) => {
         style={{
           ...styles.tabBtn,
           borderBottomWidth: selectedTab == 0 ? 2 : 0,
-        }}
-      >
-        <Text style={styles.tabText}>Comments</Text>
+        }}>
+        <Text style={styles.tabText}>{TranslationStrings.COMMENTS}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
@@ -23,9 +23,8 @@ const BottomTabs = ({ selectedTab, onTabPress, showBottomView }) => {
         style={{
           ...styles.tabBtn,
           borderBottomWidth: selectedTab == 1 ? 2 : 0,
-        }}
-      >
-        <Text style={styles.tabText}>Products</Text>
+        }}>
+        <Text style={styles.tabText}>{TranslationStrings.PRODUCTS}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
@@ -33,12 +32,11 @@ const BottomTabs = ({ selectedTab, onTabPress, showBottomView }) => {
         }}
         style={{
           ...styles.tabBtn,
-        }}
-      >
+        }}>
         {showBottomView ? (
-          <AntDesign name="upcircleo" color={"white"} size={20} />
+          <AntDesign name="upcircleo" color={'white'} size={20} />
         ) : (
-          <AntDesign name="downcircleo" color={"white"} size={20} />
+          <AntDesign name="downcircleo" color={'white'} size={20} />
         )}
       </TouchableOpacity>
     </View>
@@ -49,13 +47,13 @@ export default BottomTabs;
 
 const styles = StyleSheet.create({
   bottomTabContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     marginVertical: 15,
   },
   tabBtn: {
     marginHorizontal: 10,
-    borderColor: "white",
+    borderColor: 'white',
   },
-  tabText: { color: "white" },
+  tabText: {color: 'white'},
 });

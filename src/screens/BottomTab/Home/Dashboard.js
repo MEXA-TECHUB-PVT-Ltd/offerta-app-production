@@ -464,6 +464,7 @@ const Home = ({navigation}) => {
                       ? null
                       : IMAGE_URL + item?.images[0]
                   }
+                  video={item?.video}
                   // image={null}
                   promotion={item?.Promotion[0]}
                   sold={item?.sold}

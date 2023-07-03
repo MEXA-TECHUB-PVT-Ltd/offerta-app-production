@@ -261,7 +261,7 @@ const CreateLive = ({navigation, route}) => {
             .doc(stream_id?.toString())
             .collection('stream_detail')
             .add(obj);
-          navigation.navigate('WatchLiveStream', {
+          navigation.replace('WatchLiveStream', {
             response: response?.data,
           });
         }
@@ -384,7 +384,9 @@ const CreateLive = ({navigation, route}) => {
                       <Text style={styles.boldText}>{item?.price}$</Text>
                     </View>
                     <View style={styles.rowView}>
-                      <Text style={styles.mediumText}>Quantity:</Text>
+                      <Text style={styles.mediumText}>
+                        {TranslationStrings.QUANTITY}:
+                      </Text>
                       <Text style={styles.mediumText}>
                         {item?.quantity == '' ? 0 : item?.quantity}
                       </Text>
@@ -419,10 +421,10 @@ const CreateLive = ({navigation, route}) => {
           )}
           ListFooterComponent={() => <View style={{height: 70}} />}
         />
-        <TouchableOpacity style={styles.btn} onPress={() => handleGoLive()}>
-          <Text style={styles.btnText}>GO LIVE NOW</Text>
-        </TouchableOpacity>
 
+        <TouchableOpacity style={styles.btn} onPress={() => handleGoLive()}>
+          <Text style={styles.btnText}>{TranslationStrings.GO_LIVE_NOW}</Text>
+        </TouchableOpacity>
         <RBSheet
           ref={ref_RBSheet}
           height={395}
