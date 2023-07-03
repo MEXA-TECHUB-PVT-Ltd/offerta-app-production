@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
-import { SafeAreaView, ScrollView, FlatList, Linking } from "react-native";
+import React, {useEffect, useState, useRef} from 'react';
+import {SafeAreaView, ScrollView, FlatList, Linking} from 'react-native';
 
 /////////////navigation////////////
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from '@react-navigation/native';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   setCategoryName,
   setLocationAddress,
@@ -14,33 +14,33 @@ import {
   setLocationLng,
   setSliderDistance,
   setCategoryId,
-} from "../../../redux/actions";
+} from '../../../redux/actions';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../components/Header/CustomHeader";
-import DashboardCard from "../../../components/CustomCards/DashboardCard";
-import NoDataFound from "../../../components/NoDataFound/NoDataFound";
-import Loader from "../../../components/Loader/Loader";
+import CustomHeader from '../../../components/Header/CustomHeader';
+import DashboardCard from '../../../components/CustomCards/DashboardCard';
+import NoDataFound from '../../../components/NoDataFound/NoDataFound';
+import Loader from '../../../components/Loader/Loader';
 
 /////////////app styles////////////////
-import styles from "./styles";
+import styles from './styles';
 
 //////////////api function////////////
-import { get_Categories_Listings } from "../../../api/GetApis";
+import {get_Categories_Listings} from '../../../api/GetApis';
 
 ////////////image url////////////
-import { IMAGE_URL } from "../../../utills/ApiRootUrl";
+import {IMAGE_URL} from '../../../utills/ApiRootUrl';
 
 ////////////////app Images///////////////
-import { appImages } from "../../../constant/images";
+import {appImages} from '../../../constant/images';
 
 ////////////////api////////////////
-import axios from "axios";
-import { BASE_URL } from "../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import TranslationStrings from "../../../utills/TranslationStrings";
+import axios from 'axios';
+import {BASE_URL} from '../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import TranslationStrings from '../../../utills/TranslationStrings';
 
-const FilterListings = ({ navigation, route }) => {
+const FilterListings = ({navigation, route}) => {
   const isFocused = useIsFocused();
   /////////////////////previous data//////////////
   const [predata] = useState(route.params);
@@ -53,44 +53,44 @@ const FilterListings = ({ navigation, route }) => {
     location_lat,
     sort_by_value,
     slider_distance,
-  } = useSelector((state) => state.userReducer);
+  } = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   ///////////////////loader loading state///////////////
   const [loading, setloading] = useState(true);
 
   /////////////filter data state/////////////
-  const [Categorylist, setCategoryList] = useState("");
+  const [Categorylist, setCategoryList] = useState('');
   //////////////Api Calling Listing Filter////////////////////
   const ListingsFilter = async () => {
     axios({
-      method: "get",
+      method: 'get',
       url:
         BASE_URL +
-        "filterProduct.php?lat=" +
+        'filterProduct.php?lat=' +
         location_lat +
-        "&log=" +
+        '&log=' +
         location_lng +
-        "&price=" +
+        '&price=' +
         predata.itemprice +
-        "&category_id=" +
+        '&category_id=' +
         category_id +
-        "&time=" +
+        '&time=' +
         post_within_value +
-        "&sort=" +
+        '&sort=' +
         sort_by_value +
-        "&distance=" +
+        '&distance=' +
         slider_distance,
     })
       .then(async function (response) {
-        console.log("filter listing response : ", response?.data);
-        if (response.data.msg === "No Result") {
-          setCategoryList("no");
+        console.log('filter listing response : ', response?.data);
+        if (response.data.msg === 'No Result') {
+          setCategoryList('no');
         } else {
           setCategoryList(response.data);
-          dispatch(setSortByDD(""));
-          dispatch(setCategoryId(""));
-          dispatch(setCategoryName(""));
+          dispatch(setSortByDD(''));
+          dispatch(setCategoryId(''));
+          dispatch(setCategoryName(''));
           setloading(false);
           // dispatch(setLocationLat(""))
           // dispatch(setLocationLng(""))
@@ -98,15 +98,15 @@ const FilterListings = ({ navigation, route }) => {
       })
       .catch(function (error) {
         if (error) {
-          console.log("error in data fetching");
+          console.log('error in data fetching');
         }
         //setModalVisible(true);
-        console.log("error", error);
+        console.log('error', error);
       })
       .finally(() => {
-        dispatch(setSortByDD(""));
-        dispatch(setCategoryId(""));
-        dispatch(setCategoryName(""));
+        dispatch(setSortByDD(''));
+        dispatch(setCategoryId(''));
+        dispatch(setCategoryName(''));
         setloading(false);
       });
   };
@@ -116,38 +116,39 @@ const FilterListings = ({ navigation, route }) => {
     }
 
     console.log(
-      "previos data",
+      'previos data',
       category_id,
       post_within_value,
       location_lng,
       location_lat,
       sort_by_value,
-      predata.itemprice
+      predata.itemprice,
     );
   }, [isFocused]);
 
-  const openAffiliateLink = async (url) => {
+  const openAffiliateLink = async url => {
     await Linking.openURL(url)
-      .then((res) => {
-        console.log("res : ", res);
+      .then(res => {
+        console.log('res : ', res);
       })
-      .catch((err) => {
+      .catch(err => {
         alert(`Invalid affiliate link`);
       });
   };
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <DashboardCard
         // image={IMAGE_URL + item.images[0]}
+        video={item?.video}
         maintext={item.title}
         subtext={item.location}
         price={item?.price}
         added_by={item?.added_by}
         onpress={() => {
-          if (item?.added_by == "admin") {
+          if (item?.added_by == 'admin') {
             openAffiliateLink(item?.description);
           } else {
-            navigation.navigate("MainListingsDetails", {
+            navigation.navigate('MainListingsDetails', {
               listing_id: item.id,
             });
           }
@@ -166,13 +167,13 @@ const FilterListings = ({ navigation, route }) => {
         iconPress={() => {
           navigation.goBack();
         }}
-        icon={"arrow-back"}
+        icon={'arrow-back'}
       />
       <Loader isLoading={loading} />
-      {Categorylist === "no" ? (
+      {Categorylist === 'no' ? (
         loading == false && (
           <NoDataFound
-            icon={"exclamation-thick"}
+            icon={'exclamation-thick'}
             text={TranslationStrings.NO_DATA_FOUND}
           />
         )

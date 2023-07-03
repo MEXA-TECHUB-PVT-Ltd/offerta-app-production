@@ -286,6 +286,10 @@ const ShippingAddresss = ({navigation, route}) => {
                     quantity: route?.params?.quantity,
                     streamId: route?.params?.streamId,
                     navtype: 'no_shipping_address',
+
+                    //live stream
+                    response: route?.params?.response,
+                    host: route?.params?.host,
                   })
                 : navigation.navigate('ShippingAddressList');
           }}

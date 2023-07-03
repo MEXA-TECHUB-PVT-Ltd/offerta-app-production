@@ -575,6 +575,12 @@ const PaypalPayment = ({navigation, route}) => {
           } else if (route?.params?.type == 'addbanner') {
             navigation?.goBack();
             setModalVisible(false);
+          } else if (route?.params?.buy_type == 'live_stream') {
+            navigation.navigate('WatchLiveStream', {
+              response: route?.params?.response,
+              host: route?.params?.host,
+              nav_type: 'after_payment',
+            });
           } else {
             // navigation.navigate("BottomTab")
             navigation.replace('SalesOrders');

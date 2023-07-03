@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,44 +6,44 @@ import {
   View,
   Text,
   TouchableOpacity,
-} from "react-native";
+} from 'react-native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../../components/Header/CustomHeader";
-import DashboardCard from "../../../../components/CustomCards/DashboardCard";
+import CustomHeader from '../../../../components/Header/CustomHeader';
+import DashboardCard from '../../../../components/CustomCards/DashboardCard';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   setExchangeOffer_MyListing,
   setNavPlace,
-} from "../../../../redux/actions";
+} from '../../../../redux/actions';
 
 /////////////app styles////////////////
-import styles from "./styles";
+import styles from './styles';
 
 //////////////app functions///////////////
-import { get_User_Listings } from "../../../../api/GetApis";
+import {get_User_Listings} from '../../../../api/GetApis';
 
 /////////////image url/////////////
-import { IMAGE_URL } from "../../../../utills/ApiRootUrl";
+import {IMAGE_URL} from '../../../../utills/ApiRootUrl';
 
 ////////////////////app height and width//////////////
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
-import TranslationStrings from "../../../../utills/TranslationStrings";
+} from 'react-native-responsive-screen';
+import TranslationStrings from '../../../../utills/TranslationStrings';
 
-const ExchangeOfferList = ({ navigation, route }) => {
+const ExchangeOfferList = ({navigation, route}) => {
   ////////////////redux/////////////
-  const { exchange_other_listing } = useSelector((state) => state.userReducer);
+  const {exchange_other_listing} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   /////////////////Price formatter/////////////
-  const formatter = new Intl.NumberFormat("en-US", {
-    notation: "compact",
-    compactDisplay: "short",
+  const formatter = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    compactDisplay: 'short',
   });
 
   ////////////////LIST DATA/////////
@@ -52,25 +52,26 @@ const ExchangeOfferList = ({ navigation, route }) => {
   ////////////select state////////////
   const [selectedId, setSelectedId] = useState(null);
   ///////////////select function/////////////
-  const onselect = (item) => {
+  const onselect = item => {
     setSelectedId(item.id);
     dispatch(setExchangeOffer_MyListing(item));
   };
   useEffect(() => {
-    get_User_Listings().then((response) => {
+    get_User_Listings().then(response => {
       setdata(response.data);
     });
   }, []);
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <DashboardCard
       image={item.images === [] ? null : IMAGE_URL + item.images[0]} //IMAGE_URL + item.images[0]
+      video={item?.video}
       maintext={item.title}
       subtext={item.location}
       price={item.price}
       selected={selectedId}
       id={item.id}
-      type={"Exchange_Offer"}
+      type={'Exchange_Offer'}
       onpress={() => onselect(item)}
     />
   );
@@ -85,11 +86,11 @@ const ExchangeOfferList = ({ navigation, route }) => {
         iconPress={() => {
           navigation.goBack();
         }}
-        type={"left_icon"}
-        icon={"arrow-back"}
-        searchicon={"plus-box"}
+        type={'left_icon'}
+        icon={'arrow-back'}
+        searchicon={'plus-box'}
         onpresseacrh={() =>
-          navigation.navigate("UploadItem", dispatch(setNavPlace("exchange")))
+          navigation.navigate('UploadItem', dispatch(setNavPlace('exchange')))
         }
       />
       <FlatList
@@ -101,11 +102,10 @@ const ExchangeOfferList = ({ navigation, route }) => {
         showsHorizontalScrollIndicator={false}
       />
       {/* </ScrollView> */}
-      <View style={{ position: "absolute", bottom: hp(2), left: wp(15) }}>
+      <View style={{position: 'absolute', bottom: hp(2), left: wp(15)}}>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => navigation.replace("ExchangeOffer")}
-        >
+          onPress={() => navigation.replace('ExchangeOffer')}>
           <Text style={styles.btnText}>{TranslationStrings.NEXT}</Text>
         </TouchableOpacity>
       </View>

@@ -8,6 +8,7 @@ import {
   Switch,
   BackHandler,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
 import {appImages} from '../../constant/images';
@@ -59,6 +60,7 @@ import AgoraUIKit from 'agora-rn-uikit';
 import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
 
 import {doc, onSnapshot} from 'firebase/firestore';
+import {fontFamily} from '../../constant/fonts';
 
 const WatchLiveStream = ({navigation, route}) => {
   const [videoCall, setVideoCall] = useState(true);
@@ -306,7 +308,7 @@ const WatchLiveStream = ({navigation, route}) => {
   const updateViewsCount = async (id, count) => {
     updateStreamViews(id, count)
       .then(response => {
-        console.log('update views response :        ', response?.data);
+        // console.log('update views response :        ', response?.data);
       })
       .catch(err => {
         console.log('error  :   ', err);
@@ -481,8 +483,9 @@ const WatchLiveStream = ({navigation, route}) => {
       // let token = LiveStreamingKeys.token;
       // let channelName1 = LiveStreamingKeys.channelName;
       // let uid = LiveStreamingKeys.uid;
+      console.log('484 : ', uid);
+      // setRemoteUid(uid);
 
-      setRemoteUid(uid);
       setTokenId(token);
       setHostId(uid);
       setChannelName(channelName1);
@@ -496,32 +499,49 @@ const WatchLiveStream = ({navigation, route}) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      // Initialize Agora engine when the app starts
-      console.log('route?.params?.host : ', route?.params?.host);
-      let host = route?.params?.host == false ? false : true;
-      setupVideoSDKEngine(host);
-      // isHost,token,channelName,uid
-      if (route?.params?.response?.stream) {
-        let stream_id1 = route?.params?.response?.stream[0]?.insertedId;
-        setStream_id(stream_id1);
-        let token = route?.params?.response?.stream[0]?.token;
-        let channelName1 = route?.params?.response?.stream[0]?.channelName;
-        let uid = parseInt(route?.params?.response?.stream[0]?.uid);
-
-        // let token = LiveStreamingKeys.token;
-        // let channelName1 = LiveStreamingKeys.channelName;
-        // let uid = LiveStreamingKeys.uid;
-
-        setChannelName(channelName1);
-        setRemoteUid(uid);
-        setTokenId(token);
-        setHostId(uid);
-        setTimeout(() => {
-          setIsHost(host);
-          join(host, token, channelName1, uid);
-        }, 400);
+      console.log(
+        'route?.params?.nav_type_____________________________________ : ',
+        route?.params?.nav_type,
+      );
+      // setRemoteUid(127);
+      if (route?.params?.nav_type == 'after_payment') {
+        console.log('after_payment______________________________');
       } else {
-        console.log('data not found');
+        console.log(
+          'else executed............................................................',
+        );
+        // Initialize Agora engine when the app starts
+        console.log('route?.params?.host : ', route?.params?.host);
+        let host = route?.params?.host == false ? false : true;
+        setupVideoSDKEngine(host);
+        // isHost,token,channelName,uid
+        if (route?.params?.response?.stream) {
+          let stream_id1 = route?.params?.response?.stream[0]?.insertedId;
+          setStream_id(stream_id1);
+          let token = route?.params?.response?.stream[0]?.token;
+          let channelName1 = route?.params?.response?.stream[0]?.channelName;
+          let uid1 = parseInt(route?.params?.response?.stream[0]?.uid);
+          console.log(
+            '----------------------------------- +++++++++++++++++++++++++++++++:+++++++++++++++++++++++++++++++: ',
+            route?.params?.response?.stream[0]?.uid,
+            uid1,
+          );
+          // let token = LiveStreamingKeys.token;
+          // let channelName1 = LiveStreamingKeys.channelName;
+          // let uid = LiveStreamingKeys.uid;
+
+          setChannelName(channelName1);
+          console.log('527 : ', uid1);
+          // setRemoteUid(uid1);
+          setTokenId(token);
+          setHostId(uid1);
+          setTimeout(() => {
+            setIsHost(host);
+            join(host, token, channelName1, uid1);
+          }, 400);
+        } else {
+          console.log('data not found');
+        }
       }
     }, []),
   );
@@ -538,12 +558,12 @@ const WatchLiveStream = ({navigation, route}) => {
       agoraEngine.registerEventHandler({
         onJoinChannelSuccess: () => {
           showMessage('Successfully joined the channel ' + channelName);
-          console.log(
-            'Successfully joined the channel   ........',
-            isJoined,
-            isHost,
-            remoteUid,
-          );
+          // console.log(
+          //   'Successfully joined the channel   ........',
+          //   isJoined,
+          //   isHost,
+          //   remoteUid,
+          // );
           setIsJoined(true);
           ///fsdfldkff
           // setIsHost(false);
@@ -551,17 +571,18 @@ const WatchLiveStream = ({navigation, route}) => {
         },
         onUserJoined: (_connection, Uid) => {
           showMessage('Remote user joined with uid ' + Uid);
-          console.log('Remote user joined with uid   ........');
+          // console.log('Remote user joined with uid   ........');
           setRemoteUid(Uid);
+          console.log('570 : ', Uid);
         },
         onUserOffline: (_connection, Uid) => {
           showMessage('Remote user left the channel. uid: ' + Uid);
-          console.log('Remote user left the channel. uid: ' + Uid);
+          // console.log('Remote user left the channel. uid: ' + Uid);
           setRemoteUid(0);
         },
       });
       agoraEngine.initialize({
-        appId: appId,
+        appId: LiveStreamingKeys.appId,
         channelProfile: ChannelProfileType.ChannelProfileLiveBroadcasting,
       });
 
@@ -601,7 +622,7 @@ const WatchLiveStream = ({navigation, route}) => {
   };
 
   const join = async (isHost, token, channelName, uid) => {
-    console.log('join called.....', isHost, token, channelName, uid);
+    // console.log('join called.....', isHost, token, channelName, uid);
     setIsHost(isHost);
     if (isJoined) {
       return;
@@ -611,7 +632,7 @@ const WatchLiveStream = ({navigation, route}) => {
         ChannelProfileType.ChannelProfileLiveBroadcasting,
       );
       let streamID = route?.params?.response?.stream[0]?.insertedId;
-      console.log({streamID, uid, isHost});
+      // console.log({streamID, uid, isHost});
       if (isHost) {
         agoraEngineRef.current?.startPreview();
         agoraEngineRef.current?.joinChannel(token, channelName, uid, {
@@ -622,13 +643,13 @@ const WatchLiveStream = ({navigation, route}) => {
         startDurationInterval(0); //seconds
         handleSaveThumbnail();
 
-        console.log('join stream as host.......');
+        // console.log('join stream as host.......');
       } else {
         agoraEngineRef.current?.joinChannel(token, channelName, uid, {
           clientRoleType: ClientRoleType.ClientRoleAudience,
         });
-        console.log('join stream as viewers.......');
-        console.log({channelName, uid});
+        // console.log('join stream as viewers.......');
+        // console.log({channelName, uid});
         setTimeout(() => {
           startDurationInterval(isHost);
         }, 500);
@@ -766,13 +787,44 @@ const WatchLiveStream = ({navigation, route}) => {
           <Header
             userName={hostDetail?.user_name}
             profile={hostDetail?.image}
-            // userName={remoteUid}
+            // userName={`${remoteUid} : ${hostDetail?.user_name}`}
             // totalViewers={"100k"}
             totalViewers={viewersCount}
             // duration={duration}
             duration={formatedDuration}
             onBackPress={() => setShowModal(true)}
           />
+          {isHost && (
+            <TouchableOpacity
+              onPress={() => setShowModal(true)}
+              style={{
+                flexDirection: 'row',
+                backgroundColor: '#FFFFFFB2',
+                borderRadius: 15,
+                paddingHorizontal: 5,
+                alignItems: 'center',
+                paddingVertical: 3,
+                justifyContent: 'center',
+                backgroundColor: 'red',
+                width: 75,
+                paddingVertical: 5,
+                alignSelf: 'flex-end',
+                marginRight: -8,
+              }}>
+              <Text
+                style={{
+                  color: '#0A0932',
+                  fontSize: 10,
+                  fontFamily: fontFamily.Poppins_Regular,
+                  marginLeft: 4,
+                  marginBottom: -2.5,
+                  fontSize: 10,
+                  color: 'white',
+                }}>
+                End Stream
+              </Text>
+            </TouchableOpacity>
+          )}
 
           <View style={styles.bottomContainer}>
             {/* <View style={{ height: hp(70), justifyContent: "flex-end" }}>
@@ -796,6 +848,7 @@ const WatchLiveStream = ({navigation, route}) => {
                     data={productsList}
                     isHost={isHost}
                     streamId={stream_id}
+                    response={route?.params?.response}
                   />
                 )}
               </View>

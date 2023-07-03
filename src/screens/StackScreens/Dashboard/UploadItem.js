@@ -315,7 +315,13 @@ const UploadItem = ({navigation, route}) => {
     }
 
     // input validation
-    if (title == '') {
+    if (item_images_array?.length == 0) {
+      setsnackbarValue({
+        value: TranslationStrings.PLEASE_UPLOAD_ATLEAST_ONE_IMAGE,
+        color: 'red',
+      });
+      setVisible('true');
+    } else if (title == '') {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_ENTER_ITEM_TITLE,
         color: 'red',

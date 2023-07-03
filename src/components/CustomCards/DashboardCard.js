@@ -26,6 +26,7 @@ import {fontFamily} from '../../constant/fonts';
 import TranslationStrings from '../../utills/TranslationStrings';
 import moment from 'moment';
 import {appImages} from '../../constant/images';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const DashboardCard = props => {
   const [checked, setChecked] = React.useState(true);
@@ -43,6 +44,7 @@ const DashboardCard = props => {
         style={[
           styles.dashboardcard,
           {
+            backgroundColor: props?.added_by == 'admin' ? 'purple' : '#FFFFFF',
             width: props.type === 'Exchange_Request' ? wp(90) : wp(45),
             height: props.type === 'Exchange_Request' ? hp(27) : hp(23),
             overflow: 'hidden',
@@ -69,6 +71,17 @@ const DashboardCard = props => {
                   },
                 ]}
                 resizeMode="contain"></Image>
+              {props?.video && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    left: 0,
+                    alignItems: 'center',
+                  }}>
+                  <AntDesign name="play" color={'white'} size={30} />
+                </View>
+              )}
             </ImageBackground>
           ) : (
             <View
@@ -192,6 +205,27 @@ const DashboardCard = props => {
               </Text>
             </View>
           )}
+
+          {props?.added_by == 'admin' && (
+            <View
+              style={{
+                backgroundColor: 'purple',
+                position: 'absolute',
+                right: 0,
+                borderBottomLeftRadius: 8,
+                paddingHorizontal: 8,
+                paddingTop: 3,
+              }}>
+              <Text
+                style={{
+                  fontSize: 12,
+                  fontFamily: fontFamily.Poppins_Regular,
+                  color: '#fff',
+                }}>
+                {TranslationStrings.AFFILIATE}
+              </Text>
+            </View>
+          )}
         </View>
         <View
           style={{
@@ -206,7 +240,13 @@ const DashboardCard = props => {
               alignItems: 'center',
               marginTop: props?.added_by == 'admin' ? 15 : 0,
             }}>
-            <Text numberOfLines={1} style={styles.dashboardmaintext}>
+            <Text
+              numberOfLines={1}
+              style={{
+                ...styles.dashboardmaintext,
+                color:
+                  props?.added_by == 'admin' ? '#FFFFFF' : Colors.Appthemecolor,
+              }}>
               {props.maintext}
             </Text>
             <Text numberOfLines={1} style={styles.pricetext}>

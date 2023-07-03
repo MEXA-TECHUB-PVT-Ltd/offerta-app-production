@@ -161,11 +161,24 @@ const ConfirmAddress = ({navigation, route}) => {
         //counter offer
         buy_type: route?.params?.buy_type,
         counter_fee: route?.params?.counter_fee,
+
+        //live stream
+        response: route?.params?.response,
+        host: route?.params?.host,
       });
     }
   };
 
   const handleSubmit = async () => {
+    // navigation?.popToTop();
+    // navigation.navigate('WatchLiveStream', {
+    //   response: route?.params?.response,
+    //   host: false,
+    //   nav_type: 'after_payment',
+    // });
+    // console.log('here..............................................:::::::');
+    // return;
+
     console.log('route?.params?.streamId :  ', route?.params?.streamId);
     //test
     // updateListingQuantity();
@@ -217,10 +230,16 @@ const ConfirmAddress = ({navigation, route}) => {
                 color: 'green',
               });
               setVisible(true);
-              setTimeout(() => {
-                // navigation.navigate("BottomTab");
-                navigation.replace('SalesOrders');
-              }, 500);
+              console.log('route .....', route?.params?.buy_type);
+              if (route?.params?.buy_type == 'live_stream') {
+                navigation.replace('WatchLiveStream');
+              } else {
+                console.log('else executed.......');
+                setTimeout(() => {
+                  // navigation.navigate("BottomTab");
+                  navigation.replace('SalesOrders');
+                }, 500);
+              }
             } else {
               setsnackbarValue({
                 value: 'Something went wrong',
@@ -333,7 +352,14 @@ const ConfirmAddress = ({navigation, route}) => {
             color: 'green',
           });
           setVisible(true);
-          navigation.replace('SalesOrders');
+          if (route?.params?.buy_type == 'live_stream') {
+            // navigation.replace('WatchLiveStream');
+            // navigation?.popToTop();
+            // navigation?.goBack();
+            navigation.navigate('WatchLiveStream', route?.params);
+          } else {
+            navigation.replace('SalesOrders');
+          }
         } else {
           console.log('create order response :  ', res?.data);
           setsnackbarValue({

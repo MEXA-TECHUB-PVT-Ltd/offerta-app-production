@@ -132,6 +132,10 @@ const PaymentOptions = ({navigation, route}) => {
         //counter offer
         buy_type: route?.params?.buy_type,
         counter_fee: route?.params?.counter_fee,
+
+        //live stream
+        response: route?.params?.response,
+        host: route?.params?.host,
       });
       return;
     }
@@ -157,6 +161,10 @@ const PaymentOptions = ({navigation, route}) => {
         //counter offer
         buy_type: route?.params?.buy_type,
         counter_fee: route?.params?.counter_fee,
+
+        //live stream
+        response: route?.params?.response,
+        host: route?.params?.host,
       });
     } else if (
       index !== 1 ||
@@ -177,6 +185,9 @@ const PaymentOptions = ({navigation, route}) => {
         //counter offer
         buy_type: route?.params?.buy_type,
         counter_fee: route?.params?.counter_fee,
+        //live stream
+        response: route?.params?.response,
+        host: route?.params?.host,
       });
     }
   };
@@ -198,6 +209,9 @@ const PaymentOptions = ({navigation, route}) => {
         // navigation.navigate("Coinbase", route?.params);
         navigation.navigate('Coinbase', {
           payment_url: payment_url,
+          //live stream
+          response: route?.params?.response,
+          host: route?.params?.host,
         });
       })
       .catch(err => {

@@ -1,16 +1,16 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   FlatList,
   RefreshControl,
   Linking,
-} from "react-native";
+} from 'react-native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../../components/Header/CustomHeader";
-import DashboardCard from "../../../../components/CustomCards/DashboardCard";
-import NoDataFound from "../../../../components/NoDataFound/NoDataFound";
+import CustomHeader from '../../../../components/Header/CustomHeader';
+import DashboardCard from '../../../../components/CustomCards/DashboardCard';
+import NoDataFound from '../../../../components/NoDataFound/NoDataFound';
 
 /////////////app styles////////////////
 
@@ -19,17 +19,17 @@ import {
   get_Categories_Listings,
   get_Categories_Listings_new,
   get_User_Listings,
-} from "../../../../api/GetApis";
+} from '../../../../api/GetApis';
 
 ///////////////image url///////////////
-import { IMAGE_URL } from "../../../../utills/ApiRootUrl";
-import { useFocusEffect } from "@react-navigation/native";
-import Colors from "../../../../utills/Colors";
-import Loader from "../../../../components/Loader/Loader";
-import TranslationStrings from "../../../../utills/TranslationStrings";
-import moment from "moment";
+import {IMAGE_URL} from '../../../../utills/ApiRootUrl';
+import {useFocusEffect} from '@react-navigation/native';
+import Colors from '../../../../utills/Colors';
+import Loader from '../../../../components/Loader/Loader';
+import TranslationStrings from '../../../../utills/TranslationStrings';
+import moment from 'moment';
 
-const AllListingsByCategory = ({ navigation, route }) => {
+const AllListingsByCategory = ({navigation, route}) => {
   ////////////////LIST DATA/////////
   const [data, setdata] = useState();
   const [loading, setLoading] = useState(false);
@@ -54,28 +54,28 @@ const AllListingsByCategory = ({ navigation, route }) => {
   const getData = async () => {
     // get_Categories_Listings(route?.params?.id)
     get_Categories_Listings_new(route?.params?.id)
-      .then((response) => {
-        if (response.data.message === "No data available") {
-          setdata("");
+      .then(response => {
+        if (response.data.message === 'No data available') {
+          setdata('');
         } else {
           let list = response?.data ? response?.data : [];
           // setdata(response.data);
           const urgentList = list?.filter(
-            (item) =>
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") <
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+            item =>
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') <
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const urgentList_expire = list?.filter(
-            (item) =>
-              item?.Promotion[0]?.tag == "Urgent" &&
-              moment(new Date())?.format("YYYY-MM-DD") >=
-                moment(item?.Promotion[0]?.Expirydate)?.format("YYYY-MM-DD")
+            item =>
+              item?.Promotion[0]?.tag == 'Urgent' &&
+              moment(new Date())?.format('YYYY-MM-DD') >=
+                moment(item?.Promotion[0]?.Expirydate)?.format('YYYY-MM-DD'),
           );
 
           const orthersList = list?.filter(
-            (item) => item?.Promotion[0]?.tag !== "Urgent"
+            item => item?.Promotion[0]?.tag !== 'Urgent',
           );
           const finallist = [
             ...urgentList,
@@ -96,18 +96,19 @@ const AllListingsByCategory = ({ navigation, route }) => {
     setRefreshing(true);
     getData();
   };
-  const openAffiliateLink = async (url) => {
+  const openAffiliateLink = async url => {
     await Linking.openURL(url)
-      .then((res) => {
-        console.log("res : ", res);
+      .then(res => {
+        console.log('res : ', res);
       })
-      .catch((err) => {
+      .catch(err => {
         alert(`Invalid affiliate link`);
       });
   };
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <DashboardCard
       image={item.images?.length == 0 ? null : IMAGE_URL + item.images[0]}
+      video={item?.video}
       maintext={item.title}
       subtext={item.location}
       price={item.price}
@@ -115,11 +116,11 @@ const AllListingsByCategory = ({ navigation, route }) => {
       promotion={item?.Promotion[0]}
       added_by={item?.added_by}
       onpress={() => {
-        if (item?.added_by == "admin") {
+        if (item?.added_by == 'admin') {
           openAffiliateLink(item?.description);
         } else {
           // navigation.navigate("ListingsDetails", { listing_id: item.id });
-          navigation.navigate("MainListingsDetails", {
+          navigation.navigate('MainListingsDetails', {
             listing_id: item.id,
           });
         }
@@ -130,9 +131,8 @@ const AllListingsByCategory = ({ navigation, route }) => {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: "white",
-      }}
-    >
+        backgroundColor: 'white',
+      }}>
       <Loader isLoading={loading} />
       <ScrollView
         showsVerticalScrollIndicator={false}
@@ -143,8 +143,7 @@ const AllListingsByCategory = ({ navigation, route }) => {
             colors={[Colors.Appthemecolor]}
             onRefresh={() => handleRefresh()}
           />
-        }
-      >
+        }>
         <CustomHeader
           headerlabel={
             route?.params?.name
@@ -154,11 +153,11 @@ const AllListingsByCategory = ({ navigation, route }) => {
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
-        {data === "" ? (
+        {data === '' ? (
           <NoDataFound
-            icon={"exclamation-thick"}
+            icon={'exclamation-thick'}
             text={TranslationStrings.NO_DATA_FOUND}
           />
         ) : (
