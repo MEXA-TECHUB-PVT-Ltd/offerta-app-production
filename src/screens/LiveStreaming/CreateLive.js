@@ -239,6 +239,8 @@ const CreateLive = ({navigation, route}) => {
       list_id: selectedListings,
       quantity: '0',
       currentDateTime: new Date(),
+      title: title,
+      description: description,
     };
     console.log('obj to create live ::: ', obj);
     createLiveStream(obj)
@@ -286,6 +288,8 @@ const CreateLive = ({navigation, route}) => {
     // navigation.navigate("WatchLiveStream");
   };
 
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar
@@ -297,25 +301,47 @@ const CreateLive = ({navigation, route}) => {
         style={{
           backgroundColor: 'white',
           height: hp(100),
-          alignItems: 'center',
+          // alignItems: 'center',
         }}>
         {/* <CustomHeader type={"profile"} headerlabel={"Live Streaming"} /> */}
         <Loader isLoading={loading} />
+        <CustomHeader
+          headerlabel={'Create Live'}
+          iconPress={() => {
+            navigation.goBack();
+          }}
+          type={'left_icon'}
+          icon={'arrow-back'}
+          searchicon={'plus-box'}
+          onpresseacrh={() => {
+            navigation.navigate('UploadItem');
+          }}
+        />
+
+        <CustomTextInput
+        maxLength={15}
+          icon={appImages.email}
+          type={'withouticoninput'}
+          texterror={'invalid'}
+          term={title}
+          placeholder={TranslationStrings.ITEM_TITLE}
+          onTermChange={itemtitle => setTitle(itemtitle)}
+        />
+        <CustomTextInput
+        maxLength={30}
+
+          icon={appImages.email}
+          type={'withouticoninput'}
+          texterror={'invalid'}
+          term={description}
+          multiline={true}
+          Lines={3}
+          placeholder={TranslationStrings.DESCRIPTION}
+          onTermChange={desc => setDescription(desc)}
+        />
         <FlatList
-          ListHeaderComponent={
-            <CustomHeader
-              headerlabel={'Create Live'}
-              iconPress={() => {
-                navigation.goBack();
-              }}
-              type={'left_icon'}
-              icon={'arrow-back'}
-              searchicon={'plus-box'}
-              onpresseacrh={() => {
-                navigation.navigate('UploadItem');
-              }}
-            />
-          }
+          // ListHeaderComponent={
+          // }
           data={data}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
@@ -585,6 +611,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     flexDirection: 'row',
+    alignSelf: 'center',
   },
   btnText: {
     color: 'white',
