@@ -381,7 +381,7 @@ let TranslationStrings = new LocalizedStrings({
     ENTER_BANK_ACCOUNT_NUMBER: 'Ingrese el número de cuenta bancaria',
 
     SELECT_PAYOUT_METHODS: 'Seleccionar métodos de pago',
-    AFFILIATE: 'Afiliada',
+    AFFILIATE: 'Afiliación',
     PLEASE_UPLOAD_ATLEAST_ONE_IMAGE: 'Sube al menos una imagen.',
 
     // live streaming

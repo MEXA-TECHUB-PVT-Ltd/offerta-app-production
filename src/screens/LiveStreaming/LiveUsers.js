@@ -138,6 +138,8 @@ const LiveUsers = ({navigation, route}) => {
                     currentDateTime: item?.start_time,
                     view: item?.view,
                     thumbnail: item?.thumbnail,
+                    title: item?.title,
+                    description: item?.description,
                     // streamkey: null,
                   },
                 ],
@@ -291,39 +293,71 @@ const LiveUsers = ({navigation, route}) => {
                     }>
                     <View
                       style={{
-                        margin: 10,
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
+                        backgroundColor: Colors.Appthemecolor,
+                        paddingVertical: hp(1),
+                        paddingHorizontal: wp(2),
+                        marginTop: hp(2),
+                        width: wp(38.2),alignItems:'flex-start'
                       }}>
-                      <Avatar.Image
-                        source={{uri: IMAGE_URL + item?.user[0]?.image}}
-                        size={35}
-                      />
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontSize: wp(4),
+                          fontFamily: fontFamily.Poppins_Regular,
+                          fontWeight: 'bold',
+                        }}>
+                        {item.stream[0].title
+                          ? item.stream[0].title?.slice(0, 15)
+                          : 'asdfsadf'}
+                      </Text>
+                      <Text
+                        style={{
+                          color: 'white',
+                          fontSize: 12,
+                          fontFamily: fontFamily.Poppins_Regular,
+                        }}>
+                        {item.stream[0].description
+                          ? item.stream[0].description
+                          : 'asdfsadf'}
+                      </Text>
+                    </View>
+                    <View style={{justifyContent: 'flex-end', flex: 1}}>
                       <View
                         style={{
-                          backgroundColor: '#FFFFFF5C',
-                          padding: 3,
-                          paddingHorizontal: 8,
-                          borderRadius: 18,
+                          margin: 10,
                           flexDirection: 'row',
                           alignItems: 'center',
-                          justifyContent: 'center',
+                          justifyContent: 'space-between',
                         }}>
-                        <Ionicons
-                          name="md-eye-outline"
-                          color={'white'}
-                          size={20}
+                        <Avatar.Image
+                          source={{uri: IMAGE_URL + item?.user[0]?.image}}
+                          size={35}
                         />
-                        <Text
+                        <View
                           style={{
-                            color: 'white',
-                            marginLeft: 5,
-                            fontFamily: fontFamily.Poppins_Regular,
-                            marginBottom: -3,
+                            backgroundColor: '#FFFFFF5C',
+                            padding: 3,
+                            paddingHorizontal: 8,
+                            borderRadius: 18,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
                           }}>
-                          {item?.stream[0]?.view}
-                        </Text>
+                          <Ionicons
+                            name="md-eye-outline"
+                            color={'white'}
+                            size={20}
+                          />
+                          <Text
+                            style={{
+                              color: 'white',
+                              marginLeft: 5,
+                              fontFamily: fontFamily.Poppins_Regular,
+                              marginBottom: -3,
+                            }}>
+                            {item?.stream[0]?.view}
+                          </Text>
+                        </View>
                       </View>
                     </View>
                   </ImageBackground>
