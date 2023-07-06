@@ -711,18 +711,18 @@ const AccountVerification = ({navigation, route}) => {
                     }}
                     disabled={subscription == true ? true : false}
                     style={style.imageView}>
-                    <ImageBackground
+                    {/* <ImageBackground
                       blurRadius={4}
                       resizeMode="cover"
                       source={{uri: userImage.uri}}
-                      style={{flex: 1, justifyContent: 'center'}}>
-                      <Image
-                        source={{uri: userImage.uri}}
-                        // style={style.imageView}
-                        style={{width: '100%', height: '100%'}}
-                        resizeMode={'contain'}
-                      />
-                    </ImageBackground>
+                      style={{flex: 1, justifyContent: 'center'}}> */}
+                    <Image
+                      source={{uri: userImage.uri}}
+                      // style={style.imageView}
+                      style={{width: '100%', height: '100%'}}
+                      resizeMode={'cover'}
+                    />
+                    {/* </ImageBackground> */}
                   </TouchableOpacity>
                 )}
               </View>
@@ -786,20 +786,20 @@ const AccountVerification = ({navigation, route}) => {
                     }}
                     disabled={subscription == true ? true : false}
                     style={style.imageView}>
-                    <ImageBackground
+                    {/* <ImageBackground
                       blurRadius={4}
                       resizeMode="cover"
                       source={{uri: cnicImage.uri}}
-                      style={{flex: 1, justifyContent: 'center'}}>
-                      <Image
-                        source={{uri: cnicImage.uri}}
-                        // style={style.imageView}
-                        // resizeMode={"stretch"}
+                      style={{flex: 1, justifyContent: 'center'}}> */}
+                    <Image
+                      source={{uri: cnicImage.uri}}
+                      // style={style.imageView}
+                      // resizeMode={"stretch"}
 
-                        style={{width: '100%', height: '100%'}}
-                        resizeMode={'contain'}
-                      />
-                    </ImageBackground>
+                      style={{width: '100%', height: '100%'}}
+                      resizeMode={'cover'}
+                    />
+                    {/* </ImageBackground> */}
                   </TouchableOpacity>
                 )}
               </View>

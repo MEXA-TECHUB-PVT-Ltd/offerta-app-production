@@ -332,7 +332,7 @@ const LiveUsers = ({navigation, route}) => {
                   </ImageBackground>
                 </ImageBackground> */}
 
-                <ImageBackground
+                {/* <ImageBackground
                   blurRadius={3}
                   // source={
                   //   item?.stream && item?.stream[0]?.thumbnail == null
@@ -348,96 +348,96 @@ const LiveUsers = ({navigation, route}) => {
                     height: '100%',
                     justifyContent: 'center',
                   }}
-                  resizeMode="cover">
-                  <ImageBackground
+                  resizeMode="cover"> */}
+                <ImageBackground
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    justifyContent: 'flex-end',
+                  }}
+                  resizeMode="cover"
+                  // source={
+                  //   item?.stream && item?.stream[0]?.thumbnail == null
+                  //     ? appImages.live_stream_bg
+                  //     : { uri: IMAGE_URL + item?.stream[0]?.thumbnail }
+                  // }
+                  source={
+                    item?.user && item?.user[0]?.image == null
+                      ? appImages.no_image
+                      : {uri: IMAGE_URL + item?.user[0]?.image}
+                  }>
+                  <View
                     style={{
-                      width: '100%',
-                      height: '100%',
-                      justifyContent: 'flex-end',
-                    }}
-                    resizeMode="contain"
-                    // source={
-                    //   item?.stream && item?.stream[0]?.thumbnail == null
-                    //     ? appImages.live_stream_bg
-                    //     : { uri: IMAGE_URL + item?.stream[0]?.thumbnail }
-                    // }
-                    source={
-                      item?.user && item?.user[0]?.image == null
-                        ? appImages.no_image
-                        : {uri: IMAGE_URL + item?.user[0]?.image}
-                    }>
+                      backgroundColor: Colors.Appthemecolor,
+                      paddingVertical: hp(1),
+                      paddingHorizontal: wp(2),
+                      marginTop: hp(2),
+                      width: wp(38.2),
+                      alignItems: 'flex-start',
+                    }}>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: wp(4),
+                        fontFamily: fontFamily.Poppins_Regular,
+                        fontWeight: 'bold',
+                      }}>
+                      {item.stream[0].title
+                        ? item.stream[0].title?.slice(0, 15)
+                        : 'asdfsadf'}
+                    </Text>
+                    <Text
+                      style={{
+                        color: 'white',
+                        fontSize: 12,
+                        fontFamily: fontFamily.Poppins_Regular,
+                      }}>
+                      {item.stream[0].description
+                        ? item.stream[0].description
+                        : 'asdfsadf'}
+                    </Text>
+                  </View>
+                  <View style={{justifyContent: 'flex-end', flex: 1}}>
                     <View
                       style={{
-                        backgroundColor: Colors.Appthemecolor,
-                        paddingVertical: hp(1),
-                        paddingHorizontal: wp(2),
-                        marginTop: hp(2),
-                        width: wp(38.2),
-                        alignItems: 'flex-start',
+                        margin: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
                       }}>
-                      <Text
-                        style={{
-                          color: 'white',
-                          fontSize: wp(4),
-                          fontFamily: fontFamily.Poppins_Regular,
-                          fontWeight: 'bold',
-                        }}>
-                        {item.stream[0].title
-                          ? item.stream[0].title?.slice(0, 15)
-                          : 'asdfsadf'}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'white',
-                          fontSize: 12,
-                          fontFamily: fontFamily.Poppins_Regular,
-                        }}>
-                        {item.stream[0].description
-                          ? item.stream[0].description
-                          : 'asdfsadf'}
-                      </Text>
-                    </View>
-                    <View style={{justifyContent: 'flex-end', flex: 1}}>
+                      <Avatar.Image
+                        source={{uri: IMAGE_URL + item?.user[0]?.image}}
+                        size={35}
+                      />
                       <View
                         style={{
-                          margin: 10,
+                          backgroundColor: '#FFFFFF5C',
+                          padding: 3,
+                          paddingHorizontal: 8,
+                          borderRadius: 18,
                           flexDirection: 'row',
                           alignItems: 'center',
-                          justifyContent: 'space-between',
+                          justifyContent: 'center',
                         }}>
-                        <Avatar.Image
-                          source={{uri: IMAGE_URL + item?.user[0]?.image}}
-                          size={35}
+                        <Ionicons
+                          name="md-eye-outline"
+                          color={'white'}
+                          size={20}
                         />
-                        <View
+                        <Text
                           style={{
-                            backgroundColor: '#FFFFFF5C',
-                            padding: 3,
-                            paddingHorizontal: 8,
-                            borderRadius: 18,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
+                            color: 'white',
+                            marginLeft: 5,
+                            fontFamily: fontFamily.Poppins_Regular,
+                            marginBottom: -3,
                           }}>
-                          <Ionicons
-                            name="md-eye-outline"
-                            color={'white'}
-                            size={20}
-                          />
-                          <Text
-                            style={{
-                              color: 'white',
-                              marginLeft: 5,
-                              fontFamily: fontFamily.Poppins_Regular,
-                              marginBottom: -3,
-                            }}>
-                            {item?.stream[0]?.view}
-                          </Text>
-                        </View>
+                          {item?.stream[0]?.view}
+                        </Text>
                       </View>
                     </View>
-                  </ImageBackground>
+                  </View>
                 </ImageBackground>
+                {/* </ImageBackground> */}
               </Card>
             );
           }}

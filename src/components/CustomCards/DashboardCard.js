@@ -53,15 +53,17 @@ const DashboardCard = props => {
         ]}>
         <View style={{marginBottom: hp(0), marginTop: hp(0)}}>
           {props?.image ? (
-            <ImageBackground
-              blurRadius={4}
-              resizeMode="cover"
-              source={{uri: props.image}}
-              style={{
-                // ...styles.dasboardimage,
-                // flex: 1,
-                justifyContent: 'center',
-              }}>
+            <>
+              {/* // <ImageBackground
+            //   blurRadius={4}
+            //   resizeMode="cover"
+            //   source={{uri: props.image}}
+            //   style={{
+            //     // ...styles.dasboardimage,
+            //     // flex: 1,
+            //     justifyContent: 'center',
+            //   }}
+            //   > */}
               <Image
                 source={{uri: props.image}}
                 style={[
@@ -71,7 +73,7 @@ const DashboardCard = props => {
                     height: props.type === 'Exchange_Request' ? hp(18) : hp(15),
                   },
                 ]}
-                resizeMode="contain"></Image>
+                resizeMode="cover"></Image>
               {props?.video && (
                 <View
                   style={{
@@ -79,11 +81,13 @@ const DashboardCard = props => {
                     right: 0,
                     left: 0,
                     alignItems: 'center',
+                    top: 50,
                   }}>
                   <AntDesign name="play" color={'white'} size={30} />
                 </View>
               )}
-            </ImageBackground>
+              {/* // </ImageBackground> */}
+            </>
           ) : (
             <View
               style={{
@@ -135,21 +139,21 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? Colors.Appthemecolor
+                    ? '#7fff00'
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
                   // borderBottomLeftRadius: 8,
                   borderBottomRightRadius: 8,
-                  paddingHorizontal: 15,
-                  paddingTop: 3,
+                  paddingHorizontal: 21,
+                  paddingVertical: 3,
                 }}>
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: fontFamily.Poppins_Regular,
                     color:
-                      props?.promotion?.color == '#FFFFFF' ? '#000' : '#fff',
+                      props?.promotion?.color == '#FFFFFF' ? '#fff' : '#000',
                   }}>
                   {/* Ad */}
                   {TranslationStrings.AD}
@@ -164,21 +168,21 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? Colors.Appthemecolor
+                    ? '#7fff00'
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
                   // borderBottomLeftRadius: 8,
                   borderBottomRightRadius: 8,
-                  paddingHorizontal: 15,
-                  paddingTop: 3,
+                  paddingHorizontal: 21,
+                  paddingVertical: 3,
                 }}>
                 <Text
                   style={{
                     fontSize: 12,
                     fontFamily: fontFamily.Poppins_Regular,
                     color:
-                      props?.promotion?.color == '#FFFFFF' ? '#000' : '#fff',
+                      props?.promotion?.color == '#FFFFFF' ? '#fff' : '#000',
                   }}>
                   {/* Urgent */}
                   {TranslationStrings.URGENT}
