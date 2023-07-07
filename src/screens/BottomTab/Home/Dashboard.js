@@ -497,7 +497,7 @@ const Home = ({navigation}) => {
           />
         )}
       </ScrollView>
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           right: wp(6),
@@ -520,7 +520,7 @@ const Home = ({navigation}) => {
             style={{width: '65%', height: '70%', resizeMode: 'contain'}}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
     </SafeAreaView>
   );
 };

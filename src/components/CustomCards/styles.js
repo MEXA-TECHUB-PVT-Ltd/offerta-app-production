@@ -1,24 +1,25 @@
-import React from "react";
-import { StyleSheet, Dimensions } from "react-native";
-import Colors from "../../utills/Colors";
+import React from 'react';
+import {StyleSheet, Dimensions} from 'react-native';
+import Colors from '../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////app fonts///////////////
-import { fontFamily } from "../../constant/fonts";
+import {fontFamily} from '../../constant/fonts';
+import TranslationStrings from '../../utills/TranslationStrings';
 
 const styles = StyleSheet.create({
   card: {
-    margin: wp("2%"),
+    margin: wp('2%'),
     borderRadius: wp(4),
     width: wp(92),
-    alignSelf: "center",
-    backgroundColor: "white",
+    alignSelf: 'center',
+    backgroundColor: 'white',
     paddingHorizontal: wp(5),
     paddingVertical: hp(2),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -38,11 +39,11 @@ const styles = StyleSheet.create({
     width: wp(25),
     height: hp(4.5),
     borderRadius: wp(5),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   btntext: {
-    color: "white",
+    color: 'white',
     fontSize: hp(1.6),
     fontFamily: fontFamily.Poppins_Regular,
   },
@@ -51,13 +52,13 @@ const styles = StyleSheet.create({
   blogcard: {
     marginVertical: hp(2),
     margin: wp(0),
-    alignItems: "center",
+    alignItems: 'center',
     marginHorizontal: wp(5),
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: wp(41),
     height: hp(22),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Poppins_Medium,
   },
   blogsubtext: {
-    color: "black",
+    color: 'black',
     width: wp(35),
     marginTop: hp(0),
     fontSize: hp(1),
@@ -93,13 +94,13 @@ const styles = StyleSheet.create({
   dashboardcard: {
     marginVertical: hp(2),
     margin: wp(0),
-    alignItems: "center",
+    alignItems: 'center',
     marginHorizontal: wp(2.3),
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: wp(45),
     height: hp(23),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -122,10 +123,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Poppins_Medium,
   },
   pricetext: {
-    color: "black",
+    color: 'black',
     width: wp(9),
     fontSize: hp(1),
-    textAlign: "right",
+    textAlign: 'right',
     fontFamily: fontFamily.Poppins_Regular,
   },
 
@@ -133,13 +134,13 @@ const styles = StyleSheet.create({
   Categoriescard: {
     marginVertical: hp(2),
     margin: wp(0),
-    alignItems: "center",
+    alignItems: 'center',
     marginHorizontal: wp(4.2),
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: wp(41),
     height: hp(22),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
   Categoriesimage: {
     height: hp(5),
     width: wp(20),
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   Categoriestext: {
     color: Colors.activetextinput,
@@ -166,12 +167,12 @@ const styles = StyleSheet.create({
     margin: wp(0),
     borderRadius: wp(4),
     width: wp(80),
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'white',
     paddingHorizontal: wp(5),
     paddingVertical: hp(3.5),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 1,
@@ -186,22 +187,22 @@ const styles = StyleSheet.create({
     fontSize: hp(2),
     fontFamily: fontFamily.Poppins_Medium,
     //width: wp(0),
-    textAlign: "center",
+    textAlign: 'center',
     // marginTop:hp(2)
   },
   itemsubtext: {
-    color: "#303030",
+    color: '#303030',
     fontSize: hp(1.7),
     fontFamily: fontFamily.Poppins_Regular,
     marginBottom: hp(0.8),
-    textAlign: "center",
+    textAlign: 'center',
   },
 
   verticleLine: {
     height: hp(4),
     width: 1,
     backgroundColor: Colors.activetextinput,
-    marginHorizontal: wp(4),
+    marginHorizontal: TranslationStrings.getLanguage() == 'es' ? 10 : wp(4),
   },
   verticletext: {
     color: Colors.activetextinput,
@@ -211,19 +212,19 @@ const styles = StyleSheet.create({
 
   ////////////////////////Exchange/////////////////
   Exchangecard: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: hp(2),
     //alignItems: "center",
-    alignSelf: "center",
+    alignSelf: 'center',
     //paddingLeft:wp(3),
     paddingHorizontal: wp(3),
     paddingVertical: hp(1),
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: wp(90),
     height: hp(12),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -236,7 +237,7 @@ const styles = StyleSheet.create({
   Exchangeimage: {
     height: hp(8),
     width: wp(18),
-    resizeMode: "contain",
+    resizeMode: 'contain',
     borderRadius: wp(3),
   },
   Exchangetext: {
@@ -245,30 +246,30 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Poppins_Medium,
   },
   Exchangesubtext: {
-    color: "#404040",
+    color: '#404040',
     fontSize: hp(1.3),
     fontFamily: fontFamily.Poppins_Medium,
     width: wp(55),
     marginTop: hp(1),
   },
   Exchangepricetext: {
-    color: "#363636",
+    color: '#363636',
     fontSize: hp(1.5),
     fontFamily: fontFamily.Poppins_Medium,
     width: wp(10),
-    textAlign: "left",
+    textAlign: 'left',
   },
 
   ////////////////////////Exchange/////////////////
   Promotionscard: {
-    alignSelf: "center",
-    backgroundColor: "white",
+    alignSelf: 'center',
+    backgroundColor: 'white',
     marginBottom: hp(1),
     marginTop: hp(2),
     width: wp(90),
     height: hp(15),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -298,10 +299,10 @@ const styles = StyleSheet.create({
     fontSize: hp(1.6),
     fontFamily: fontFamily.Poppins_Medium,
     width: wp(7),
-    textAlign: "left",
+    textAlign: 'left',
   },
   Promotionstagtext: {
-    color: "white",
+    color: 'white',
     fontSize: hp(1.6),
     fontFamily: fontFamily.Poppins_Regular,
   },
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
   userfullnametext: {
     fontFamily: fontFamily.Poppins_Regular,
     fontSize: hp(1.6),
-    color: "#404040",
+    color: '#404040',
   },
   subtext: {
     fontFamily: fontFamily.Poppins_Regular,
@@ -325,8 +326,8 @@ const styles = StyleSheet.create({
 
   ////////////////////shipping address//////////////
   shippingview: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: hp(0.5),
   },
   shippinglefttext: {
@@ -337,19 +338,19 @@ const styles = StyleSheet.create({
 
   ////////////////////////Exchange Offers/////////////////
   Exchangeofferscard: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: hp(2),
     //alignItems: "center",
-    alignSelf: "center",
+    alignSelf: 'center',
     //paddingLeft:wp(3),
     paddingHorizontal: wp(3),
     paddingVertical: hp(1),
-    backgroundColor: "white",
+    backgroundColor: 'white',
     width: wp(90),
     height: hp(20),
     borderRadius: wp(3),
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -362,13 +363,13 @@ const styles = StyleSheet.create({
   Exchangeoffericon: {
     height: hp(8),
     width: wp(8),
-    resizeMode: "contain",
+    resizeMode: 'contain',
     borderRadius: wp(3),
   },
   Exchangeofferimage: {
     height: hp(12),
     width: wp(32),
-    resizeMode: "contain",
+    resizeMode: 'contain',
     borderRadius: wp(3),
   },
   Exchangetext: {
@@ -377,18 +378,18 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.Poppins_Medium,
   },
   Exchangesubtext: {
-    color: "#404040",
+    color: '#404040',
     fontSize: hp(1.3),
     fontFamily: fontFamily.Poppins_Medium,
     width: wp(55),
     marginTop: hp(1),
   },
   Exchangepricetext: {
-    color: "#363636",
+    color: '#363636',
     fontSize: hp(1.5),
     fontFamily: fontFamily.Poppins_Medium,
     width: wp(10),
-    textAlign: "left",
+    textAlign: 'left',
   },
 });
 
