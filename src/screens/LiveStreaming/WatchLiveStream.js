@@ -891,7 +891,8 @@ const WatchLiveStream = ({navigation, route}) => {
               style={{
                 alignSelf: 'center',
                 marginTop: 8,
-                marginBottom: -20,
+                // marginBottom: -20,
+                marginBottom: 9,
               }}>
               <BannerAd
                 unitId={TestIds.BANNER}

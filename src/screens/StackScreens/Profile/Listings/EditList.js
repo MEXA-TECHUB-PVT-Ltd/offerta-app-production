@@ -319,7 +319,7 @@ const EditList = ({navigation, route}) => {
           marginRight: index === item_images_array.length - 1 ? wp(0) : wp(2),
           overflow: 'hidden',
         }}>
-        <ImageBackground
+        {/* <ImageBackground
           blurRadius={4}
           resizeMode="cover"
           source={
@@ -333,22 +333,22 @@ const EditList = ({navigation, route}) => {
             justifyContent: 'center',
             overflow: 'hidden',
             borderRadius: 20,
-          }}>
-          <Image
-            source={
-              route.params.navtype === 'edit_list'
-                ? {uri: item?.path ? item?.path : IMAGE_URL + item}
-                : {uri: item.path}
-            }
-            style={{
-              height: hp(20),
-              width: wp(84),
+          }}> */}
+        <Image
+          source={
+            route.params.navtype === 'edit_list'
+              ? {uri: item?.path ? item?.path : IMAGE_URL + item}
+              : {uri: item.path}
+          }
+          style={{
+            height: hp(20),
+            width: wp(84),
 
-              alignSelf: 'center',
-            }}
-            resizeMode="contain"
-          />
-        </ImageBackground>
+            alignSelf: 'center',
+          }}
+          resizeMode="contain"
+        />
+        {/* </ImageBackground> */}
         <TouchableOpacity
           onPress={() => navigation.navigate('CameraViewScreen')}
           style={{

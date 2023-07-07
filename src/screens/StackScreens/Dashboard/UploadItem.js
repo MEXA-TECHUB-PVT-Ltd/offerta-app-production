@@ -386,7 +386,7 @@ const UploadItem = ({navigation, route}) => {
           borderRadius: wp(6),
           overflow: 'hidden',
         }}>
-        <ImageBackground
+        {/* <ImageBackground
           blurRadius={4}
           resizeMode="cover"
           source={{uri: item.path}}
@@ -396,20 +396,20 @@ const UploadItem = ({navigation, route}) => {
             width: '100%',
             justifyContent: 'center',
             overflow: 'hidden',
-          }}>
-          <Image
-            //source={appImages.dogIcon}
-            source={{uri: item.path}}
-            // style={{ height: hp(25), width: wp(80), borderRadius: wp(6) }}
-            style={{
-              height: '100%',
-              width: '100%',
-              // backgroundColor: "white",
-              // borderRadius: wp(6),
-            }}
-            resizeMode="contain"
-          />
-        </ImageBackground>
+          }}> */}
+        <Image
+          //source={appImages.dogIcon}
+          source={{uri: item.path}}
+          // style={{ height: hp(25), width: wp(80), borderRadius: wp(6) }}
+          style={{
+            height: '100%',
+            width: '100%',
+            // backgroundColor: "white",
+            // borderRadius: wp(6),
+          }}
+          resizeMode="cover"
+        />
+        {/* </ImageBackground> */}
         <TouchableOpacity
           onPress={() => navigation.navigate('CameraViewScreen')}
           style={{

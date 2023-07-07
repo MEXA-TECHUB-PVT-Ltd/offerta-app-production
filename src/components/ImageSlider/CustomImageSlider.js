@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, {useState, useRef} from 'react';
 import {
   Text,
   View,
@@ -8,171 +8,165 @@ import {
   TouchableOpacity,
   Linking,
   ImageBackground,
-} from "react-native";
+} from 'react-native';
 // import Carousel, { Pagination } from "react-native-snap-carousel";
 
-import { SwiperFlatList } from "react-native-swiper-flatlist";
-import { Pagination } from "react-native-swiper-flatlist/src/components";
+import {SwiperFlatList} from 'react-native-swiper-flatlist';
+import {Pagination} from 'react-native-swiper-flatlist/src/components';
 
-export const SLIDER_WIDTH = Dimensions.get("window").width + 30;
+export const SLIDER_WIDTH = Dimensions.get('window').width + 30;
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.8);
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import Colors from "../../utills/Colors";
-import { BASE_URL, IMAGE_URL } from "../../utills/ApiRootUrl";
+} from 'react-native-responsive-screen';
+import Colors from '../../utills/Colors';
+import {BASE_URL, IMAGE_URL} from '../../utills/ApiRootUrl';
 
-import { Snackbar } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
+import {Snackbar} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 
 const data = [
   {
     id: 1,
-    name: "React JS",
-    url: "https://icon-library.com/images/react-icon/react-icon-29.jpg",
+    name: 'React JS',
+    url: 'https://icon-library.com/images/react-icon/react-icon-29.jpg',
   },
   {
     id: 2,
-    name: "JavaScript",
-    url: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Javascript_Logo.png",
+    name: 'JavaScript',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Javascript_Logo.png',
   },
   {
     id: 3,
-    name: "Node JS",
-    url: "https://upload.wikimedia.org/wikipedia/commons/6/67/NodeJS.png",
+    name: 'Node JS',
+    url: 'https://upload.wikimedia.org/wikipedia/commons/6/67/NodeJS.png',
   },
 ];
 
-const renderItem = ({ item }) => {
+const renderItem = ({item}) => {
   return (
     <View
       style={{
         borderWidth: 1,
         padding: 20,
         borderRadius: 20,
-        alignItems: "center",
-        backgroundColor: "white",
-      }}
-    >
-      <Image source={{ uri: item.url }} style={{ width: 200, height: 200 }} />
-      <Text style={{ marginVertical: 10, fontSize: 20, fontWeight: "bold" }}>
+        alignItems: 'center',
+        backgroundColor: 'white',
+      }}>
+      <Image source={{uri: item.url}} style={{width: 200, height: 200}} />
+      <Text style={{marginVertical: 10, fontSize: 20, fontWeight: 'bold'}}>
         {item.name}
       </Text>
     </View>
   );
 };
 
-const CustomImageSlider = ({ imagearray, type }) => {
+const CustomImageSlider = ({imagearray, type}) => {
   const [index, setIndex] = useState(0);
   const isCarousel = useRef(null);
 
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
   const navigation = useNavigation();
   return (
-    <View style={{ width: wp(100), marginVertical: 10 }}>
+    <View style={{width: wp(100), marginVertical: 10}}>
       {imagearray ? (
         <SwiperFlatList
-          autoplay={type == "upload_item" ? false : true}
+          autoplay={type == 'upload_item' ? false : true}
           autoplayDelay={2}
           autoplayLoop
           //   index={2}
           showPagination
           data={imagearray}
-          renderItem={({ item }) => {
+          renderItem={({item}) => {
             return (
               <>
-                {type == "upload_item" ? (
+                {type == 'upload_item' ? (
                   <View onPress={() => {}} style={styles.sliderCard}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("CameraViewScreen")}
-                      style={styles.btnChange}
-                    >
+                      onPress={() => navigation.navigate('CameraViewScreen')}
+                      style={styles.btnChange}>
                       <Text style={styles.btnChangeText}>Change</Text>
                     </TouchableOpacity>
-                    <ImageBackground
+                    {/* <ImageBackground
                       blurRadius={4}
                       resizeMode="cover"
                       source={{
                         uri: item?.path,
                       }}
                       style={{ flex: 1, justifyContent: "center" }}
-                    >
-                      <Image
-                        source={{
-                          uri: item?.path,
-                        }}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                        resizeMode={"contain"}
-                      />
-                    </ImageBackground>
+                    > */}
+                    <Image
+                      source={{
+                        uri: item?.path,
+                      }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      resizeMode={'cover'}
+                    />
+                    {/* </ImageBackground> */}
                   </View>
-                ) : type == "edit_item" ? (
+                ) : type == 'edit_item' ? (
                   <View style={styles.sliderCard}>
                     <TouchableOpacity
-                      onPress={() => navigation.navigate("CameraViewScreen")}
-                      style={styles.btnChange}
-                    >
+                      onPress={() => navigation.navigate('CameraViewScreen')}
+                      style={styles.btnChange}>
                       <Text style={styles.btnChangeText}>Change</Text>
                     </TouchableOpacity>
-                    <ImageBackground
+                    {/* <ImageBackground
                       blurRadius={4}
                       resizeMode="cover"
                       source={{
                         uri: item?.path ? item?.path : IMAGE_URL + item,
                       }}
-                      style={{ flex: 1, justifyContent: "center" }}
-                    >
-                      <Image
-                        source={{
-                          uri: item?.path ? item?.path : IMAGE_URL + item,
-                        }}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                        resizeMode={"contain"}
-                      />
-                    </ImageBackground>
+                      style={{flex: 1, justifyContent: 'center'}}> */}
+                    <Image
+                      source={{
+                        uri: item?.path ? item?.path : IMAGE_URL + item,
+                      }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      resizeMode={'cover'}
+                    />
+                    {/* </ImageBackground> */}
                   </View>
                 ) : (
                   <TouchableOpacity
                     onPress={() => {
-                      Linking.openURL(item?.app_img_link).catch((err) => {
+                      Linking.openURL(item?.app_img_link).catch(err => {
                         setsnackbarValue({
-                          value: "Something went wrong.Unable to open url",
-                          color: "red",
+                          value: 'Something went wrong.Unable to open url',
+                          color: 'red',
                         });
                         setVisible(true);
                       });
                     }}
-                    style={styles.sliderCard}
-                  >
-                    <ImageBackground
+                    style={styles.sliderCard}>
+                    {/* <ImageBackground
                       blurRadius={4}
                       resizeMode="cover"
                       source={{
                         uri: `${IMAGE_URL}${item?.app_img}`,
                       }}
-                      style={{ flex: 1, justifyContent: "center" }}
-                    >
-                      <Image
-                        source={{
-                          uri: `${IMAGE_URL}${item?.app_img}`,
-                        }}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                        }}
-                        resizeMode={"contain"}
-                      />
-                    </ImageBackground>
+                      style={{flex: 1, justifyContent: 'center'}}> */}
+                    <Image
+                      source={{
+                        uri: `${IMAGE_URL}${item?.app_img}`,
+                      }}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                      }}
+                      resizeMode={'cover'}
+                    />
+                    {/* </ImageBackground> */}
                   </TouchableOpacity>
                 )}
               </>
@@ -189,7 +183,7 @@ const CustomImageSlider = ({ imagearray, type }) => {
             width: 9,
             // margin: 0,
           }}
-          PaginationComponent={(props) => {
+          PaginationComponent={props => {
             return (
               <Pagination
                 {...props}
@@ -211,8 +205,7 @@ const CustomImageSlider = ({ imagearray, type }) => {
           backgroundColor: snackbarValue.color,
           marginBottom: hp(20),
           zIndex: 999,
-        }}
-      >
+        }}>
         {snackbarValue.value}
       </Snackbar>
     </View>
@@ -224,9 +217,9 @@ export default CustomImageSlider;
 // const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "white" },
-  child: { height: 190, width: wp(90), justifyContent: "center" },
-  text: { fontSize: wp(100) * 0.5, textAlign: "center" },
+  container: {flex: 1, backgroundColor: 'white'},
+  child: {height: 190, width: wp(90), justifyContent: 'center'},
+  text: {fontSize: wp(100) * 0.5, textAlign: 'center'},
   paginationContainer: {
     bottom: -40,
   },
@@ -246,31 +239,31 @@ const styles = StyleSheet.create({
     // marginVertical: 10,
   },
   btnChange: {
-    position: "absolute",
+    position: 'absolute',
     top: 10,
     right: 10,
-    backgroundColor: "green",
+    backgroundColor: 'green',
     borderRadius: wp(5),
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
     zIndex: 999,
   },
   btnChangeText: {
-    color: "white",
+    color: 'white',
     paddingVertical: hp(0.8),
     paddingHorizontal: wp(3),
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   sliderCard: {
     width: wp(90),
     marginHorizontal: wp(5),
     height: hp(25),
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: hp(2.5),
     //   backgroundColor: item,
     borderWidth: 0.5,
     // marginTop: 35,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });
 
