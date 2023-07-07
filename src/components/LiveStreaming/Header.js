@@ -78,7 +78,8 @@ const styles = StyleSheet.create({
   },
   totalViewsContainer: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFFB2',
+    // backgroundColor: '#FFFFFFB2',
+    backgroundColor: '#FFFFFF5C',
     borderRadius: 15,
     paddingHorizontal: 10,
     alignItems: 'center',

@@ -45,7 +45,14 @@ const DashboardCard = props => {
           styles.dashboardcard,
           {
             backgroundColor:
-              props?.added_by == 'admin' ? Colors.Appthemecolor : '#FFFFFF',
+              props?.added_by == 'admin'
+                ? Colors.Appthemecolor
+                : props?.promotion?.tag == 'urgent' ||
+                  props?.promotion?.tag == 'Urgent' ||
+                  props?.promotion?.tag == 'Advertised' ||
+                  props?.promotion?.tag == 'Advertisement'
+                ? Colors.UrgentTag_Color
+                : '#FFFFFF',
             width: props.type === 'Exchange_Request' ? wp(90) : wp(45),
             height: props.type === 'Exchange_Request' ? hp(27) : hp(23),
             overflow: 'hidden',
@@ -95,10 +102,12 @@ const DashboardCard = props => {
                 height: props.type === 'Exchange_Request' ? hp(18) : hp(15),
                 alignItems: 'center',
                 justifyContent: 'center',
+                backgroundColor: 'white',
+                paddingTop: 20,
               }}>
               <Image
                 source={appImages.no_image}
-                style={{height: 80, width: 80, tintColor: 'gray'}}
+                style={{height: 50, width: 50, tintColor: '#AAAAAA'}}
                 resizeMode="contain"
               />
             </View>
@@ -139,7 +148,7 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? '#7fff00'
+                    ? '#90EE90'
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
@@ -168,7 +177,7 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? '#7fff00'
+                    ? Colors.UrgentTag_Color
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
@@ -216,7 +225,7 @@ const DashboardCard = props => {
           {props?.added_by == 'admin' && (
             <View
               style={{
-                backgroundColor: 'purple',
+                backgroundColor: Colors.Appthemecolor,
                 position: 'absolute',
                 right: 0,
                 borderBottomLeftRadius: 8,
@@ -273,7 +282,16 @@ const DashboardCard = props => {
               <Ionicons
                 name={'location'}
                 size={15}
-                color={Colors.activetextinput}
+                color={
+                  props?.promotion?.tag == 'urgent' ||
+                  props?.promotion?.tag == 'Urgent' ||
+                  props?.promotion?.tag == 'Advertised' ||
+                  props?.promotion?.tag == 'Advertisement'
+                    ? '#FFFFFF'
+                    : Colors.activetextinput
+                  // Colors.activetextinput
+                  // Colors.Appthemecolor
+                }
                 onPress={() => navigation.toggleDrawer()}
               />
               <Text numberOfLines={2} style={styles.blogsubtext}>

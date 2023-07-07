@@ -387,6 +387,7 @@ let TranslationStrings = new LocalizedStrings({
     // live streaming
     START_LIVE: 'Empezar el en vivo',
     LIVE_STREAMING: 'Transmisión en vivo',
+    MY_STREAMING: 'Mis transmisiones',
     TYPE_SOMETHING: 'Escribe algo',
     PRODUCTS: 'Productos',
     QUANTITY: 'Cantidad',
@@ -760,6 +761,7 @@ let TranslationStrings = new LocalizedStrings({
     // live streaming
     START_LIVE: 'Start Live',
     LIVE_STREAMING: 'Live Streaming',
+    MY_STREAMING: 'My Streams',
     TYPE_SOMETHING: 'Type Something',
     PRODUCTS: 'Products',
     QUANTITY: 'Quantity',

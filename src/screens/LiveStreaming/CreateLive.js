@@ -328,13 +328,13 @@ const CreateLive = ({navigation, route}) => {
           onTermChange={itemtitle => setTitle(itemtitle)}
         />
         <CustomTextInput
-          maxLength={30}
+          maxLength={20}
           icon={appImages.email}
           type={'withouticoninput'}
           texterror={'invalid'}
           term={description}
-          multiline={true}
-          Lines={3}
+          // multiline={true}
+          // Lines={3}
           placeholder={TranslationStrings.DESCRIPTION}
           onTermChange={desc => setDescription(desc)}
         />
@@ -583,6 +583,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     padding: 10,
+    // marginHorizontal: 20,
+    // alignSelf: 'center',
   },
   cardImageView: {
     height: 50,
