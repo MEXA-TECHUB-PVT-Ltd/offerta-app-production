@@ -45,7 +45,7 @@ import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TranslationStrings from '../../utills/TranslationStrings';
 
-const LiveUsers = ({navigation, route}) => {
+const MyStreams = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [data, setData] = useState([
@@ -121,7 +121,7 @@ const LiveUsers = ({navigation, route}) => {
               item?.active_status == 'active' &&
               item?.uid != '0' &&
               item?.user != null &&
-              item?.user[0]?.id != user_id
+              item?.user[0]?.id == user_id
             ) {
               let obj = {
                 stream: [
@@ -197,9 +197,9 @@ const LiveUsers = ({navigation, route}) => {
           user: item?.user,
           Listing: item?.Listing,
         };
-        console.log('obj : ', obj);
+
         navigation.navigate('WatchLiveStream', {
-          host: false,
+          host: true,
           response: obj,
         });
       })
@@ -235,13 +235,13 @@ const LiveUsers = ({navigation, route}) => {
           ListHeaderComponent={
             <CustomHeader
               type={'profile'}
-              headerlabel={TranslationStrings.LIVE_STREAMING}
+              headerlabel={TranslationStrings.MY_STREAMING}
               iconPress={() => {
                 navigation.goBack();
               }}
               icon={'arrow-back'}
-              rightText={TranslationStrings.MY_STREAMING}
-              onRightTextPress={() => navigation.navigate('MyStreams')}
+              // rightText={TranslationStrings.MY_STREAMING}
+              // onRightTextPress={() => navigation.navigate('MyStreams')}
             />
           }
           data={data}
@@ -484,7 +484,7 @@ const LiveUsers = ({navigation, route}) => {
   );
 };
 
-export default LiveUsers;
+export default MyStreams;
 
 const styles = StyleSheet.create({
   card: {

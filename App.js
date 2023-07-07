@@ -107,6 +107,7 @@ import AudiencePage from './src/screens/LiveStreaming/AudiencePage';
 import HostPage from './src/screens/LiveStreaming/HostPage';
 import CreateLive from './src/screens/LiveStreaming/CreateLive';
 import WatchLiveStream from './src/screens/LiveStreaming/WatchLiveStream';
+import MyStreams from './src/screens/LiveStreaming/MyStreams';
 
 const Stack = createNativeStackNavigator();
 function App() {
@@ -183,6 +184,13 @@ function App() {
           <Stack.Screen
             name="CreateLive"
             component={CreateLive}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="MyStreams"
+            component={MyStreams}
             options={{
               headerShown: false,
             }}
