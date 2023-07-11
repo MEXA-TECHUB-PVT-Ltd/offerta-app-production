@@ -44,15 +44,16 @@ const DashboardCard = props => {
         style={[
           styles.dashboardcard,
           {
-            backgroundColor:
-              props?.added_by == 'admin'
-                ? Colors.Appthemecolor
-                : props?.promotion?.tag == 'urgent' ||
-                  props?.promotion?.tag == 'Urgent' ||
-                  props?.promotion?.tag == 'Advertised' ||
-                  props?.promotion?.tag == 'Advertisement'
-                ? Colors.UrgentTag_Color
-                : '#FFFFFF',
+            // backgroundColor:
+            //   props?.added_by == 'admin'
+            //     ? Colors.Appthemecolor
+            //     : props?.promotion?.tag == 'urgent' ||
+            //       props?.promotion?.tag == 'Urgent' ||
+            //       props?.promotion?.tag == 'Advertised' ||
+            //       props?.promotion?.tag == 'Advertisement'
+            //     ? Colors.UrgentTag_Color
+            //     : '#FFFFFF',
+            backgroundColor: props?.added_by == 'admin' ? '#90EE90' : '#FFFFFF',
             width: props.type === 'Exchange_Request' ? wp(90) : wp(45),
             height: props.type === 'Exchange_Request' ? hp(27) : hp(23),
             overflow: 'hidden',
@@ -148,7 +149,7 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? '#90EE90'
+                    ? props?.promotion?.color
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
@@ -177,7 +178,7 @@ const DashboardCard = props => {
               <View
                 style={{
                   backgroundColor: props?.promotion?.color
-                    ? Colors.UrgentTag_Color
+                    ? props?.promotion?.color
                     : '#576AF4',
                   position: 'absolute',
                   left: 0,
@@ -225,7 +226,8 @@ const DashboardCard = props => {
           {props?.added_by == 'admin' && (
             <View
               style={{
-                backgroundColor: Colors.Appthemecolor,
+                // backgroundColor: Colors.Appthemecolor,
+                backgroundColor: '#90EE90',
                 position: 'absolute',
                 right: 0,
                 borderBottomLeftRadius: 8,
@@ -236,7 +238,7 @@ const DashboardCard = props => {
                 style={{
                   fontSize: 12,
                   fontFamily: fontFamily.Poppins_Regular,
-                  color: '#fff',
+                  color: '#000',
                 }}>
                 {TranslationStrings.AFFILIATE}
               </Text>
@@ -261,7 +263,7 @@ const DashboardCard = props => {
               style={{
                 ...styles.dashboardmaintext,
                 color:
-                  props?.added_by == 'admin' ? '#FFFFFF' : Colors.Appthemecolor,
+                  props?.added_by == 'admin' ? '#000' : Colors.Appthemecolor,
               }}>
               {props.maintext}
             </Text>
@@ -283,13 +285,13 @@ const DashboardCard = props => {
                 name={'location'}
                 size={15}
                 color={
-                  props?.promotion?.tag == 'urgent' ||
-                  props?.promotion?.tag == 'Urgent' ||
-                  props?.promotion?.tag == 'Advertised' ||
-                  props?.promotion?.tag == 'Advertisement'
-                    ? '#FFFFFF'
-                    : Colors.activetextinput
-                  // Colors.activetextinput
+                  // props?.promotion?.tag == 'urgent' ||
+                  // props?.promotion?.tag == 'Urgent' ||
+                  // props?.promotion?.tag == 'Advertised' ||
+                  // props?.promotion?.tag == 'Advertisement'
+                  //   ? '#FFFFFF'
+                  //   : Colors.activetextinput
+                  Colors.activetextinput
                   // Colors.Appthemecolor
                 }
                 onPress={() => navigation.toggleDrawer()}

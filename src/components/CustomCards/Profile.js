@@ -25,8 +25,6 @@ import {IMAGE_URL} from '../../utills/ApiRootUrl';
 import TranslationStrings from '../../utills/TranslationStrings';
 
 const ProfileCard = props => {
-  //console.log('here props:',props)
-
   const navigation = useNavigation();
   return (
     <View style={{...styles.profilecard, ...props.style}}>
@@ -134,7 +132,14 @@ const ProfileCard = props => {
 
           // backgroundColor: 'red',
         }}>
-        <View style={{alignItems: 'center'}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Followers', props);
+            // props.type === 'other_user'
+            //   ? null
+            //   : navigation.navigate('Followers', props);
+          }}
+          style={{alignItems: 'center'}}>
           {props.type === 'other' ? (
             <Icon name={'facebook'} size={25} color={'blue'} />
           ) : (
@@ -143,21 +148,29 @@ const ProfileCard = props => {
 
           <Text
             style={styles.verticletext}
-            onPress={() =>
-              props.type === 'other_user'
-                ? null
-                : navigation.navigate('Followers')
-            }>
+            // onPress={() =>
+            //   props.type === 'other_user'
+            //     ? null
+            //     : navigation.navigate('Followers', props)
+            // }
+          >
             {props.following_text}
           </Text>
-        </View>
+        </TouchableOpacity>
         <View
           style={{
             ...styles.verticleLine,
             marginHorizontal:
               TranslationStrings.getLanguage() == 'es' ? 10 : wp(4),
           }}></View>
-        <View style={{alignItems: 'center'}}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Followings', props);
+            // props.type === 'other_user'
+            //   ? null
+            //   : navigation.navigate('Followings', props);
+          }}
+          style={{alignItems: 'center'}}>
           {props.type === 'other' ? (
             <Icon name={'star'} size={25} color={'orange'} />
           ) : (
@@ -165,14 +178,15 @@ const ProfileCard = props => {
           )}
           <Text
             style={styles.verticletext}
-            onPress={() =>
-              props.type === 'other_user'
-                ? null
-                : navigation.navigate('Followings')
-            }>
+            // onPress={() =>
+            //   props.type === 'other_user'
+            //     ? null
+            //     : navigation.navigate('Followings', props)
+            // }
+          >
             {props.followers_text}
           </Text>
-        </View>
+        </TouchableOpacity>
         {props.type === 'other' ? null : (
           <View
             style={{
@@ -209,7 +223,7 @@ const ProfileCard = props => {
 
             <Text
               style={styles.verticletext}
-              //onPress={() => navigation.navigate("Reviews")}
+              // onPress={() => navigation.navigate('Reviews')}
             >
               {props.ratting_text}
             </Text>

@@ -65,6 +65,9 @@ export const get_Login_User_Followers_List = async () => {
   var user_id = await AsyncStorage.getItem('Userid');
   return axios.get(BASE_URL + 'getFollower.php?user_id=' + user_id);
 };
+export const get_Specific_User_Followers_List = async user_id => {
+  return axios.get(BASE_URL + 'getFollower.php?user_id=' + user_id);
+};
 //----------------> User follwings
 export const get_Login_User_Followings = async () => {
   var user_id = await AsyncStorage.getItem('Userid');
@@ -73,6 +76,9 @@ export const get_Login_User_Followings = async () => {
 //----------------> User follwers List
 export const get_Login_User_Followings_List = async () => {
   var user_id = await AsyncStorage.getItem('Userid');
+  return axios.get(BASE_URL + 'getFollowing.php?user_id=' + user_id);
+};
+export const get_Specific_User_Followings_List = async user_id => {
   return axios.get(BASE_URL + 'getFollowing.php?user_id=' + user_id);
 };
 

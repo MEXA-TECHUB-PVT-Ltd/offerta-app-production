@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   RefreshControl,
-} from "react-native";
+} from 'react-native';
 
 //////////////map////////////////
 import MapView, {
@@ -14,34 +14,37 @@ import MapView, {
   Polyline,
   Marker,
   AnimatedRegion,
-} from "react-native-maps";
+} from 'react-native-maps';
 
 ////////////////////app components//////////////
-import DescriptionBottomSheet from "../../../../components/CustomBottomSheet/DescriptionBTS";
-import Loader from "../../../../components/Loader/Loader";
+import DescriptionBottomSheet from '../../../../components/CustomBottomSheet/DescriptionBTS';
+import Loader from '../../../../components/Loader/Loader';
 
 ///////////////app icons////////////
-import Icon from "react-native-vector-icons/Ionicons";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 /////////////////app components/////////
-import Slider from "../../../../components/ImageSlider/Slider";
+import Slider from '../../../../components/ImageSlider/Slider';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
-import { setListingId } from "../../../../redux/actions";
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  setExchangeOffer_OtherListing,
+  setListingId,
+} from '../../../../redux/actions';
 
 ///////////height and width/////////////////
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 /////////////////////app styles////////////
-import styles from "./styles";
-import Colors from "../../../../utills/Colors";
+import styles from './styles';
+import Colors from '../../../../utills/Colors';
 
 /////////////////app images///////////
-import { appImages } from "../../../../constant/images";
+import {appImages} from '../../../../constant/images';
 
 ////////////////helper functions/////////////
 import {
@@ -51,7 +54,7 @@ import {
   GetListingViews,
   GetListingsDetails_New,
   GETLIKES_NEW,
-} from "../../../../api/GetApis";
+} from '../../../../api/GetApis';
 import {
   GET_LIKE_STATUS_NEW,
   post_Like_Listings,
@@ -59,30 +62,30 @@ import {
   post_UnLike_Listings,
   post_UnLike_Listings_NEW,
   post_Views_Listings,
-} from "../../../../api/PostApis";
+} from '../../../../api/PostApis';
 
 ////////////menu array/////////////
 // import { my_listing_options } from "../../../../data/Menulists";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import BlockUserView from "../../../../components/BlockUserView";
-import { get_user_status } from "../../../../api/GetApis";
-import TranslationStrings from "../../../../utills/TranslationStrings";
+import BlockUserView from '../../../../components/BlockUserView';
+import {get_user_status} from '../../../../api/GetApis';
+import TranslationStrings from '../../../../utills/TranslationStrings';
 
-const ListingsDetails = ({ navigation, route }) => {
+const ListingsDetails = ({navigation, route}) => {
   const my_listing_options = [
     {
-      id: "1",
+      id: '1',
       label: TranslationStrings.EDIT_ITEM,
-      icon: "square-edit-outline",
+      icon: 'square-edit-outline',
     },
     {
-      id: "2",
+      id: '2',
       label: TranslationStrings.MARK_AS_SOLD,
-      icon: "checkbox-marked",
+      icon: 'checkbox-marked',
     },
-    { id: "3", label: TranslationStrings.DELETE, icon: "delete" },
-    { id: "3", label: TranslationStrings.SHARE, icon: "share-variant" },
+    {id: '3', label: TranslationStrings.DELETE, icon: 'delete'},
+    {id: '3', label: TranslationStrings.SHARE, icon: 'share-variant'},
   ];
 
   ///////////previous data///////////
@@ -93,7 +96,7 @@ const ListingsDetails = ({ navigation, route }) => {
   //camera and imagepicker
   const refRBSheet = useRef();
 
-  const { name, age } = useSelector((state) => state.userReducer);
+  const {name, age} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   const [showBlockModal, setShowBlockModal] = useState(false);
@@ -103,9 +106,9 @@ const ListingsDetails = ({ navigation, route }) => {
 
   ////////////Listing Checks//////////////
   const [listing_like_user_id, setListing_Like_User_id] = useState(
-    route?.params?.like ? route?.params?.login_user_id : ""
+    route?.params?.like ? route?.params?.login_user_id : '',
   );
-  const [listing_views_user_id, setListing_Views_User_id] = useState("");
+  const [listing_views_user_id, setListing_Views_User_id] = useState('');
 
   const [listing_files, setListing_files] = useState([]);
   const [videoFile, setVideoFile] = useState(null);
@@ -145,28 +148,28 @@ const ListingsDetails = ({ navigation, route }) => {
   // };
 
   const GetLikeStatus = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     GET_LIKE_STATUS_NEW(predata.listing_id)
-      .then((response) => {
+      .then(response => {
         let isLike = response?.data?.islike ? response?.data?.islike : false;
 
         if (isLike) {
           setListing_Like_User_id(user_id);
         } else {
-          setListing_Like_User_id("");
+          setListing_Like_User_id('');
         }
       })
-      .catch((err) => {
-        console.log("Error : ", err);
+      .catch(err => {
+        console.log('Error : ', err);
       });
   };
   useEffect(() => {
     GetLikeStatus();
   }, [listing_like_user_id]);
 
-  const listing_like = async (props) => {
-    let user_status = await AsyncStorage.getItem("account_status");
-    if (user_status == "block") {
+  const listing_like = async props => {
+    let user_status = await AsyncStorage.getItem('account_status');
+    if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
@@ -175,17 +178,17 @@ const ListingsDetails = ({ navigation, route }) => {
     //   setListing_Like_User_id(response.data.data.user_id);
     //   likes_count();
     // });
-    post_Like_Listings_NEW(props).then((response) => {
+    post_Like_Listings_NEW(props).then(response => {
       setListing_Like_User_id(response.data.data.user_id);
       likes_count();
     });
   };
 
   //-----------unlike list
-  const listing_unlike = async (props) => {
-    let user_status = await AsyncStorage.getItem("account_status");
+  const listing_unlike = async props => {
+    let user_status = await AsyncStorage.getItem('account_status');
 
-    if (user_status == "block") {
+    if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
@@ -194,8 +197,8 @@ const ListingsDetails = ({ navigation, route }) => {
     //   setListing_Like_User_id(" ");
     //   likes_count();
     // });
-    post_UnLike_Listings_NEW(props).then((response) => {
-      setListing_Like_User_id(" ");
+    post_UnLike_Listings_NEW(props).then(response => {
+      setListing_Like_User_id(' ');
       likes_count();
     });
   };
@@ -210,7 +213,7 @@ const ListingsDetails = ({ navigation, route }) => {
     //     // listing_like(predata.listing_id);
     //   }
     // });
-    GETLIKES_NEW(predata.listing_id).then((response) => {
+    GETLIKES_NEW(predata.listing_id).then(response => {
       let count = response?.data?.Total ? response?.data?.Total : 0;
       setListing_Likes_count(count);
       // if (response.data.msg === "No one liked yet") {
@@ -224,19 +227,19 @@ const ListingsDetails = ({ navigation, route }) => {
 
   //---------------comments count
   const comments_count = () => {
-    GetComments(predata.listing_id).then((response) => {
+    GetComments(predata.listing_id).then(response => {
       setListing_Comments_count(response.data.length);
     });
   };
   //---------------views count
   const views_count = () => {
-    GetListingViews(predata.listing_id).then((response) => {
+    GetListingViews(predata.listing_id).then(response => {
       setListing_Views_count(response.data.total_views);
     });
   };
   //---------------views post
   const listing_views = () => {
-    post_Views_Listings(predata.listing_id).then((response) => {
+    post_Views_Listings(predata.listing_id).then(response => {
       setListing_Views_User_id(response.data.data.user_id);
       views_count();
     });
@@ -246,8 +249,8 @@ const ListingsDetails = ({ navigation, route }) => {
   const [listing_id, setListing_Id] = useState();
   const [listing_user_id, setListing_User_Id] = useState();
   const [listing_images, setListing_Images] = useState([]);
-  const [listing_item_title, setListing_Item_Title] = useState("");
-  const [listing_item_price, setListing_Item_Price] = useState("");
+  const [listing_item_title, setListing_Item_Title] = useState('');
+  const [listing_item_price, setListing_Item_Price] = useState('');
   const [listing_comments_count, setListing_Comments_count] = useState();
   const [listing_likes_count, setListing_Likes_count] = useState();
   const [listing_views_count, setListing_Views_count] = useState();
@@ -272,10 +275,13 @@ const ListingsDetails = ({ navigation, route }) => {
   const GetListData = async () => {
     // GetListingsDetails(predata.listing_id)
     GetListingsDetails_New(predata.listing_id)
-      .then((res) => {
+      .then(res => {
         let response = {
           data: res?.data[0],
         };
+
+        // dispatch(setExchangeOffer_OtherListing(response.data));
+
         setListing_Id(response.data.id);
         setListingId(response.data.id);
         setListing_User_Id(response.data.user_id);
@@ -292,7 +298,7 @@ const ListingsDetails = ({ navigation, route }) => {
         let list1 = [];
         if (response.data?.video) {
           let obj = {
-            type: "video",
+            type: 'video',
             path: response.data?.video,
           };
           list1.push(obj);
@@ -303,23 +309,23 @@ const ListingsDetails = ({ navigation, route }) => {
         }
 
         console.log(
-          "list1 ____________________________________________ ",
-          list1
+          'list1 ____________________________________________ ',
+          list1,
         );
         setListing_files(list1);
 
         getuser();
         //////////date//////////
         const year =
-          response.data.created_at === ""
+          response.data.created_at === ''
             ? null
             : response.data.created_at.substring(0, 4);
         const month =
-          response.data.created_at === ""
+          response.data.created_at === ''
             ? null
             : response.data.created_at.substring(5, 7);
         const day =
-          response.data.created_at === ""
+          response.data.created_at === ''
             ? null
             : response.data.created_at.substring(8, 10);
         const formattedDate = `${day}/${month}/${year}`;
@@ -340,7 +346,7 @@ const ListingsDetails = ({ navigation, route }) => {
         let imagesList = response?.data?.images ? response?.data?.images : [];
         setListingImages(imagesList);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       })
       .finally(() => {
@@ -355,13 +361,13 @@ const ListingsDetails = ({ navigation, route }) => {
   }, []);
   const [login_user_id, setlogin_user_id] = useState();
   const getuser = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     setlogin_user_id(user_id);
   };
   const SliderImages = [
-    { image: require("../../../../assets/images/img.png") },
-    { image: appImages.AddIcon },
-    { image: appImages.BagsIcon },
+    {image: require('../../../../assets/images/img.png')},
+    {image: appImages.AddIcon},
+    {image: appImages.BagsIcon},
   ];
 
   ///////////////youtube link////////////
@@ -387,18 +393,18 @@ const ListingsDetails = ({ navigation, route }) => {
             colors={[Colors.Appthemecolor]}
             onRefresh={() => handleRefresh()}
           />
-        }
-      >
+        }>
         <Loader isLoading={loading} />
         {/* {listingImages?.length > 0 && ( */}
 
         <Slider
           // imagearray={listingImages}
+          listing_id={listing_id}
           imagearray={listing_files}
           listing_owner_id={listing_user_id}
           menuitem1onpress={() => {
             {
-              navigation.navigate("OtherProfile");
+              navigation.navigate('OtherProfile');
             }
           }}
           menuitem2onpress={() => {
@@ -406,7 +412,7 @@ const ListingsDetails = ({ navigation, route }) => {
               refRBSheet.current.open();
             }
           }}
-          type={"promote"}
+          type={'promote'}
           listing_user_id={listing_user_id}
           otherParams={route?.params}
           menuoptions={my_listing_options}
@@ -431,12 +437,11 @@ const ListingsDetails = ({ navigation, route }) => {
           style={{
             marginTop: listingImages?.length == 0 ? hp(8) : hp(4),
             marginHorizontal: wp(7),
-            flexDirection: "row-reverse",
-            justifyContent: "space-between",
-          }}
-        >
+            flexDirection: 'row-reverse',
+            justifyContent: 'space-between',
+          }}>
           <Text style={styles.pricetext}>
-            {giveaway_status === "true" ? "Free" : listing_item_price + " $"}
+            {giveaway_status === 'true' ? 'Free' : listing_item_price + ' $'}
           </Text>
           <Text style={styles.maintext}>{listing_item_title}</Text>
         </View>
@@ -448,27 +453,26 @@ const ListingsDetails = ({ navigation, route }) => {
           > */}
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("CommentsDetails", route.params);
+            navigation.navigate('CommentsDetails', route.params);
           }}
-          style={styles.iconview}
-        >
+          style={styles.iconview}>
           <Icon
-            name={"chatbox-sharp"}
+            name={'chatbox-sharp'}
             size={20}
             color={Colors.activetextinput}
-            style={{ marginRight: wp(3) }}
+            style={{marginRight: wp(3)}}
             onPress={() => {
-              navigation.navigate("CommentsDetails", route.params);
+              navigation.navigate('CommentsDetails', route.params);
             }}
           />
           <Text style={styles.icontext}>
             {listing_comments_count} {TranslationStrings.COMMENTS}
           </Text>
           <Icon
-            name={"chevron-forward-sharp"}
+            name={'chevron-forward-sharp'}
             size={15}
             color={Colors.Appthemecolor}
-            style={{ marginLeft: wp(3) }}
+            style={{marginLeft: wp(3)}}
             // onPress={() => {
             //   {
             //     navigation.navigate("CommentsDetails");
@@ -481,14 +485,13 @@ const ListingsDetails = ({ navigation, route }) => {
         {listing_like_user_id === login_user_id ? (
           <TouchableOpacity
             disabled
-            onPress={() => listing_unlike(predata.listing_id)}
-          >
+            onPress={() => listing_unlike(predata.listing_id)}>
             <View style={styles.iconview}>
               <Icon
-                name={"heart"}
+                name={'heart'}
                 size={20}
                 color={Colors.activetextinput}
-                style={{ marginRight: wp(3) }}
+                style={{marginRight: wp(3)}}
               />
               <Text style={styles.icontext}>
                 {listing_likes_count} {TranslationStrings.LIKES}
@@ -499,14 +502,13 @@ const ListingsDetails = ({ navigation, route }) => {
           // </TouchableOpacity>
           <TouchableOpacity
             disabled
-            onPress={() => listing_like(predata.listing_id)}
-          >
+            onPress={() => listing_like(predata.listing_id)}>
             <View style={styles.iconview}>
               <Icon
-                name={"heart-outline"}
+                name={'heart-outline'}
                 size={20}
                 color={Colors.activetextinput}
-                style={{ marginRight: wp(3) }}
+                style={{marginRight: wp(3)}}
               />
               <Text style={styles.icontext}>
                 {listing_likes_count} {TranslationStrings.LIKES}
@@ -517,11 +519,11 @@ const ListingsDetails = ({ navigation, route }) => {
         <View style={styles.iconview}>
           <Icon
             name={
-              listing_views_user_id === login_user_id ? "eye" : "eye-outline"
+              listing_views_user_id === login_user_id ? 'eye' : 'eye-outline'
             }
             size={20}
             color={Colors.activetextinput}
-            style={{ marginRight: wp(3) }}
+            style={{marginRight: wp(3)}}
             onPress={() => {
               {
               }
@@ -531,11 +533,11 @@ const ListingsDetails = ({ navigation, route }) => {
             {listing_views_count} {TranslationStrings.VIEWS}
           </Text>
         </View>
-        <View style={{ paddingHorizontal: wp(7) }}>
+        <View style={{paddingHorizontal: wp(7)}}>
           <Text style={styles.subtext}>{listing_details}</Text>
         </View>
 
-        <View style={{ paddingHorizontal: wp(7), marginTop: hp(2) }}>
+        <View style={{paddingHorizontal: wp(7), marginTop: hp(2)}}>
           <View style={styles.rowtextview}>
             <Text style={styles.rowlefttext}>
               {TranslationStrings.CATEGORY}
@@ -548,22 +550,22 @@ const ListingsDetails = ({ navigation, route }) => {
             </Text>
             {/* <Text style={styles.rowrighttext}>{listing_condition}</Text> */}
             <Text style={styles.rowrighttext}>
-              {listing_condition?.toLowerCase() == "like new" ||
-              listing_condition == "Como nuevo"
+              {listing_condition?.toLowerCase() == 'like new' ||
+              listing_condition == 'Como nuevo'
                 ? TranslationStrings.LIKE_NEW
-                : listing_condition?.toLowerCase() == "lightly used" ||
-                  listing_condition == "Poco usado"
+                : listing_condition?.toLowerCase() == 'lightly used' ||
+                  listing_condition == 'Poco usado'
                 ? TranslationStrings.LIGHTLY_USED
-                : listing_condition?.toLowerCase() == "heavely used" ||
-                  listing_condition == "Muy usado"
+                : listing_condition?.toLowerCase() == 'heavely used' ||
+                  listing_condition == 'Muy usado'
                 ? TranslationStrings.HEAVELY_USED
-                : listing_condition?.toLowerCase() == "new" ||
-                  listing_condition == "Nuevo"
+                : listing_condition?.toLowerCase() == 'new' ||
+                  listing_condition == 'Nuevo'
                 ? TranslationStrings.NEW
                 : listing_condition}
             </Text>
           </View>
-          {listing_date === "" ? null : (
+          {listing_date === '' ? null : (
             <View style={styles.rowtextview}>
               <Text style={styles.rowlefttext}>
                 {TranslationStrings.DATE_OF_LISTING}
@@ -578,7 +580,7 @@ const ListingsDetails = ({ navigation, route }) => {
             </Text>
             <Text style={styles.rowrighttext}>{listing_location}</Text>
           </View>
-          {listing_shippingcost === "" ? null : (
+          {listing_shippingcost === '' ? null : (
             <View style={styles.rowtextview}>
               <Text style={styles.rowlefttext}>
                 {TranslationStrings.SHIPPING_COST}
@@ -586,7 +588,7 @@ const ListingsDetails = ({ navigation, route }) => {
               <Text style={styles.rowrighttext}>{listing_shippingcost}$</Text>
             </View>
           )}
-          {listing_youtubelink === "" ? null : (
+          {listing_youtubelink === '' ? null : (
             <View style={styles.rowtextview}>
               <Text style={styles.rowlefttext}>
                 {TranslationStrings.YOUTUBE_LINK}
@@ -599,10 +601,10 @@ const ListingsDetails = ({ navigation, route }) => {
         </View>
         <View style={styles.locationview}>
           <Icon
-            name={"location"}
+            name={'location'}
             size={20}
             color={Colors.activetextinput}
-            style={{ marginRight: wp(2) }}
+            style={{marginRight: wp(2)}}
           />
           <Text style={styles.locationtext}>{listing_location}</Text>
         </View>
@@ -610,10 +612,9 @@ const ListingsDetails = ({ navigation, route }) => {
           style={{
             height: hp(25),
             width: wp(100),
-            alignItems: "center",
+            alignItems: 'center',
             marginBottom: hp(0),
-          }}
-        >
+          }}>
           {listingLat && listingLng > 0 ? (
             <MapView
               style={[styles.mapStyle]}
@@ -623,8 +624,7 @@ const ListingsDetails = ({ navigation, route }) => {
                 longitude: listingLng,
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421,
-              }}
-            >
+              }}>
               {listingLat && listingLng > 0 ? (
                 <Marker
                   coordinate={{
@@ -642,15 +642,14 @@ const ListingsDetails = ({ navigation, route }) => {
           <TouchableOpacity
             style={styles.btn}
             onPress={async () => {
-              let user_status = await AsyncStorage.getItem("account_status");
+              let user_status = await AsyncStorage.getItem('account_status');
 
-              if (user_status == "block") {
+              if (user_status == 'block') {
                 setShowBlockModal(true);
                 return;
               }
-              navigation.navigate("Insights", { list_id: listing_id });
-            }}
-          >
+              navigation.navigate('Insights', {list_id: listing_id});
+            }}>
             <Text style={styles.btnText}>
               {TranslationStrings.VIEW_INSIGHTS}
             </Text>
@@ -658,16 +657,15 @@ const ListingsDetails = ({ navigation, route }) => {
           <TouchableOpacity
             style={styles.btn}
             onPress={async () => {
-              let user_status = await AsyncStorage.getItem("account_status");
+              let user_status = await AsyncStorage.getItem('account_status');
 
-              if (user_status == "block") {
+              if (user_status == 'block') {
                 setShowBlockModal(true);
                 return;
               }
 
-              navigation.navigate("Promote", { list_id: listing_id });
-            }}
-          >
+              navigation.navigate('Promote', {list_id: listing_id});
+            }}>
             <Text style={styles.btnText}>{TranslationStrings.PROMOTE}</Text>
           </TouchableOpacity>
         </View>
