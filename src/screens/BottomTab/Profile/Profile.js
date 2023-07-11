@@ -49,7 +49,7 @@ import CustomButtonhere from '../../../components/Button/CustomButton';
 const Profile = ({navigation}) => {
   ////////////isfocused//////////
   const isfocussed = useIsFocused();
-
+  const [user_id, setUser_id] = useState(0);
   ///////////////data states////////////////////
   const [username, setUserName] = React.useState('');
   const [userimage, setUserImage] = React.useState();
@@ -64,6 +64,8 @@ const Profile = ({navigation}) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const GetAcountDetail = async () => {
+    var user_id = await AsyncStorage.getItem('Userid');
+    setUser_id(user_id);
     get_Login_UserData().then(response => {
       // setVerificationStatus(response?.data?.subscription);
       setVerificationStatus(response?.data?.verify_status);
@@ -173,6 +175,7 @@ const Profile = ({navigation}) => {
           alignSelf: 'center',
         }}>
         <ProfileCard
+          user_id={user_id}
           verificationStatus={verificationStatus}
           userRole={userRole}
           userlogo={userimage}

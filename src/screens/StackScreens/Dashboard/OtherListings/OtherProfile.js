@@ -87,6 +87,8 @@ const OtherProfile = ({navigation}) => {
       dispatch(
         setOtherUserFollowersCountINC(response.data.following_user.followers),
       );
+
+      setFollowers(response.data.following_user.followers);
     });
   };
   //-----------unlike list
@@ -96,6 +98,8 @@ const OtherProfile = ({navigation}) => {
       dispatch(
         setOtherUserFollowersCountDEC(response.data.following_user.followers),
       );
+
+      setFollowers(response.data.following_user.followers);
     });
   };
 
@@ -106,6 +110,8 @@ const OtherProfile = ({navigation}) => {
   const [ratting, setRatting] = React.useState();
   const [followers, setFollowers] = React.useState();
   const [following, setFollowing] = React.useState();
+  const [user_id, setUser_id] = React.useState();
+  const [prev_Rating, setPrev_Rating] = useState(0);
 
   const [verificationStatus, setVerificationStatus] = useState(null);
 
@@ -116,13 +122,14 @@ const OtherProfile = ({navigation}) => {
       // setVerificationStatus(response?.data?.subscription);
       setVerificationStatus(response?.data?.verify_status);
       setUserRole(response?.data?.role);
-
+      setUser_id(exchange_other_listing.user_id);
       //setFollow_User_id(response.data.id)
       setUserName(response.data.full_name);
       setUseremail(response.data.email);
       setUserImage(response.data.image);
       setFollowing(response.data.following);
       setFollowers(response.data.followers);
+
       setRatting(response.data.review);
       // follow_user();
       //dispatch(setOtherUserFollowersCountINC(response.data.following))
@@ -224,6 +231,7 @@ const OtherProfile = ({navigation}) => {
           alignSelf: 'center',
         }}>
         <ProfileCard
+          user_id={user_id}
           verificationStatus={verificationStatus}
           userRole={userRole}
           //
@@ -234,7 +242,8 @@ const OtherProfile = ({navigation}) => {
           following_text={TranslationStrings.FOLLOWERS}
           followers_text={TranslationStrings.FOLLOWINGS}
           ratting={ratting}
-          followers={other_user_followers_count}
+          // followers={other_user_followers_count}
+          followers={followers}
           following={following}
           type={'other_user'}
           followStatus={
@@ -248,8 +257,12 @@ const OtherProfile = ({navigation}) => {
       </View>
       <RattingModal
         modalVisible={modalVisible}
-        CloseModal={() => setModalVisible(false)}
+        CloseModal={() => {
+          setModalVisible(false);
+          GetAcountDetail();
+        }}
         ratted_user={exchange_other_listing.user_id}
+        setRating={setRatting}
         onPress={() => {
           setModalVisible(false), navigation.navigate('BottomTab');
         }}

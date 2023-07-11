@@ -392,6 +392,8 @@ let TranslationStrings = new LocalizedStrings({
     PRODUCTS: 'Productos',
     QUANTITY: 'Cantidad',
     GO_LIVE_NOW: 'IR en vivo ahora',
+
+    UNFOLLOW: 'Dejar de seguir',
   },
   en: {
     //home
@@ -767,6 +769,8 @@ let TranslationStrings = new LocalizedStrings({
     QUANTITY: 'Quantity',
 
     GO_LIVE_NOW: 'Go Live Now',
+
+    UNFOLLOW: 'Unfollow',
   },
 });
 

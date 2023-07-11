@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -6,53 +6,55 @@ import {
   Modal,
   FlatList,
   TouchableWithoutFeedback,
-} from "react-native";
+} from 'react-native';
 
 /////////////react navigation////////////
-import { useNavigation } from "@react-navigation/native";
+import {useNavigation} from '@react-navigation/native';
 
 /////////////app components////////////////
-import CustomModal from "../Modal/CustomModal";
+import CustomModal from '../Modal/CustomModal';
 
 ///////////////APP HEIGTH AND WIDTH///////////////////
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 /////////////app icons/////////////////////
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
-import Colors from "../../utills/Colors";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Colors from '../../utills/Colors';
 
 ////////////////app fonts//////////
-import { fontFamily } from "../../constant/fonts";
+import {fontFamily} from '../../constant/fonts';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
-import { setExchangeOffer_MyListing } from "../../../../redux/actions";
+import {useSelector, useDispatch} from 'react-redux';
+import {setExchangeOffer_MyListing} from '../../../../redux/actions';
 
 //////////////////API FUNCTION///////////
-import axios from "axios";
-import { BASE_URL } from "../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import {BASE_URL} from '../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /////////////app images/////////////
-import { appImages } from "../../constant/images";
+import {appImages} from '../../constant/images';
 
-import BlockUserView from "../BlockUserView";
-import { get_user_status } from "../../api/GetApis";
-import TranslationStrings from "../../utills/TranslationStrings";
-import RattingModal from "../Modal/RattingModal";
+import BlockUserView from '../BlockUserView';
+import {get_user_status} from '../../api/GetApis';
+import TranslationStrings from '../../utills/TranslationStrings';
+import RattingModal from '../Modal/RattingModal';
 
-import { Snackbar } from "react-native-paper";
+import {Snackbar} from 'react-native-paper';
 
-const CustomMenu = (props) => {
+import Share from 'react-native-share';
+
+const CustomMenu = props => {
   /////////////navigation state////////////
   const navigation = useNavigation();
 
   ////////////////redux/////////////
-  const { listing_id, exchange_other_listing } = useSelector(
-    (state) => state.userReducer
+  const {listing_id, exchange_other_listing} = useSelector(
+    state => state.userReducer,
   );
   const dispatch = useDispatch();
   //////////////modal states/////////////
@@ -64,9 +66,9 @@ const CustomMenu = (props) => {
 
   const [rating, setRating] = useState(3.5);
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [selected_user_id, setSelected_user_id] = useState("");
+  const [selected_user_id, setSelected_user_id] = useState('');
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
   const onDismissSnackBar = () => setVisible(false);
 
   //////////////delete/////////////
@@ -76,11 +78,11 @@ const CustomMenu = (props) => {
     });
 
     var config = {
-      method: "delete",
+      method: 'delete',
       maxBodyLength: Infinity,
-      url: BASE_URL + "deleteList.php",
+      url: BASE_URL + 'deleteList.php',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: data,
     };
@@ -88,7 +90,7 @@ const CustomMenu = (props) => {
     axios(config)
       .then(function (response) {
         setMsgModalVisible(false);
-        navigation.navigate("Listings");
+        navigation.navigate('Listings');
       })
       .catch(function (error) {
         console.log(error);
@@ -101,21 +103,21 @@ const CustomMenu = (props) => {
     });
 
     var config = {
-      method: "post",
+      method: 'post',
       maxBodyLength: Infinity,
-      url: BASE_URL + "markAsSold.php",
+      url: BASE_URL + 'markAsSold.php',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: data,
     };
 
     axios(config)
       .then(function (response) {
-        if (props?.otherParams?.type == "sale") {
+        if (props?.otherParams?.type == 'sale') {
           setShowRatingModal(true);
         } else {
-          navigation.navigate("Listings");
+          navigation.navigate('Listings');
           // navigation.replace("BuyersList", {
           //   listing_id: listing_id,
           // });
@@ -127,10 +129,10 @@ const CustomMenu = (props) => {
   };
 
   const AddRattings = async (ratted_user, rating) => {
-    var user = await AsyncStorage.getItem("Userid");
+    var user = await AsyncStorage.getItem('Userid');
     axios({
-      method: "POST",
-      url: BASE_URL + "reivewUser.php",
+      method: 'POST',
+      url: BASE_URL + 'reivewUser.php',
       data: {
         user_id: user,
         reviewed_user_id: ratted_user,
@@ -138,38 +140,38 @@ const CustomMenu = (props) => {
       },
     })
       .then(async function (response) {
-        console.log("response  : ", response?.data);
+        console.log('response  : ', response?.data);
         // setsnackbarValue({
         //   value: "Review Submitted Successfully",
         //   color: "green",
         // });
         // setVisible(true);
-        navigation.replace("Listings");
+        navigation.replace('Listings');
       })
       .catch(function (error) {
-        console.log("error", error);
+        console.log('error', error);
       });
   };
   //////////////delete/////////////
   const Report = async () => {
-    var user_id = await AsyncStorage.getItem("Userid");
+    var user_id = await AsyncStorage.getItem('Userid');
     var data = JSON.stringify({
       reportedBy_user_id: user_id,
       reported_user_id: exchange_other_listing.user_id,
     });
 
     var config = {
-      method: "post",
-      url: BASE_URL + "createReport.php",
+      method: 'post',
+      url: BASE_URL + 'createReport.php',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       data: data,
     };
 
     axios(config)
       .then(function (response) {
-        console.log("report here", response.data);
+        console.log('report here', response.data);
         setMsgModalVisible(false);
         // navigation.navigate("Listings")
       })
@@ -179,17 +181,34 @@ const CustomMenu = (props) => {
   };
 
   const handleMenuPress = async () => {
-    console.log("this called...");
+    console.log('this called...');
 
-    let user_status = await AsyncStorage.getItem("account_status");
+    let user_status = await AsyncStorage.getItem('account_status');
 
-    if (user_status == "block") {
-      console.log("her......");
+    if (user_status == 'block') {
+      console.log('her......');
       props.setShowBlockModal(true);
 
       return;
     }
     setModalVisible(true);
+  };
+
+  const handleShare = async () => {
+    let id = props?.listing_id;
+    const shareOptions = {
+      // title: 'Share via',
+      // message: 'some message',
+      url: `${BASE_URL}share/shareLisitng.php?id=${id}`,
+      // social: Share.Social.WHATSAPP,
+      // whatsAppNumber: '+92 3434', // country code + phone number
+      // // filename: 'test', // only for base64 file in Android
+    };
+    try {
+      const ShareResponse = await Share.open(shareOptions);
+    } catch (error) {
+      console.log('Error =>', error);
+    }
   };
 
   return (
@@ -211,30 +230,27 @@ const CustomMenu = (props) => {
           setModalVisible(!modalVisible);
         }}
         animationType="slide"
-        transparent={true}
-      >
+        transparent={true}>
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View
             style={{
               flex: 1,
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-              alignItems: "flex-end",
-            }}
-          >
+              backgroundColor: 'rgba(0, 0, 0, 0.1)',
+              alignItems: 'flex-end',
+            }}>
             <View
               style={{
-                backgroundColor: "white",
+                backgroundColor: 'white',
                 paddingHorizontal: wp(3.5),
                 paddingVertical: hp(4),
                 borderRadius: wp(5),
                 width: wp(50),
                 marginRight: wp(5),
                 marginTop: hp(2),
-              }}
-            >
+              }}>
               <FlatList
                 data={props.menudata}
-                renderItem={({ item, index }) => {
+                renderItem={({item, index}) => {
                   const isEnd = index === props.menudata.length - 1;
                   return (
                     <View>
@@ -242,34 +258,36 @@ const CustomMenu = (props) => {
                         onPress={() => {
                           // console.log(item.label);
                           // return;
-                          item.label === "View Profile" ||
-                          item.label == TranslationStrings.VIEW_PROFILE
-                            ? navigation.navigate("OtherProfile")
-                            : item.label === "Make an Offer" ||
+                          item.label === 'Share' ||
+                          item.label === TranslationStrings.SHARE
+                            ? handleShare()
+                            : item.label === 'View Profile' ||
+                              item.label == TranslationStrings.VIEW_PROFILE
+                            ? navigation.navigate('OtherProfile')
+                            : item.label === 'Make an Offer' ||
                               item.label == TranslationStrings.MAKE_AN_OFFER
-                            ? navigation.navigate("PriceOffer")
-                            : item.label === "Request Exchange" ||
+                            ? navigation.navigate('PriceOffer')
+                            : item.label === 'Request Exchange' ||
                               item.label == TranslationStrings.REQUEST_EXCHANGE
-                            ? navigation.navigate("ExchangeOfferList")
-                            : item.label === "Edit Item" ||
+                            ? navigation.navigate('ExchangeOfferList')
+                            : item.label === 'Edit Item' ||
                               item.label == TranslationStrings.EDIT_ITEM
-                            ? navigation.navigate("EditList", {
-                                navtype: "edit_list",
+                            ? navigation.navigate('EditList', {
+                                navtype: 'edit_list',
                               })
-                            : item.label === "Mark as Sold" ||
+                            : item.label === 'Mark as Sold' ||
                               item.label == TranslationStrings.MARK_AS_SOLD
                             ? mark_Status_Listing()
-                            : item.label === "Delete" ||
+                            : item.label === 'Delete' ||
                               item.label == TranslationStrings.DELETE
                             ? setMsgModalVisible(true)
-                            : item.label === "Report Item" ||
+                            : item.label === 'Report Item' ||
                               item.label == TranslationStrings.REPORT_ITEM
                             ? setMsgModalVisible1(true)
                             : null;
                           setModalVisible(false);
                         }}
-                        style={{ flexDirection: "row" }}
-                      >
+                        style={{flexDirection: 'row'}}>
                         <MaterialCommunityIcons
                           name={item.icon}
                           color={Colors.appgreycolor}
@@ -281,8 +299,7 @@ const CustomMenu = (props) => {
                             fontFamily: fontFamily.Poppins_Regular,
                             fontSize: hp(1.8),
                             color: Colors.Appthemecolor,
-                          }}
-                        >
+                          }}>
                           {item.label}
                         </Text>
                       </TouchableOpacity>
@@ -292,17 +309,16 @@ const CustomMenu = (props) => {
                         <View
                           style={{
                             borderWidth: 0.5,
-                            borderColor: "rgba(112,112,112,0.3)",
+                            borderColor: 'rgba(112,112,112,0.3)',
                             marginVertical: hp(1.3),
                             width: wp(38),
-                            alignSelf: "center",
-                          }}
-                        ></View>
+                            alignSelf: 'center',
+                          }}></View>
                       )}
                     </View>
                   );
                 }}
-                keyExtractor={(item) => item.id}
+                keyExtractor={item => item.id}
               />
             </View>
           </View>
@@ -311,8 +327,8 @@ const CustomMenu = (props) => {
       {props?.hideMenu == true ? null : (
         <TouchableOpacity onPress={() => handleMenuPress()}>
           <MaterialCommunityIcons
-            name={"dots-vertical"}
-            color={"#404040"}
+            name={'dots-vertical'}
+            color={'#404040'}
             size={22}
             // onPress={() => setModalVisible(true)}
             onPress={() => handleMenuPress()}
@@ -324,7 +340,7 @@ const CustomMenu = (props) => {
         CloseModal={() => setMsgModalVisible(false)}
         Icon={appImages.confirm}
         text={TranslationStrings.CONFIRMATION}
-        type={"confirmation"}
+        type={'confirmation'}
         subtext={TranslationStrings.DO_YOU_REALLY_WANT_TO_DELETE_THE_LISTINGS}
         buttontext={TranslationStrings.YES}
         buttontext1={TranslationStrings.CANCEL}
@@ -341,8 +357,8 @@ const CustomMenu = (props) => {
         CloseModal={() => setMsgModalVisible1(false)}
         Icon={appImages.confirm}
         text={TranslationStrings.CONFIRMATION}
-        type={"confirmation"}
-        subtext={TranslationStrings.DO_YOU_REALLY_WANT_TO_REPORT + "?"}
+        type={'confirmation'}
+        subtext={TranslationStrings.DO_YOU_REALLY_WANT_TO_REPORT + '?'}
         buttontext={TranslationStrings.YES}
         buttontext1={TranslationStrings.CANCEL}
         onPress={() => {
