@@ -60,8 +60,9 @@ const queryString = require('query-string');
 import {Checkbox} from 'react-native-paper';
 import {useFocusEffect} from '@react-navigation/native';
 import LanguageSelector from '../../components/LanguageSelector';
+import {GetListingsDetails_New} from '../../api/GetApis';
 
-const Login = ({navigation}) => {
+const Login = ({navigation, route}) => {
   const [isRemembered, setIsRemembered] = useState(false);
 
   //Modal States
@@ -226,7 +227,26 @@ const Login = ({navigation}) => {
             'account_status',
             response?.data?.data?.status ? response?.data?.data?.status : '',
           );
-          navigation.replace('Drawerroute');
+          if (route?.params?.type == 'deep_linking') {
+            let user_id = response?.data?.data.id;
+            let id = route?.params?.listing_id;
+            let adminId = await getListingAdminId(id);
+
+            // navigation.replace('Drawerroute');
+            if (user_id == adminId) {
+              navigation.replace('Drawerroute');
+              navigation.navigate('ListingsDetails', {
+                listing_id: id,
+              });
+            } else {
+              navigation.replace('Drawerroute');
+              navigation.navigate('MainListingsDetails', {
+                listing_id: id,
+              });
+            }
+          } else {
+            navigation.replace('Drawerroute');
+          }
         } else {
           setloading(0);
           setdisable(0);
@@ -245,13 +265,25 @@ const Login = ({navigation}) => {
         console.log('error', error);
       });
   };
+
+  const getListingAdminId = async id => {
+    return new Promise((resolve, reject) => {
+      try {
+        GetListingsDetails_New(id).then(res => {
+          if (res?.data[0]?.user_id) {
+            resolve(res?.data[0]?.user_id);
+          } else {
+            resolve(false);
+          }
+        });
+      } catch (error) {
+        resolve(false);
+      }
+    });
+  };
+
   //Api form validation
   const formValidation = async () => {
-    // await AsyncStorage.setItem("Userid", "63");
-    // navigation.replace("Drawerroute");
-    // return;
-    // testPayPalPayment();
-
     // input validation
     if (email == '') {
       setsnackbarValue({
@@ -357,12 +389,6 @@ const Login = ({navigation}) => {
       })
         .then(async function (response) {
           console.log('response', JSON.stringify(response.data));
-          // if (response.data.message) {
-          //   await AsyncStorage.setItem("Userid", response.data.data.id);
-          //   navigation.navigate("Drawerroute");
-          // } else {
-          //   setModalVisible(true);
-          // }
 
           console.log('respo nkfsdfjsf', response?.data);
           setloading(0);
@@ -375,7 +401,28 @@ const Login = ({navigation}) => {
                 ? response?.data?.data?.status?.toString()
                 : '',
             );
-            navigation.replace('Drawerroute');
+            // navigation.replace('Drawerroute');
+            if (route?.params?.type == 'deep_linking') {
+              let user_id = response?.data?.data.id;
+              let id = route?.params?.listing_id;
+              let adminId = await getListingAdminId(id);
+
+              // navigation.replace('Drawerroute');
+              if (user_id == adminId) {
+                navigation.replace('Drawerroute');
+                navigation.navigate('ListingsDetails', {
+                  listing_id: id,
+                });
+              } else {
+                navigation.replace('Drawerroute');
+                navigation.navigate('MainListingsDetails', {
+                  listing_id: id,
+                });
+              }
+            } else {
+              navigation.replace('Drawerroute');
+            }
+
             saveUserPreferences(props, 'google123');
           } else {
             if (response?.data?.message == 'Password Incorrect') {

@@ -271,11 +271,15 @@ const MainListingsDetails = ({navigation, route}) => {
     console.log('getting listings details....');
     GetListingsDetails_New(predata.listing_id)
       .then(res => {
+        if (res?.data?.error == true) {
+          alert('No Record Found');
+          return;
+        }
         let response = {
           data: res?.data[0],
         };
         setListing_user_detail(response?.data?.user);
-        setListing_User_Id(response.data.user_id);
+        setListing_User_Id(response?.data.user_id);
         dispatch(setExchangeOffer_OtherListing(response.data));
 
         setListing_Item_Price(response.data.price);
@@ -357,6 +361,7 @@ const MainListingsDetails = ({navigation, route}) => {
     React.useCallback(() => {
       GetListData();
       listing_views();
+      console.log();
     }, []),
   );
 
