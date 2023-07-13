@@ -151,7 +151,7 @@ const PriceOfferNoti = ({navigation, route}) => {
             let order_id = response?.data?.order_id;
             createListingTranscation(order_id, type);
           } else {
-            alert('Something went wrong');
+            // alert('Something went wrong');
           }
         })
         .catch(err => {

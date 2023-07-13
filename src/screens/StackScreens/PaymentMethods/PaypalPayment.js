@@ -233,6 +233,8 @@ const PaypalPayment = ({navigation, route}) => {
     let promotionType = route?.params?.promotionType;
     let start_date = route?.params?.start_date;
     let expiry_date = route?.params?.expiry_date;
+    let payment_method = 'paypal';
+    let amount = route?.params?.fee ? route?.params?.fee : '1.00';
 
     post_Promotions_new(
       listingID,
@@ -241,6 +243,8 @@ const PaypalPayment = ({navigation, route}) => {
       promotionType,
       start_date,
       expiry_date,
+      payment_method,
+      amount,
     ).then(response => {
       console.log('hessdsre we go in:', response.data);
       //setModalVisible(true)

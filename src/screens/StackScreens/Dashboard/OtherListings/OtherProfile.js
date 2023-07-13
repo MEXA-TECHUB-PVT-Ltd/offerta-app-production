@@ -263,6 +263,7 @@ const OtherProfile = ({navigation}) => {
         }}
         ratted_user={exchange_other_listing.user_id}
         setRating={setRatting}
+        rating={ratting}
         onPress={() => {
           setModalVisible(false), navigation.navigate('BottomTab');
         }}

@@ -110,6 +110,7 @@ import WatchLiveStream from './src/screens/LiveStreaming/WatchLiveStream';
 import MyStreams from './src/screens/LiveStreaming/MyStreams';
 import Home from './src/screens/Home';
 import LoaderScreen from './src/screens/Auth/LoaderScreen';
+import UploadItem from './src/screens/StackScreens/Dashboard/UploadItem';
 
 const Stack = createNativeStackNavigator();
 function App() {
@@ -584,6 +585,13 @@ function App() {
           <Stack.Screen
             name="UpdateShippingAddress"
             component={UpdateShippingAddress}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="UploadItem"
+            component={UploadItem}
             options={{
               headerShown: false,
             }}

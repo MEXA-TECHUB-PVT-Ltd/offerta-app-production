@@ -75,6 +75,7 @@ const RattingModal = props => {
               {props?.title ? props?.title : TranslationStrings.RATE_PROFILE}
             </Text>
           </View>
+
           <View
             style={{
               alignItems: 'center',
@@ -85,6 +86,7 @@ const RattingModal = props => {
               type="star"
               ratingCount={5}
               imageSize={30}
+              startingValue={props?.rating ? props?.rating : 2}
               //showRating
               onFinishRating={ratingCompleted}
             />

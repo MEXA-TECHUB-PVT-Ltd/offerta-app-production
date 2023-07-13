@@ -466,6 +466,20 @@ const UploadItem = ({navigation, route}) => {
       });
   };
 
+  const handleNotNow = async () => {
+    setModalVisible(false);
+    if (route?.params?.route_type == 'live_stream') {
+      // navigation?.replace('CreateLive');
+      navigation?.goBack();
+      console.log('if....');
+    } else {
+      console.log('else....');
+      navigation?.navigate('ListingsDetails', {
+        listing_id: addedListingId,
+      });
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <BlockUserView visible={showBlockModal} setVisible={setShowBlockModal} />
@@ -925,10 +939,12 @@ const UploadItem = ({navigation, route}) => {
           buttontext={TranslationStrings.YES}
           cancelText={TranslationStrings.NOT_NOW}
           cancelPress={() => {
-            setModalVisible(false);
-            navigation?.navigate('ListingsDetails', {
-              listing_id: addedListingId,
-            });
+            // setModalVisible(false);
+            // navigation?.navigate('ListingsDetails', {
+            //   listing_id: addedListingId,
+            // });
+
+            handleNotNow();
           }}
           cancelable={true}
           onPress={() => {
