@@ -91,6 +91,7 @@
     "regenerator-runtime": "^0.13.11",
     "rn-fetch-blob": "^0.12.0",
     "rn-range-slider": "^2.2.2",
+    "uri-scheme": "^1.1.0",
     "valid-url": "^1.0.9"
   },
   "devDependencies": {

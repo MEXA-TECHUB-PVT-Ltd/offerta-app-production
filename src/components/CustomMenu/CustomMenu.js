@@ -33,7 +33,7 @@ import {setExchangeOffer_MyListing} from '../../../../redux/actions';
 
 //////////////////API FUNCTION///////////
 import axios from 'axios';
-import {BASE_URL} from '../../utills/ApiRootUrl';
+import {BASE_URL, Share_Listing_URL} from '../../utills/ApiRootUrl';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /////////////app images/////////////
@@ -196,10 +196,11 @@ const CustomMenu = props => {
 
   const handleShare = async () => {
     let id = props?.listing_id;
+    // https://ofertasvapp.com/share/sv/listing.php?id=244
     const shareOptions = {
       // title: 'Share via',
       // message: 'some message',
-      url: `${BASE_URL}share/shareLisitng.php?id=${id}`,
+      url: `${Share_Listing_URL}${id}`,
       // social: Share.Social.WHATSAPP,
       // whatsAppNumber: '+92 3434', // country code + phone number
       // // filename: 'test', // only for base64 file in Android

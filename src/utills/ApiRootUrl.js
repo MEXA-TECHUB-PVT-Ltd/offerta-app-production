@@ -8,7 +8,8 @@ export const BASE_URL =
   'https://ofertasvapp.com/testing/offerta-sv/offerta-backend/v1/';
 export const IMAGE_URL = 'https://ofertasvapp.com/testing/offerta-sv/';
 export const ADMIN_IMAGE_URL = 'https://ofertasvapp.com/testing/offerta-sv/';
-
+export const Share_Listing_URL =
+  'https://ofertasvapp.com/share/sv/listing.php?id=';
 // export const firebase_server_key =
 //   "AAAA6aQ0Hvc:APA91bFwJevXkhpFrHkOp7JYFSSjVgxjzH1ddJwzmN1_UP3pPGkD1EMTMWoIWpeEyWJZuet7-91kh4QMzBrNVIjqDVRRg_MfcoLJLN5QEAZMM6rfcdp6S-MIV8rpv2pcp8nfLWR-8dU5";
 

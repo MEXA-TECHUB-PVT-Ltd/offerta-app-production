@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Linking} from 'react-native';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
@@ -108,6 +108,8 @@ import HostPage from './src/screens/LiveStreaming/HostPage';
 import CreateLive from './src/screens/LiveStreaming/CreateLive';
 import WatchLiveStream from './src/screens/LiveStreaming/WatchLiveStream';
 import MyStreams from './src/screens/LiveStreaming/MyStreams';
+import Home from './src/screens/Home';
+import LoaderScreen from './src/screens/Auth/LoaderScreen';
 
 const Stack = createNativeStackNavigator();
 function App() {
@@ -117,7 +119,7 @@ function App() {
   // );
   //const navigation = useNavigation();
   const [loading, setLoading] = React.useState(true);
-  const [initialRoute, setInitialRoute] = React.useState('Home');
+  const [initialRoute, setInitialRoute] = React.useState('LoaderScreen');
   // React.useEffect(() => {
   //   // Assume a message-notification contains a "type" property in the data payload of the screen to open
   //   //   messaging().onMessage(remoteMessage => {
@@ -156,9 +158,32 @@ function App() {
   //   }
   // }, []);
 
+  const config = {
+    screens: {
+      // initialRouteName: 'SplashScreen',
+      LoaderScreen: {
+        path: 'LoaderScreen/:listing_id',
+        parse: {
+          listing_id: listing_id => `${listing_id}`,
+        },
+      },
+      MainListingsDetails: {
+        path: 'MainListingsDetails/:listing_id',
+        parse: {
+          listing_id: listing_id => `${listing_id}`,
+        },
+      },
+    },
+  };
+
+  const deepLinking = {
+    prefixes: ['ofertasv://com.ofertasvAppMtechub'],
+    config,
+  };
+
   return (
     <Provider store={Store}>
-      <NavigationContainer ref={navigationRef}>
+      <NavigationContainer linking={deepLinking} ref={navigationRef}>
         <Stack.Navigator initialRouteName={initialRoute}>
           <Stack.Screen
             name="AuthNav"
@@ -167,6 +192,21 @@ function App() {
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="LoaderScreen"
+            component={LoaderScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="MainListingsDetails"
+            component={MainListingsDetails}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <Stack.Screen
             name="LiveStreaming"
             component={LiveStreaming}
@@ -385,13 +425,7 @@ function App() {
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="MainListingsDetails"
-            component={MainListingsDetails}
-            options={{
-              headerShown: false,
-            }}
-          />
+
           <Stack.Screen
             name="PaymentOptions"
             component={PaymentOptions}
