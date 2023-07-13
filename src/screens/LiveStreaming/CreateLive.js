@@ -48,6 +48,7 @@ import {get_User_Listings, get_all_listings} from '../../api/GetApis';
 import {BASE_URL, IMAGE_URL} from '../../utills/ApiRootUrl';
 import axios from 'axios';
 import LiveStreamingKeys from '../../utills/LiveStreamingKeys';
+import {useFocusEffect} from '@react-navigation/native';
 
 const CreateLive = ({navigation, route}) => {
   const ref_RBSheet = useRef();
@@ -94,9 +95,15 @@ const CreateLive = ({navigation, route}) => {
     // },
   ]);
 
-  useEffect(() => {
-    getCurrentUserProducts();
-  }, []);
+  // useEffect(() => {
+  //   getCurrentUserProducts();
+  // }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      getCurrentUserProducts();
+    }, []),
+  );
 
   const getCurrentUserProducts = async () => {
     setLoading(true);
@@ -315,7 +322,9 @@ const CreateLive = ({navigation, route}) => {
           icon={'arrow-back'}
           searchicon={'plus-box'}
           onpresseacrh={() => {
-            navigation.navigate('UploadItem');
+            navigation.navigate('UploadItem', {
+              route_type: 'live_stream',
+            });
           }}
         />
         <CustomTextInput

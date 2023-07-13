@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -6,51 +6,52 @@ import {
   View,
   Text,
   useWindowDimensions,
-} from "react-native";
-
+  TouchableOpacity,
+} from 'react-native';
+import CheckBox from '@react-native-community/checkbox';
 //////////////paper//////////////
-import { Checkbox } from "react-native-paper";
+// import {Checkbox} from 'react-native-paper';
 
 /////////////render/////////////////
-import RenderHtml from "react-native-render-html";
+import RenderHtml from 'react-native-render-html';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../../components/Header/CustomHeader";
-import PromotionTopTabs from "../../../../components/TopTabs/PromotionTopTabs";
-import CustomButtonhere from "../../../../components/Button/CustomButton";
+import CustomHeader from '../../../../components/Header/CustomHeader';
+import PromotionTopTabs from '../../../../components/TopTabs/PromotionTopTabs';
+import CustomButtonhere from '../../../../components/Button/CustomButton';
 
 /////////////app styles////////////////
-import styles from "./styles";
-import TopTabstyles from "../../../../styles/GlobalStyles/TopTabstyles";
+import styles from './styles';
+import TopTabstyles from '../../../../styles/GlobalStyles/TopTabstyles';
 
 /////////////import colors/////////////
-import Colors from "../../../../utills/Colors";
+import Colors from '../../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////////api function/////////////
 import {
   get_Advertisement_Promotions,
   get_Urgent_Promotions,
   post_Promotions,
-} from "../../../../api/Sales&Promotions";
-import TranslationStrings from "../../../../utills/TranslationStrings";
-import { get_Promotion_on_tag_basis } from "../../../../api/GetApis";
-import moment from "moment";
+} from '../../../../api/Sales&Promotions';
+import TranslationStrings from '../../../../utills/TranslationStrings';
+import {get_Promotion_on_tag_basis} from '../../../../api/GetApis';
+import moment from 'moment';
 
 //////////top tab/////////////
 
-const Promote = ({ navigation, route }) => {
+const Promote = ({navigation, route}) => {
   const Top_Tab = [
     {
-      id: "1",
+      id: '1',
       // title: "Urgent",
       title: TranslationStrings.URGENT,
     },
     {
-      id: "2",
+      id: '2',
       // title: "Advertisement",
       title: TranslationStrings.ADVERTISEMENT,
     },
@@ -63,23 +64,24 @@ const Promote = ({ navigation, route }) => {
   const [checked, setChecked] = React.useState(false);
 
   ////////html render width//////////
-  const { width } = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   /////////////urgent tab states/////////////
-  const [promotion_id, setPromotion_id] = useState("");
-  const [promotion_type, setPromotion_Type] = useState("");
-  const [urgent_promotion_price, setUrgent_Promotion_Price] = useState("");
-  const [urgent_promotion_feature, setUrgent_Promotion_Feature] = useState("");
+  const [promotion_id, setPromotion_id] = useState('');
+  const [promotion_type, setPromotion_Type] = useState('');
+  const [urgent_promotion_price, setUrgent_Promotion_Price] = useState('');
+  const [urgent_promotion_Color, setUrgent_Promotion_Color] = useState('');
+  const [urgent_promotion_feature, setUrgent_Promotion_Feature] = useState('');
 
   ///////////////advertisement tab states////////////////
   const [advertisement_promotion, setAdvertisement_Promotion] = useState([]);
 
-  const [urgent_promotion_id, setUrgent_promotion_id] = useState("");
+  const [urgent_promotion_id, setUrgent_promotion_id] = useState('');
 
-  const [feature_id, setFeature_id] = useState("");
-  const [promotion_days, setPromotion_days] = useState("");
+  const [feature_id, setFeature_id] = useState('');
+  const [promotion_days, setPromotion_days] = useState('');
 
-  const GetUrgentPromotions = async (props) => {
+  const GetUrgentPromotions = async props => {
     // get_Urgent_Promotions().then((response) => {
     //   if (response.data.message === "No data available") {
     //     setUrgent_Promotion_Price("");
@@ -91,25 +93,30 @@ const Promote = ({ navigation, route }) => {
     // });
 
     get_Promotion_on_tag_basis()
-      .then((response) => {
+      .then(response => {
         let list = response.data?.Promotion ? response.data?.Promotion : [];
-        const filter = list?.filter((item) => item?.tag == "Urgent");
+        const filter = list?.filter(item => item?.tag == 'Urgent');
         if (filter?.length > 0) {
           setUrgent_promotion_id(filter[0]?.promotion_id);
           setFeature_id(filter[0]?.feature_id);
-          console.log("filter[0]?.feature_id  : ", filter[0]?.feature_id);
+
           setUrgent_Promotion_Price(filter[0]?.price);
+          setUrgent_Promotion_Color(filter[0]?.color);
           setUrgent_Promotion_Feature(filter[0]?.text);
           setPromotion_days(filter[0]?.day);
+
+          console.log('filter[0]?.color  : ', filter[0]?.color);
         } else {
-          setUrgent_Promotion_Price("");
+          setUrgent_Promotion_Price('');
+          setUrgent_Promotion_Color('');
         }
       })
-      .catch((err) => {
-        console.log("Error  : ", err);
+      .catch(err => {
+        console.log('Error  : ', err);
       });
   };
-  const GetAdvertisementPromotions = async (props) => {
+
+  const GetAdvertisementPromotions = async props => {
     // get_Advertisement_Promotions().then((response) => {
     //   console.log("response advertisement list", JSON.stringify(response.data));
     //   if (response.data.message === "No data available") {
@@ -121,21 +128,22 @@ const Promote = ({ navigation, route }) => {
     // });
 
     get_Promotion_on_tag_basis()
-      .then((response) => {
+      .then(response => {
         let list = response.data?.Promotion ? response.data?.Promotion : [];
-        const filter = list?.filter((item) => item?.tag == "Advertisement");
+        const filter = list?.filter(item => item?.tag == 'Advertisement');
         if (filter?.length > 0) {
           setAdvertisement_Promotion(filter);
         } else {
           setAdvertisement_Promotion([]);
         }
       })
-      .catch((err) => {
-        console.log("Error  : ", err);
+      .catch(err => {
+        console.log('Error  : ', err);
       });
   };
-  const togglePromotions = async (props) => {
-    if (props === "Urgent") {
+
+  const togglePromotions = async props => {
+    if (props === 'Urgent') {
       GetUrgentPromotions();
     } else {
       GetAdvertisementPromotions();
@@ -148,34 +156,34 @@ const Promote = ({ navigation, route }) => {
 
   ////////////Create Order//////////
   const Create_Promotions = () => {
-    console.log("here we go in:", predata.list_id);
+    console.log('here we go in:', predata.list_id);
     // console.log({ checked, promotion_id, promotion_type });
     // navigation.navigate("CardDetails");
     let listingID = predata.list_id;
     let price = 1.0;
-    let promotionID = "";
-    let promotionType = "";
+    let promotionID = '';
+    let promotionType = '';
     if (selectedId == 1) {
       //urgent
       promotionID = urgent_promotion_id;
       price = urgent_promotion_price;
-      promotionType = "urgent";
+      promotionType = 'urgent';
     } else {
       const selected_ad = advertisement_promotion?.filter(
-        (item) => item?.checked
+        item => item?.checked,
       );
       if (selected_ad?.length == 0) {
-        alert("Please Select Plan");
+        alert('Please Select Plan');
         return;
       } else {
         // promotionID = selected_ad[0]?.id;
         promotionID = promotion_id;
-        promotionType = "advertisment";
+        promotionType = 'advertisment';
         price = selected_ad[0]?.price;
       }
     }
 
-    console.log({ listingID, promotionID, promotionType, price });
+    console.log({listingID, promotionID, promotionType, price});
 
     // navigation.replace("CardDetails", {
     //   type: "promote",
@@ -184,13 +192,13 @@ const Promote = ({ navigation, route }) => {
     //   promotionType: promotionType,
     // });
     let day = promotion_days;
-    day = day?.split(" ")[0];
+    day = day?.split(' ')[0];
     let expiry_date = moment(new Date())
-      .add(day, "days")
-      .format("YYYY-MM-DD hh:mm:ss");
-    let start_date = moment(new Date()).format("YYYY-MM-DD hh:mm:ss");
+      .add(day, 'days')
+      .format('YYYY-MM-DD hh:mm:ss');
+    let start_date = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
     let obj = {
-      type: "promote",
+      type: 'promote',
       fee: price,
       listingID: listingID,
       feature_id: feature_id,
@@ -199,40 +207,40 @@ const Promote = ({ navigation, route }) => {
       start_date: start_date,
       expiry_date: expiry_date,
     };
-
-    navigation.replace("PaymentMethods", obj);
+    console.log('obj : _______________ ', obj);
+    navigation.replace('PaymentMethods', obj);
 
     return;
 
     post_Promotions(predata.list_id, promotion_id, promotion_type).then(
-      (response) => {
-        console.log("hessdsre we go in:", response.data);
+      response => {
+        console.log('hessdsre we go in:', response.data);
         //setModalVisible(true)
-      }
+      },
     );
   };
 
   ////////////select state////////////
-  const [selectedId, setSelectedId] = useState("1");
+  const [selectedId, setSelectedId] = useState('1');
   ///////////////select function/////////////
-  const onselect = (item) => {
+  const onselect = item => {
     setSelectedId(item);
     togglePromotions();
     setChecked(false);
   };
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <PromotionTopTabs
       title={item.title}
-      width={"30%"}
+      width={'30%'}
       selected={selectedId}
       id={item.id}
       onpress={() => onselect(item.id)}
-      type={"sales&orders"}
+      type={'sales&orders'}
     />
   );
 
-  const handleCheckbox = (id) => {
-    const newData = advertisement_promotion?.map((item) => {
+  const handleCheckbox = id => {
+    const newData = advertisement_promotion?.map(item => {
       // if (item.id == id) {
       if (item?.promotion_id == id) {
         return {
@@ -251,17 +259,34 @@ const Promote = ({ navigation, route }) => {
   };
 
   ///////////////Promotions//////////////
-  const renderItemPromotions = ({ item, index }) => (
-    <View style={{ marginHorizontal: wp(7), alignSelf: "center" }}>
+  const renderItemPromotions = ({item, index}) => (
+    <TouchableOpacity
+      activeOpacity={0.9}
+      onPress={() => {
+        // setChecked(!checked), setPromotion_id(item.id);
+        // setPromotion_Type("advertisment");
+        // handleCheckbox(item.id);
+        setChecked(!checked), setPromotion_id(item?.promotion_id);
+        setPromotion_Type('advertisment');
+        setFeature_id(item?.feature_id);
+        handleCheckbox(item.promotion_id);
+        setPromotion_days(item?.day);
+      }}
+      style={{
+        ...styles.card,
+        // backgroundColor: item?.color ? item?.color : 'transparent',
+        // borderWidth: item?.checked ? 2 : 0,
+        borderWidth: 1.5,
+        borderColor: item?.checked ? Colors.activetextinput : Colors.border,
+      }}>
       <View
         style={{
-          alignItems: "center",
+          alignItems: 'center',
           marginTop: hp(2),
-          flexDirection: "row",
-          justifyContent: "space-between",
-        }}
-      >
-        <View style={{ alignItems: "center", flexDirection: "row" }}>
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+        }}>
+        <View style={{alignItems: 'center', flexDirection: 'row'}}>
           {/* <Checkbox
             status={checked ? "checked" : "unchecked"}
             onPress={() => {
@@ -270,76 +295,101 @@ const Promote = ({ navigation, route }) => {
               handleCheckbox(item.id)
             }}
           /> */}
-          <Checkbox
-            status={item?.checked ? "checked" : "unchecked"}
+          {/* <Checkbox
+            status={item?.checked ? 'checked' : 'unchecked'}
             onPress={() => {
               // setChecked(!checked), setPromotion_id(item.id);
               // setPromotion_Type("advertisment");
               // handleCheckbox(item.id);
-              setChecked(!checked),
-                console.log("item?.promotion_id  :   ", item?.promotion_id);
-              setPromotion_id(item?.promotion_id);
-              setPromotion_Type("advertisment");
+              setChecked(!checked), setPromotion_id(item?.promotion_id);
+              setPromotion_Type('advertisment');
+              setFeature_id(item?.feature_id);
+              handleCheckbox(item.promotion_id);
+              setPromotion_days(item?.day);
+            }}
+          /> */}
+          <CheckBox
+            value={item?.checked ? true : false}
+            // tintColors={{true: 'white', false: 'white'}}
+            tintColors={{
+              true: item?.color ? item?.color : Colors.Appthemecolor,
+              false: item?.color ? item?.color : Colors.Appthemecolor,
+            }}
+            onValueChange={() => {
+              // setChecked(!checked), setPromotion_id(item.id);
+              // setPromotion_Type("advertisment");
+              // handleCheckbox(item.id);
+              setChecked(!checked), setPromotion_id(item?.promotion_id);
+              setPromotion_Type('advertisment');
               setFeature_id(item?.feature_id);
               handleCheckbox(item.promotion_id);
               setPromotion_days(item?.day);
             }}
           />
           {/* <Text style={styles.promotepricetext}>{item.offer_time}</Text> */}
-          <Text style={styles.promotepricetext}>{item.day}</Text>
+          {/* <Text style={{...styles.promotepricetext, color: 'white'}}> */}
+          <Text style={{...styles.promotepricetext}}>{item.day} days</Text>
         </View>
-        <Text style={styles.promotepricetext}>{item.price + "$"}</Text>
+        {/* <Text style={{...styles.promotepricetext, color: 'white'}}> */}
+        <Text style={{...styles.promotepricetext}}>{item.price + '$'}</Text>
       </View>
       <View
         style={{
           height: hp(0.3),
           width: wp(85),
           backgroundColor: Colors.icon,
-          alignSelf: "center",
+          alignSelf: 'center',
           marginTop: hp(2),
-        }}
-      ></View>
+        }}></View>
       <View
         style={{
-          alignItems: "center",
+          alignItems: 'center',
           paddingHorizontal: wp(5),
           marginTop: hp(2),
-        }}
-      >
-        <Text style={[styles.promotepricetext, { fontSize: hp(2.5) }]}>
+        }}>
+        <Text
+          style={[
+            styles.promotepricetext,
+            {
+              fontSize: hp(2.5),
+              // color: 'white'
+            },
+          ]}>
           {TranslationStrings.FEATURES}
         </Text>
       </View>
       <View
         style={{
-          alignItems: "center",
+          alignItems: 'center',
           // paddingHorizontal: wp(5),
           // backgroundColor: "orange",
           width: wp(90),
-        }}
-      >
+        }}>
         <RenderHtml
           contentWidth={width}
           // source={{ html: item.feature }}
-          source={{ html: item?.text }}
+          source={{html: item?.text}}
           tagsStyles={tagsStyles}
         />
       </View>
-    </View>
+    </TouchableOpacity>
   );
   const tagsStyles = {
     p: {
       fontSize: hp(2),
-      color: "black",
+      color: 'black',
+      // color: 'white',
       width: wp(90),
       marginHorizontal: wp(5),
+      paddingHorizontal: 10,
     },
     ul: {
       marginHorizontal: wp(3),
     },
     li: {
       fontSize: hp(1.7),
-      color: "black",
+      color: 'black',
+      // color: 'white',
     },
   };
 
@@ -347,14 +397,13 @@ const Promote = ({ navigation, route }) => {
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+        showsHorizontalScrollIndicator={false}>
         <CustomHeader
           headerlabel={TranslationStrings.PROMOTE}
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
         <View style={TopTabstyles.TopTabView}>
           <FlatList
@@ -368,24 +417,36 @@ const Promote = ({ navigation, route }) => {
         </View>
         <View
           style={{
-            alignItems: "center",
+            alignItems: 'center',
             paddingHorizontal: wp(5),
-            color: "black",
-          }}
-        >
+            color: 'black',
+          }}>
           <Text style={styles.promotetoptext}>
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, se
+            You can get advertisement of your own choice.
           </Text>
         </View>
-        {selectedId === "1" ? (
-          <View>
-            <View style={styles.mainView}>
-              <View style={{ alignItems: "center", flexDirection: "row" }}>
+        {selectedId === '1' ? (
+          <View
+            style={{
+              ...styles.card,
+              // backgroundColor: urgent_promotion_Color
+              //   ? urgent_promotion_Color
+              //   : 'transparent',
+              // borderWidth: selectedId === '1' ? 2 : 0,
+
+              borderWidth: 1.5,
+              borderColor:
+                selectedId === '1' ? urgent_promotion_Color : Colors.border,
+              marginTop: 20,
+            }}>
+            <View style={{...styles.mainView}}>
+              <View
+                style={{
+                  alignItems: 'center',
+                  flexDirection: 'row',
+                  marginLeft: -20,
+                  // backgroundColor: '#346965',
+                }}>
                 {/* <Checkbox
                   status={checked ? "checked" : "unchecked"}
                   onPress={() => {
@@ -393,12 +454,20 @@ const Promote = ({ navigation, route }) => {
                     setPromotion_Type("urgent");
                   }}
                 /> */}
+                <CheckBox
+                  value={true}
+                  tintColors={{
+                    true: urgent_promotion_Color,
+                    false: urgent_promotion_Color,
+                  }}
+                />
+
                 {/* <Text style={styles.promotepricetext}>1-day</Text> */}
-                <Text style={styles.promotepricetext}>
-                  {promotion_days} Days
+                <Text style={{...styles.promotepricetext}}>
+                  {promotion_days}
                 </Text>
               </View>
-              <Text style={styles.promotepricetext}>
+              <Text style={{...styles.promotepricetext}}>
                 {TranslationStrings.BUY_AT} {urgent_promotion_price}$
               </Text>
             </View>
@@ -407,54 +476,51 @@ const Promote = ({ navigation, route }) => {
                 height: hp(0.3),
                 width: wp(85),
                 backgroundColor: Colors.icon,
-                alignSelf: "center",
+                alignSelf: 'center',
                 marginTop: hp(2),
-              }}
-            ></View>
+              }}></View>
             <View
               style={{
-                alignItems: "center",
+                alignItems: 'center',
                 paddingHorizontal: wp(5),
                 marginTop: hp(2),
-              }}
-            >
-              <Text style={[styles.promotepricetext, { fontSize: hp(2.5) }]}>
+              }}>
+              <Text style={[styles.promotepricetext, {fontSize: hp(2.5)}]}>
                 {TranslationStrings.FEATURES}
               </Text>
             </View>
             <View
               style={{
-                alignItems: "center",
+                alignItems: 'center',
                 paddingHorizontal: wp(5),
-                width: wp(88),
-                alignSelf: "center",
-              }}
-            >
+                width: wp(85),
+                alignSelf: 'center',
+              }}>
               <RenderHtml
-                contentWidth={width}
-                source={{ html: urgent_promotion_feature }}
+                contentWidth={width / 2}
+                source={{html: urgent_promotion_feature}}
                 tagsStyles={tagsStyles}
               />
             </View>
           </View>
         ) : (
-          <View>
+          <View style={{}}>
             <FlatList
               data={advertisement_promotion}
               renderItem={renderItemPromotions}
               keyExtractor={(item, index) => index}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}
-              horizontal={true}
+              // horizontal={true}
             />
           </View>
         )}
 
-        <View style={{ marginBottom: hp(15) }}>
+        <View style={{marginBottom: hp(15)}}>
           <CustomButtonhere
             title={TranslationStrings.PAY}
             widthset={80}
-            topDistance={15}
+            topDistance={5}
             onPress={() => {
               Create_Promotions();
               //navigation.navigate('Payment')

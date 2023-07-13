@@ -44,16 +44,21 @@ const DashboardCard = props => {
         style={[
           styles.dashboardcard,
           {
-            // backgroundColor:
-            //   props?.added_by == 'admin'
-            //     ? Colors.Appthemecolor
-            //     : props?.promotion?.tag == 'urgent' ||
-            //       props?.promotion?.tag == 'Urgent' ||
-            //       props?.promotion?.tag == 'Advertised' ||
-            //       props?.promotion?.tag == 'Advertisement'
-            //     ? Colors.UrgentTag_Color
-            //     : '#FFFFFF',
-            backgroundColor: props?.added_by == 'admin' ? '#90EE90' : '#FFFFFF',
+            backgroundColor:
+              props?.added_by == 'admin'
+                ? Colors.Appthemecolor
+                : (props?.promotion?.tag == 'urgent' ||
+                    props?.promotion?.tag == 'Urgent') &&
+                  moment(new Date())?.format('YYYY-MM-DD') <
+                    moment(props?.promotion?.Expirydate)?.format('YYYY-MM-DD')
+                ? props?.promotion?.color
+                : (props?.promotion?.tag == 'Advertised' ||
+                    props?.promotion?.tag == 'Advertisement') &&
+                  moment(new Date())?.format('YYYY-MM-DD') <
+                    moment(props?.promotion?.Expirydate)?.format('YYYY-MM-DD')
+                ? props?.promotion?.color
+                : '#FFFFFF',
+            // backgroundColor: props?.added_by == 'admin' ? '#90EE90' : '#FFFFFF',
             width: props.type === 'Exchange_Request' ? wp(90) : wp(45),
             height: props.type === 'Exchange_Request' ? hp(27) : hp(23),
             overflow: 'hidden',
@@ -226,8 +231,8 @@ const DashboardCard = props => {
           {props?.added_by == 'admin' && (
             <View
               style={{
-                // backgroundColor: Colors.Appthemecolor,
-                backgroundColor: '#90EE90',
+                backgroundColor: Colors.Appthemecolor,
+                // backgroundColor: '#90EE90',
                 position: 'absolute',
                 right: 0,
                 borderBottomLeftRadius: 8,
@@ -238,7 +243,8 @@ const DashboardCard = props => {
                 style={{
                   fontSize: 12,
                   fontFamily: fontFamily.Poppins_Regular,
-                  color: '#000',
+                  // color: '#000',
+                  color: 'white',
                 }}>
                 {TranslationStrings.AFFILIATE}
               </Text>
@@ -262,8 +268,10 @@ const DashboardCard = props => {
               numberOfLines={1}
               style={{
                 ...styles.dashboardmaintext,
+                // color:
+                //   props?.added_by == 'admin' ? '#000' : Colors.Appthemecolor,
                 color:
-                  props?.added_by == 'admin' ? '#000' : Colors.Appthemecolor,
+                  props?.added_by == 'admin' ? '#fff' : Colors.Appthemecolor,
               }}>
               {props.maintext}
             </Text>
