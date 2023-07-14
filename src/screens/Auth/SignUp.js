@@ -287,6 +287,11 @@ const SignUp = ({navigation}) => {
   };
   //Api form validation
   const formValidation = async () => {
+    // navigation.navigate('CreateProfile', {
+    //   useremail: '',
+    //   signup_role: 'user',
+    // });
+    // return;
     // navigation.navigate("AccountVerification");
     // return;
 
@@ -412,6 +417,7 @@ const SignUp = ({navigation}) => {
             </TouchableOpacity>
 
             <CustomTextInput
+              autoCapitalize={'none'}
               icon={appImages.email}
               type={'iconinput'}
               texterror={'invalid'}

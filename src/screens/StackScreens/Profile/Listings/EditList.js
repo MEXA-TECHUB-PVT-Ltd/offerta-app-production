@@ -183,8 +183,9 @@ const EditList = ({navigation, route}) => {
           ? shippingprice
           : '0.0',
       youtube_link: youtubelink,
+      quantity: '',
     });
-
+    console.log('data::::::::::::::::::::::::::::::::::', data);
     var config = {
       method: 'put',
       url: BASE_URL + 'updateList.php',
@@ -204,7 +205,7 @@ const EditList = ({navigation, route}) => {
       // })
 
       if (videoFile && isVideoUpdated) {
-        post_Listing_Video(response.data.id, videoFile)
+        post_Listing_Video(listing_id, videoFile)
           .then(res => res.json())
           .then(response => {
             console.log(
@@ -222,7 +223,7 @@ const EditList = ({navigation, route}) => {
         });
       }
       post_Item_Images({
-        item_id: response.data.id,
+        item_id: listing_id,
         item_images: item_images_array,
       })
         .then(response => response.json())
@@ -266,6 +267,7 @@ const EditList = ({navigation, route}) => {
         let response = {
           data: res?.data[0],
         };
+        console.log('responst : ', response.data);
         dispatch(setItemImagesArray(response.data.images));
 
         setVideoFile(

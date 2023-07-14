@@ -78,6 +78,8 @@ const CounterOffer = ({navigation, route}) => {
 
   const onDismissSnackBar = () => setVisible(false);
 
+  const [loading, setLoading] = useState(false);
+
   //////////////////Textinput state////////////
   const [offerprice, setOfferPrice] = React.useState(0);
 
@@ -88,8 +90,6 @@ const CounterOffer = ({navigation, route}) => {
   //Modal States
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible1, setModalVisible1] = useState(false);
-
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     checkData();
@@ -159,37 +159,41 @@ const CounterOffer = ({navigation, route}) => {
     //   listing_image: route?.params?.item_img,
     // });
     // return;
-
+    setLoading(true);
     post_Listings_Conter_Offer(
       route?.params?.buyer_id,
       route?.params?.sale_by,
       route?.params?.listing_id,
       offerprice,
-    ).then(response => {
-      //dispatch(setExchangeOffer_OtherListing(list_data))
-      console.log(
-        'counter offfer response   : :   :: ::  :   :  :: :  ::::: : : ::',
-        response?.data,
-      );
+    )
+      .then(response => {
+        //dispatch(setExchangeOffer_OtherListing(list_data))
+        console.log(
+          'counter offfer response   : :   :: ::  :   :  :: :  ::::: : : ::',
+          response?.data,
+        );
 
-      if (response?.data?.status == true) {
-        navigation.replace('ChatScreen', {
-          buyer_id: route?.params?.buyer_id,
-          sale_by: route?.params?.sale_by,
-          userid: route?.params?.buyer_id,
-          offerprice: offerprice,
-          offerid: response.data.data.id,
-          item_price: route?.params.itemprice,
-          navtype: 'counter_offer',
-          listing_id: route?.params?.listing_id,
-          listing_image: route?.params?.item_img,
-        });
-      } else {
-        setsnackbarMessage(response?.data?.message);
-        onToggleSnackBar();
-      }
-      // setListing_Like_User_id(response.data.data.user_id);
-    });
+        if (response?.data?.status == true) {
+          navigation.replace('ChatScreen', {
+            buyer_id: route?.params?.buyer_id,
+            sale_by: route?.params?.sale_by,
+            userid: route?.params?.buyer_id,
+            offerprice: offerprice,
+            offerid: response.data.data.id,
+            item_price: route?.params.itemprice,
+            navtype: 'counter_offer',
+            listing_id: route?.params?.listing_id,
+            listing_image: route?.params?.item_img,
+          });
+        } else {
+          setsnackbarMessage(response?.data?.message);
+          onToggleSnackBar();
+        }
+        // setListing_Like_User_id(response.data.data.user_id);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   const [list_data, setList_Date] = useState({
     otheruser_id: exchange_other_listing.user_id,

@@ -158,7 +158,7 @@ const UploadItem = ({navigation, route}) => {
       description: description,
       price: givingawaychecked != true ? price : '0.0',
       category_id: category_id,
-      subcategory_id: sub_category_id,
+      subcategory_id: sub_category_id ? sub_category_id : '00',
       product_condition: product_condition,
       fixed_price: fixedpricechecked != true ? 'false' : 'true',
       location: location_address,
@@ -350,13 +350,15 @@ const UploadItem = ({navigation, route}) => {
         color: 'red',
       });
       setVisible('true');
-    } else if (sub_category_id == '') {
-      setsnackbarValue({
-        value: TranslationStrings.PLEASE_SELECT_A_SUB_CATEGORY,
-        color: 'red',
-      });
-      setVisible('true');
-    } else if (product_condition == '') {
+    }
+    // else if (sub_category_id == '') {
+    //   setsnackbarValue({
+    //     value: TranslationStrings.PLEASE_SELECT_A_SUB_CATEGORY,
+    //     color: 'red',
+    //   });
+    //   setVisible('true');
+    // }
+    else if (product_condition == '') {
       setsnackbarValue({
         value: TranslationStrings.PLEASE_SELECT_PRODUCT_CONDITION,
         color: 'red',

@@ -44,6 +44,8 @@ import {get_user_status} from '../../api/GetApis';
 import TranslationStrings from '../../utills/TranslationStrings';
 
 import Share from 'react-native-share';
+import Loader from '../Loader/Loader';
+import {Snackbar} from 'react-native-paper';
 
 const CustomMenu1 = props => {
   /////////////navigation state////////////
@@ -59,9 +61,17 @@ const CustomMenu1 = props => {
   const [msgmodalVisible, setMsgModalVisible] = React.useState(false);
   const [msgmodalVisible1, setMsgModalVisible1] = React.useState(false);
 
+  const [reportModalVisible, setReportModalVisible] = useState(false);
+
   const [showBlockModal, setShowBlockModal] = useState(false);
 
-  //////////////delete/////////////
+  const [loading, setLoading] = useState(false);
+
+  const [visible, setVisible] = useState(false);
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
+  const onDismissSnackBar = () => setVisible(false);
+
+  ///////  ///////delete/////////////
   const delete_Listing = () => {
     var data = JSON.stringify({
       id: listing_id,
@@ -138,6 +148,55 @@ const CustomMenu1 = props => {
       });
   };
 
+  const handleReportListing = async () => {
+    setReportModalVisible(false);
+    setLoading(true);
+    var user_id = await AsyncStorage.getItem('Userid');
+    let obj = {
+      user_id: user_id,
+      listing_id: exchange_other_listing.id,
+    };
+    //
+    console.log('obj : ', obj);
+    var config = {
+      method: 'post',
+      url: BASE_URL + 'reportList.php',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: JSON.stringify(obj),
+    };
+    axios(config)
+      .then(function (response) {
+        console.log('report here', response.data);
+        if (response?.data?.message == 'List already Reported by user') {
+          setsnackbarValue({
+            value: 'You already reported this item.',
+            color: 'red',
+          });
+          setVisible(true);
+        } else if (response?.data?.status == true) {
+          setsnackbarValue({
+            value: 'Reported Successfully',
+            color: 'green',
+          });
+          setVisible(true);
+        } else {
+          setsnackbarValue({
+            value: response?.data?.message,
+            color: 'red',
+          });
+          setVisible(true);
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   const handleMenuPress = async () => {
     console.log('this called...');
     // setShowBlockModal
@@ -170,6 +229,7 @@ const CustomMenu1 = props => {
   };
   return (
     <View style={{backgroundColor: '#FFFFFF'}}>
+      <Loader isLoading={loading} />
       {/* <Modal
         visible={modalVisible}
         onRequestClose={() => {
@@ -210,6 +270,9 @@ const CustomMenu1 = props => {
                         : item.label === 'View Profile' ||
                           item.label == TranslationStrings.VIEW_PROFILE
                         ? navigation.navigate('OtherProfile')
+                        : item.label === 'Report Item' ||
+                          item.label == TranslationStrings.REPORT_ITEM
+                        ? setReportModalVisible(true)
                         : item.label === 'Make an Offer' ||
                           item.label == TranslationStrings.MAKE_AN_OFFER
                         ? navigation.navigate('PriceOffer')
@@ -226,9 +289,6 @@ const CustomMenu1 = props => {
                         ? mark_Status_Listing()
                         : item.label === 'Delete' || TranslationStrings.DELETE
                         ? setMsgModalVisible(true)
-                        : item.label === 'Report Item' ||
-                          item.label == TranslationStrings.REPORT_ITEM
-                        ? setMsgModalVisible1(true)
                         : null;
                       setModalVisible(false);
                     }}
@@ -294,7 +354,17 @@ const CustomMenu1 = props => {
           delete_Listing();
         }}
       />
-
+      <Snackbar
+        duration={2000}
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        style={{
+          backgroundColor: snackbarValue.color,
+          marginBottom: hp(20),
+          zIndex: 999,
+        }}>
+        {snackbarValue.value}
+      </Snackbar>
       <CustomModal
         modalVisible={msgmodalVisible1}
         CloseModal={() => setMsgModalVisible1(false)}
@@ -309,6 +379,22 @@ const CustomMenu1 = props => {
         }}
         onPress1={() => {
           Report();
+        }}
+      />
+      <CustomModal
+        modalVisible={reportModalVisible}
+        CloseModal={() => setReportModalVisible(false)}
+        Icon={appImages.confirm}
+        text={TranslationStrings.CONFIRMATION}
+        type={'confirmation'}
+        subtext={TranslationStrings.DO_YOU_REALLY_WANT_TO_REPORT + '?'}
+        buttontext={TranslationStrings.YES}
+        buttontext1={TranslationStrings.CANCEL}
+        onPress={() => {
+          setReportModalVisible(false);
+        }}
+        onPress1={() => {
+          handleReportListing();
         }}
       />
     </View>

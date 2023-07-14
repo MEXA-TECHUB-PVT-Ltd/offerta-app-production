@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, FlatList, View, Text, BackHandler } from "react-native";
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, FlatList, View, Text, BackHandler} from 'react-native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../../components/Header/CustomHeader";
-import PromotionTopTabs from "../../../components/TopTabs/PromotionTopTabs";
-import ExcahangeCard from "../../../components/CustomCards/ExcahngeCard";
+import CustomHeader from '../../../components/Header/CustomHeader';
+import PromotionTopTabs from '../../../components/TopTabs/PromotionTopTabs';
+import ExcahangeCard from '../../../components/CustomCards/ExcahngeCard';
 
 /////////////app styles////////////////
-import styles from "./styles";
-import TopTabstyles from "../../../styles/GlobalStyles/TopTabstyles";
+import styles from './styles';
+import TopTabstyles from '../../../styles/GlobalStyles/TopTabstyles';
 
-import Colors from "../../../utills/Colors";
+import Colors from '../../../utills/Colors';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { appImages } from "../../../constant/images";
+} from 'react-native-responsive-screen';
+import {appImages} from '../../../constant/images';
 
 ////////////////api functions///////////
 import {
@@ -23,16 +23,16 @@ import {
   get_Orders,
   get_Sales_new,
   get_Orders_new,
-} from "../../../api/Sales&Promotions";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import { BASE_URL, IMAGE_URL } from "../../../utills/ApiRootUrl";
-import RattingModal from "../../../components/Modal/RattingModal";
-import { Snackbar } from "react-native-paper";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import Loader from "../../../components/Loader/Loader";
-import NoNotificationFound from "../../BottomTab/Notification/NoNotificationFound";
-import { update_order_status } from "../../../api/Offer";
+} from '../../../api/Sales&Promotions';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import {BASE_URL, IMAGE_URL} from '../../../utills/ApiRootUrl';
+import RattingModal from '../../../components/Modal/RattingModal';
+import {Snackbar} from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import Loader from '../../../components/Loader/Loader';
+import NoNotificationFound from '../../BottomTab/Notification/NoNotificationFound';
+import {update_order_status} from '../../../api/Offer';
 
 // const Top_Tab = [
 //   {
@@ -47,13 +47,16 @@ import { update_order_status } from "../../../api/Offer";
 //   },
 // ];
 
-const SalesOrders = ({ navigation }) => {
+const SalesOrders = ({navigation, route}) => {
   const [loading, setLoading] = useState(false);
   const [rating, setRating] = useState(3.5);
   const [showRatingModal, setShowRatingModal] = useState(false);
-  const [selected_user_id, setSelected_user_id] = useState("");
+  const [selected_user_id, setSelected_user_id] = useState('');
   const [visible, setVisible] = useState(false);
-  const [snackbarValue, setsnackbarValue] = useState({ value: "", color: "" });
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
+
+  const navType = route?.params.navType ? route?.params.navType : '';
+
   const onDismissSnackBar = () => setVisible(false);
 
   useEffect(() => {
@@ -63,8 +66,8 @@ const SalesOrders = ({ navigation }) => {
     };
 
     const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
+      'hardwareBackPress',
+      backAction,
     );
 
     return () => backHandler.remove();
@@ -72,27 +75,28 @@ const SalesOrders = ({ navigation }) => {
 
   const [Top_Tab, setTop_Tab] = useState([
     {
-      id: "1",
+      id: '1',
       // title: "Sales",
       title: TranslationStrings.SALES,
     },
     {
-      id: "2",
+      id: '2',
       // title: "Orders",
       title: TranslationStrings.ORDERS,
     },
   ]);
   ////////////select state////////////
-  const [selectedId, setSelectedId] = useState("1");
+  // const [selectedId, setSelectedId] = useState('1');
+  const [selectedId, setSelectedId] = useState(navType == 'Order' ? '2' : '1');
   ///////////////select function/////////////
-  const onselect = (item) => {
+  const onselect = item => {
     setSelectedId(item);
     //GetPromotionsFeaturesList(item);
   };
-  const GetSalesList = async (props) => {
+  const GetSalesList = async props => {
     setLoading(true);
     get_Sales_new()
-      .then((response) => {
+      .then(response => {
         if (response?.data?.status == false) {
           setdata([]);
         } else {
@@ -104,10 +108,10 @@ const SalesOrders = ({ navigation }) => {
         setLoading(false);
       });
   };
-  const GetOrderList = async (props) => {
+  const GetOrderList = async props => {
     setLoading(true);
     get_Orders_new()
-      .then((response) => {
+      .then(response => {
         if (response?.data?.status == false) {
           setdata([]);
         } else {
@@ -119,34 +123,39 @@ const SalesOrders = ({ navigation }) => {
         setLoading(false);
       });
   };
-
+  console.log('navType  :::::::::::::::::: ', navType);
   useEffect(() => {
-    GetSalesList();
+    // GetSalesList();
+    if (navType == 'Order') {
+      GetOrderList();
+    } else {
+      GetSalesList();
+    }
   }, []);
   ////////////////LIST DATA/////////
   const [data, setdata] = useState();
 
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <PromotionTopTabs
       title={item.title}
-      width={"30%"}
+      width={'30%'}
       selected={selectedId}
       id={item.id}
       onpress={() => {
         onselect(item.id),
-          item.title === "Sales" ? GetSalesList() : GetOrderList();
+          item.title === 'Sales' ? GetSalesList() : GetOrderList();
       }}
-      type={"sales&orders"}
+      type={'sales&orders'}
     />
   );
 
   const AddRattings = async (ratted_user, rating) => {
-    console.log("...");
+    console.log('...');
     setLoading(true);
-    var user = await AsyncStorage.getItem("Userid");
+    var user = await AsyncStorage.getItem('Userid');
     axios({
-      method: "POST",
-      url: BASE_URL + "reivewUser.php",
+      method: 'POST',
+      url: BASE_URL + 'reivewUser.php',
       data: {
         user_id: user,
         reviewed_user_id: ratted_user,
@@ -154,50 +163,50 @@ const SalesOrders = ({ navigation }) => {
       },
     })
       .then(async function (response) {
-        console.log("response", response?.data);
+        console.log('response', response?.data);
         if (response?.data?.status == true) {
           setsnackbarValue({
-            value: "Review Submitted Successfully",
-            color: "green",
+            value: 'Review Submitted Successfully',
+            color: 'green',
           });
           setVisible(true);
         } else {
-          console.log("else.");
+          console.log('else.');
           setsnackbarValue({
             value: response?.data?.message
               ? response?.data?.message
               : response?.data?.msg,
-            color: "red",
+            color: 'red',
           });
           setVisible(true);
         }
       })
       .catch(function (error) {
-        console.log("error", error);
+        console.log('error', error);
       })
       .finally(() => {
-        console.log("finall...");
+        console.log('finall...');
         setLoading(false);
       });
   };
 
-  const handleUpdateOrderStatus = (order_detail) => {
-    if (order_detail?.order_status == "pending" && selectedId == 1) {
+  const handleUpdateOrderStatus = order_detail => {
+    if (order_detail?.order_status == 'pending' && selectedId == 1) {
       setLoading(true);
-      update_order_status(order_detail?.id, "complete")
-        .then((res) => {
-          console.log("update_order_status : ", res?.data);
+      update_order_status(order_detail?.id, 'complete')
+        .then(res => {
+          console.log('update_order_status : ', res?.data);
           GetSalesList();
           // GetOrderList();
         })
-        .catch((err) => {
-          console.log("err : ", err);
+        .catch(err => {
+          console.log('err : ', err);
         })
         .finally(() => {
           setLoading(false);
         });
     } else {
-      console.log("selected id : ", selectedId);
+      console.log('selected id : ', selectedId);
     }
   };
   return (
@@ -207,7 +216,7 @@ const SalesOrders = ({ navigation }) => {
         iconPress={() => {
           navigation.goBack();
         }}
-        icon={"chevron-back"}
+        icon={'chevron-back'}
       />
       <Loader isLoading={loading} />
       <View style={TopTabstyles.TopTabView}>
@@ -241,15 +250,15 @@ const SalesOrders = ({ navigation }) => {
         </TouchableOpacity>
       </View> */}
 
-      <View style={{ flex: 1 }}>
+      <View style={{flex: 1}}>
         {data?.length == 0 ? (
           <NoNotificationFound loading={loading} />
         ) : (
           <FlatList
             data={data}
-            renderItem={({ item }) => (
+            renderItem={({item}) => (
               <>
-                {item?.listing_detail?.message == "No data available" ? null : (
+                {item?.listing_detail?.message == 'No data available' ? null : (
                   <ExcahangeCard
                     onPress={() => {
                       if (selectedId == 2) {
@@ -260,15 +269,15 @@ const SalesOrders = ({ navigation }) => {
                       } else {
                         //sales
                         let buyer_id = item?.order_by?.id;
-                        navigation.navigate("ListingsDetails", {
+                        navigation.navigate('ListingsDetails', {
                           listing_id: item?.listing_detail?.id,
                           buyer_id: buyer_id,
-                          type: "sale",
+                          type: 'sale',
                         });
                       }
                     }}
                     image={
-                      typeof item?.listing_images == "undefined"
+                      typeof item?.listing_images == 'undefined'
                         ? null
                         : IMAGE_URL + item?.listing_images?.image
                     }
@@ -298,8 +307,7 @@ const SalesOrders = ({ navigation }) => {
           backgroundColor: snackbarValue.color,
           marginBottom: hp(9),
           zIndex: 999,
-        }}
-      >
+        }}>
         {snackbarValue.value}
       </Snackbar>
       <RattingModal

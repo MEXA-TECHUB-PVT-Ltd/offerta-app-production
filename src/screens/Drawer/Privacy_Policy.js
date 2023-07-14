@@ -1,40 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
   View,
   Text,
   useWindowDimensions,
-} from "react-native";
+} from 'react-native';
 
 //////////////////app components///////////////
-import CustomHeader from "../../components/Header/CustomHeader";
+import CustomHeader from '../../components/Header/CustomHeader';
 
 /////////////render/////////////////
-import RenderHtml from "react-native-render-html";
+import RenderHtml from 'react-native-render-html';
 
 /////////////app styles////////////////
-import styles from "./Banner/styles";
+import styles from './Banner/styles';
 
 ///////////////////api function//////////////
-import { get_Privacy_Policy } from "../../api/Blogs";
+import {get_Privacy_Policy} from '../../api/Blogs';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import TranslationStrings from "../../utills/TranslationStrings";
+} from 'react-native-responsive-screen';
+import TranslationStrings from '../../utills/TranslationStrings';
 
-const PrivacyTerms = ({ navigation }) => {
+const PrivacyTerms = ({navigation}) => {
   //////////render html width///////////
-  const { width } = useWindowDimensions();
+  const {width} = useWindowDimensions();
 
   /////////////data state/////////////
-  const [privacyPolicy, setprivacyPolicy] = useState("");
+  const [privacyPolicy, setprivacyPolicy] = useState('');
 
   useEffect(() => {
-    get_Privacy_Policy().then((response) => {
-      if (response.data.message === "No data available") {
-        setdata("");
+    get_Privacy_Policy().then(response => {
+      if (response.data.message === 'No data available') {
+        setdata('');
       } else {
         setprivacyPolicy(response.data[0].privacy_policy);
       }
@@ -43,7 +43,7 @@ const PrivacyTerms = ({ navigation }) => {
   const tagsStyles = {
     p: {
       fontSize: hp(2),
-      color: "black",
+      color: 'black',
       width: wp(90),
       marginHorizontal: wp(5),
     },
@@ -52,36 +52,35 @@ const PrivacyTerms = ({ navigation }) => {
     },
     li: {
       fontSize: hp(1.7),
-      color: "black",
+      color: 'black',
     },
+    h1: {},
   };
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        showsHorizontalScrollIndicator={false}
-      >
+        showsHorizontalScrollIndicator={false}>
         <CustomHeader
           headerlabel={TranslationStrings.PRIVACY_POLICY}
           iconPress={() => {
             navigation.goBack();
           }}
-          icon={"arrow-back"}
+          icon={'arrow-back'}
         />
 
         <View style={styles.textview}>
           <Text style={styles.text}>
             <View
               style={{
-                alignItems: "center",
+                alignItems: 'center',
                 //backgroundColor: "orange",
-                alignSelf: "center",
+                alignSelf: 'center',
                 marginHorizontal: wp(5),
-              }}
-            >
+              }}>
               <RenderHtml
                 contentWidth={width}
-                source={{ html: privacyPolicy }}
+                source={{html: privacyPolicy}}
                 tagsStyles={tagsStyles}
               />
             </View>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -6,57 +6,57 @@ import {
   FlatList,
   Image,
   TextInput,
-} from "react-native";
+} from 'react-native';
 
 ///////////////////react native navigation///////////////
-import { useIsFocused } from "@react-navigation/native";
+import {useIsFocused} from '@react-navigation/native';
 
 ///////////////////app pakages///////////////
-import RBSheet from "react-native-raw-bottom-sheet";
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 /////////////icons///////////
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 //////////////////app components///////////////
-import NoDataFound from "../../NoDataFound/NoDataFound";
+import NoDataFound from '../../NoDataFound/NoDataFound';
 
 ////////////app styles//////////////
-import styles from "./styles";
+import styles from './styles';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
-import { setCityName } from "../../../redux/Location/actions";
+import {useSelector, useDispatch} from 'react-redux';
+import {setCityName} from '../../../redux/Location/actions';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import TranslationStrings from "../../../utills/TranslationStrings";
+import axios from 'axios';
+import TranslationStrings from '../../../utills/TranslationStrings';
 
-const CityDropDown = (props) => {
+const CityDropDown = props => {
   ////////////isfocused//////////
   const isfocussed = useIsFocused();
 
   /////////////redux states///////
-  const { country_name } = useSelector((state) => state.locationReducer);
+  const {country_name} = useSelector(state => state.locationReducer);
   const dispatch = useDispatch();
 
   //seacrh states
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   //search textfield
-  const searchFilterFunction = (text) => {
+  const searchFilterFunction = text => {
     // Check if searched text is not blank
     if (text) {
       // Inserted text is not blank
       // Filter the masterDataSource
       // Update FilteredDataSource
       const newData = masterDataSource.filter(function (item) {
-        const itemData = item ? item.toUpperCase() : "".toUpperCase();
+        const itemData = item ? item.toUpperCase() : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -70,20 +70,20 @@ const CityDropDown = (props) => {
     }
   };
   //////////dropdownlink data/////////////
-  const [data, setdata] = useState("");
+  const [data, setdata] = useState('');
 
   ///////////////CarCondition function///////////////
   const GetCity = async () => {
     axios({
-      method: "POST",
-      url: "https://countriesnow.space/api/v0.1/countries/cities",
+      method: 'POST',
+      url: 'https://countriesnow.space/api/v0.1/countries/cities',
       data: {
         country: country_name,
       },
     })
       .then(function (response) {
-        if (response.data.msg === "missing param (country or iso2)") {
-          setdata("");
+        if (response.data.msg === 'missing param (country or iso2)') {
+          setdata('');
         } else {
           setFilteredDataSource(response.data.data);
           setMasterDataSource(response.data.data);
@@ -91,7 +91,7 @@ const CityDropDown = (props) => {
         }
       })
       .catch(function (error) {
-        console.log("error", error);
+        console.log('error in get city', error);
       });
   };
   useEffect(() => {
@@ -111,10 +111,10 @@ const CityDropDown = (props) => {
       //height={500}
       customStyles={{
         wrapper: {
-          backgroundColor: "rgba(52, 52, 52, 0.5)",
+          backgroundColor: 'rgba(52, 52, 52, 0.5)',
         },
         draggableIcon: {
-          backgroundColor: "white",
+          backgroundColor: 'white',
         },
         container: {
           borderTopLeftRadius: wp(10),
@@ -122,15 +122,13 @@ const CityDropDown = (props) => {
           height: hp(90),
           maxHeight: hp(90),
         },
-      }}
-    >
+      }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           marginHorizontal: 0,
-        }}
-      >
+        }}>
         <Text style={styles.bottomsheettext}>
           {TranslationStrings.SELECT_CITY}
           {/* {country_name} */}
@@ -142,25 +140,24 @@ const CityDropDown = (props) => {
           style={styles.textInput}
           placeholder={TranslationStrings.SEARCH}
           placeholderTextColor="#999"
-          onChangeText={(text) => searchFilterFunction(text)}
+          onChangeText={text => searchFilterFunction(text)}
           value={search}
         />
       </View>
-      {data === "" && country_name === "" ? (
+      {data === '' && country_name === '' ? (
         <NoDataFound
-          icon={"exclamation-thick"}
+          icon={'exclamation-thick'}
           text={TranslationStrings.PLEASE_SELECT_COUNTRY_FIRST}
         />
       ) : (
         <FlatList
           data={filteredDataSource}
-          renderItem={({ item, index, separators }) => (
+          renderItem={({item, index, separators}) => (
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => {
                 dispatch(setCityName(item)), props.refRBSheet.current.close();
-              }}
-            >
+              }}>
               <View style={styles.card}>
                 <Text style={styles.cardtext}>{item}</Text>
               </View>
