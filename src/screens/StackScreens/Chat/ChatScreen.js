@@ -18,7 +18,7 @@
 
 // const styles = StyleSheet.create({});
 
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, {useEffect, useState, useRef, useCallback} from 'react';
 import {
   SafeAreaView,
   View,
@@ -28,26 +28,26 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   TextInput,
-} from "react-native";
+} from 'react-native';
 
 ///////////////import app components/////////////
-import CamerBottomSheet from "../../../components/CameraBottomSheet/CameraBottomSheet";
+import CamerBottomSheet from '../../../components/CameraBottomSheet/CameraBottomSheet';
 
 //////////////////app icons////////////////
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 ////////////////app styles/////////////////////
-import styles from "./styles";
+import styles from './styles';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 //////////////app pakages//////////////////
-import ImagePicker from "react-native-image-crop-picker";
+import ImagePicker from 'react-native-image-crop-picker';
 
 //////////////app components///////////////////
-import ChatHeader from "../../../components/Chat/ChatHeader";
+import ChatHeader from '../../../components/Chat/ChatHeader';
 
 ///////////////////app Packages//////////////
 import {
@@ -56,68 +56,69 @@ import {
   InputToolbar,
   Send,
   Composer,
-} from "react-native-gifted-chat";
+} from 'react-native-gifted-chat';
 
 //////////////furestore/////////////
-import firestore from "@react-native-firebase/firestore";
-import storage from "@react-native-firebase/storage";
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
-import uuid from "react-native-uuid";
+import uuid from 'react-native-uuid';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
+import {useSelector, useDispatch} from 'react-redux';
 import {
   setChatCount,
   setChatList,
   setExchangeOffer_MyListing,
   setExchangeOffer_OtherListing,
-} from "../../../redux/actions";
+} from '../../../redux/actions';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
+import axios from 'axios';
 import {
   BASE_URL,
   firebase_server_key,
   IMAGE_URL,
-} from "../../../utills/ApiRootUrl";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from '../../../utills/ApiRootUrl';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /////////////////app images///////////////
-import { appImages } from "../../../constant/images";
-import Colors from "../../../utills/Colors";
+import {appImages} from '../../../constant/images';
+import Colors from '../../../utills/Colors';
 
 ////////////////api function////////////
-import { post_User_Chat_Room } from "../../../api/ChatApis";
+import {post_User_Chat_Room} from '../../../api/ChatApis';
 
 /////////////////////get api function////////////
 import {
   get_Login_UserData,
   get_Other_UserData,
   get_specific_user_detail,
-} from "../../../api/GetApis";
+} from '../../../api/GetApis';
 
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import {useFocusEffect, useIsFocused} from '@react-navigation/native';
 
-import BlockUserView from "../../../components/BlockUserView";
-import { get_user_status } from "../../../api/GetApis";
-import TranslationStrings from "../../../utills/TranslationStrings";
-import PushNotification from "react-native-push-notification";
+import BlockUserView from '../../../components/BlockUserView';
+import {get_user_status} from '../../../api/GetApis';
+import TranslationStrings from '../../../utills/TranslationStrings';
+import PushNotification from 'react-native-push-notification';
 
-const ChatScreen = ({ route, navigation }) => {
+const ChatScreen = ({route, navigation}) => {
   const isFocused = useIsFocused();
   const dispatch = useDispatch();
 
-  const { chatCount, chatList } = useSelector((state) => state.userReducer);
+  const {chatCount, chatList} = useSelector(state => state.userReducer);
 
   ////////////////redux/////////////
-  const { exchange_other_listing, exchange_my_listing, user_image } =
-    useSelector((state) => state.userReducer);
+  const {exchange_other_listing, exchange_my_listing, user_image} = useSelector(
+    state => state.userReducer,
+  );
 
-  const [navType, setNavType] = useState("");
+  const [navType, setNavType] = useState('');
 
-  const formatter = new Intl.NumberFormat("en-US", {
-    notation: "compact",
-    compactDisplay: "short",
+  const formatter = new Intl.NumberFormat('en-US', {
+    notation: 'compact',
+    compactDisplay: 'short',
   });
 
   // const formattedLikes = formatter.format(props.pricetext);
@@ -131,24 +132,24 @@ const ChatScreen = ({ route, navigation }) => {
   const refRBSheet = useRef();
 
   /////////////////create room chat//////////
-  const Chat_Room = (props) => {
-    post_User_Chat_Room(props).then((response) => {});
+  const Chat_Room = props => {
+    post_User_Chat_Room(props).then(response => {});
   };
 
   //////////////chat states/////////////
   const [messages, setMessages] = useState([]);
   const [imageData, setImageData] = useState(null);
-  const [imageUrl, setImageUrl] = useState("");
+  const [imageUrl, setImageUrl] = useState('');
 
   /////////////login user//////////
-  const [login_user, setLoginUser] = useState("");
-  const [login_user_details, setLogin_user_details] = useState("");
-  const [receiverDetails, setReceiverDetails] = useState("");
-  const [receiver_FCM_TOKEN, setReceiver_FCM_TOKEN] = useState("");
+  const [login_user, setLoginUser] = useState('');
+  const [login_user_details, setLogin_user_details] = useState('');
+  const [receiverDetails, setReceiverDetails] = useState('');
+  const [receiver_FCM_TOKEN, setReceiver_FCM_TOKEN] = useState('');
 
   /////////get login user//////////
   const getUserMessages = async () => {
-    var user = await AsyncStorage.getItem("Userid");
+    var user = await AsyncStorage.getItem('Userid');
     setLoginUser(user);
   };
   const getUserDetails = async () => {
@@ -177,39 +178,40 @@ const ChatScreen = ({ route, navigation }) => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.CAMERA,
         {
-          title: "App Camera Permission",
-          message: "App needs access to your camera ",
-          buttonNeutral: "Ask Me Later",
-          buttonNegative: "Cancel",
-          buttonPositive: "OK",
-        }
+          title: 'App Camera Permission',
+          message: 'App needs access to your camera ',
+          buttonNeutral: 'Ask Me Later',
+          buttonNegative: 'Cancel',
+          buttonPositive: 'OK',
+        },
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         // console.log("Camera permission given");
       } else {
-        console.log("Camera permission denied");
+        console.log('Camera permission denied');
       }
     } catch (err) {
       console.warn(err);
     }
   };
   const AllMessages = async () => {
-    var user = await AsyncStorage.getItem("Userid");
+    console.log('_______________ : ', 'AllMessages');
+    var user = await AsyncStorage.getItem('Userid');
     const doc_id =
       route.params.userid > user
-        ? user + "-" + route.params.userid
-        : route.params.userid + "-" + user;
+        ? user + '-' + route.params.userid
+        : route.params.userid + '-' + user;
 
-    console.log("doc_id  :  ", doc_id);
+    console.log('doc_id  :  ', doc_id);
 
     const messageRef = firestore()
-      .collection("chats")
+      .collection('chats')
       .doc(doc_id)
-      .collection("messages")
-      .orderBy("createdAt", "desc");
+      .collection('messages')
+      .orderBy('createdAt', 'desc');
 
-    messageRef.onSnapshot((querySnap) => {
-      const allmsg = querySnap?.docs?.map((docsnap) => {
+    messageRef.onSnapshot(querySnap => {
+      const allmsg = querySnap?.docs?.map(docsnap => {
         const data = docsnap.data();
         if (data.createdAt) {
           return {
@@ -229,10 +231,10 @@ const ChatScreen = ({ route, navigation }) => {
   };
   const ref = useRef();
   /////////////user data states/////////////
-  const [username, setUsername] = useState("");
-  const [userimage, setImage] = useState("");
+  const [username, setUsername] = useState('');
+  const [userimage, setImage] = useState('');
   const GetUserData = async () => {
-    get_Other_UserData(route.params.userid).then((response) => {
+    get_Other_UserData(route.params.userid).then(response => {
       setUsername(response.data.full_name);
       setImage(response.data.image);
       //AllMessages();
@@ -246,8 +248,8 @@ const ChatScreen = ({ route, navigation }) => {
     if (count === 0) {
       setCount(count + 1),
         onSend(),
-        setExchangeOffer_OtherListing(""),
-        setExchangeOffer_MyListing("");
+        setExchangeOffer_OtherListing(''),
+        setExchangeOffer_MyListing('');
     }
   };
 
@@ -275,10 +277,10 @@ const ChatScreen = ({ route, navigation }) => {
 
     // getUserDetails();
     if (
-      route?.params?.navtype == "chatlist" ||
-      typeof route?.params?.navtype == "undefined"
+      route?.params?.navtype == 'chatlist' ||
+      typeof route?.params?.navtype == 'undefined'
     ) {
-      console.log("if called  ...........");
+      console.log('if called  ...........');
       GetUserData();
       getUserMessages();
       AllMessages();
@@ -295,11 +297,11 @@ const ChatScreen = ({ route, navigation }) => {
       // } else
 
       if (count === 0) {
-        console.log("count is 0 now_____________________________________");
+        console.log('count is 0 now_____________________________________');
         setCount(count + 1),
           onSend(),
-          setExchangeOffer_OtherListing(""),
-          setExchangeOffer_MyListing("");
+          setExchangeOffer_OtherListing(''),
+          setExchangeOffer_MyListing('');
       }
       GetUserData();
       getUserMessages();
@@ -317,10 +319,10 @@ const ChatScreen = ({ route, navigation }) => {
   //   Chat_Room(route.params.userid);
   // }, []);
 
-  const onSend = (messages) => {
+  const onSend = messages => {
     setCount(count + 1);
-    console.log("onSend called....");
-    console.log("count :   ", count);
+    console.log('onSend called....');
+    console.log('count :   ', count);
     // return;
     handleSend(messages);
     Chat_Room(route.params.userid);
@@ -329,37 +331,37 @@ const ChatScreen = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       updateUnreadMessages();
-    }, [])
+    }, []),
   );
 
   const updateUnreadMessages = async () => {
     try {
-      var user = await AsyncStorage.getItem("Userid");
-      let docid = "";
-      if (route?.params?.navtype == "counter_offer") {
+      var user = await AsyncStorage.getItem('Userid');
+      let docid = '';
+      if (route?.params?.navtype == 'counter_offer') {
         // console.log("route?.params ::::::::: : :: : : : :: :  ", route?.params);
         docid =
           route.params.buyer_id > user
-            ? user + "-" + route.params.buyer_id
-            : route.params.buyer_id + "-" + user;
+            ? user + '-' + route.params.buyer_id
+            : route.params.buyer_id + '-' + user;
       } else {
         docid =
           route.params.userid > user
-            ? user + "-" + route.params.userid
-            : route.params.userid + "-" + user;
+            ? user + '-' + route.params.userid
+            : route.params.userid + '-' + user;
       }
       let updated = false;
       const messagesList = firestore()
-        .collection("chats")
+        .collection('chats')
         .doc(docid)
-        .collection("messages");
+        .collection('messages');
       // console.log("ORDER_ITEMS  :  ", ORDER_ITEMS);
       messagesList
-        .where("read", "==", false)
+        .where('read', '==', false)
         .get()
-        .then((snapshots) => {
+        .then(snapshots => {
           if (snapshots.size > 0) {
-            snapshots.forEach((message) => {
+            snapshots.forEach(message => {
               if (message?._data?.user?._id != user) {
                 messagesList.doc(message?.id).update({
                   read: true,
@@ -368,7 +370,7 @@ const ChatScreen = ({ route, navigation }) => {
                 if (!updated) {
                   dispatch(setChatCount(0));
                   let prevChatList = chatList;
-                  const newData = prevChatList?.map((item) => {
+                  const newData = prevChatList?.map(item => {
                     if (item?.user?.id == message?._data?.user?._id) {
                       return {
                         ...item,
@@ -395,27 +397,29 @@ const ChatScreen = ({ route, navigation }) => {
     } catch (error) {}
   };
 
-  const handleSend = async (messageArray) => {
-    console.log("messageArray  :  ", messageArray);
-    let user_status = await AsyncStorage.getItem("account_status");
-    if (user_status == "block") {
+  const handleSend = async messageArray => {
+    // AllMessages();
+    // console.log('messageArray+++++++++++++++++++++++++  :  ', messageArray);
+    // return;
+    let user_status = await AsyncStorage.getItem('account_status');
+    if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
 
-    var user = await AsyncStorage.getItem("Userid");
-    let docid = "";
-    if (route?.params?.navtype == "counter_offer") {
+    var user = await AsyncStorage.getItem('Userid');
+    let docid = '';
+    if (route?.params?.navtype == 'counter_offer') {
       // console.log("route?.params ::::::::: : :: : : : :: :  ", route?.params);
       docid =
         route.params.buyer_id > user
-          ? user + "-" + route.params.buyer_id
-          : route.params.buyer_id + "-" + user;
+          ? user + '-' + route.params.buyer_id
+          : route.params.buyer_id + '-' + user;
     } else {
       docid =
         route.params.userid > user
-          ? user + "-" + route.params.userid
-          : route.params.userid + "-" + user;
+          ? user + '-' + route.params.userid
+          : route.params.userid + '-' + user;
     }
 
     // return;
@@ -437,17 +441,19 @@ const ChatScreen = ({ route, navigation }) => {
     // } else {
     const msg = messageArray ? messageArray[0] : null;
 
-    if (route?.params?.navtype == "counter_offer" && count === 0) {
-      console.log("counter_offer....");
+    if (route?.params?.navtype == 'counter_offer' && count === 0) {
+      console.log('counter_offer....');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
-        textimg1: route?.params?.listing_image,
+        textimg1: route?.params?.listing_image
+          ? route?.params?.listing_image
+          : null,
         textprice: route.params.item_price,
         offerprice: route.params.offerprice,
         offerid: route.params.offerid,
-        type: "counter_offer",
-        text: "counter_offer", //added....
+        type: 'counter_offer',
+        text: 'counter_offer', //added....
         senderId: user,
         // receiverId: route.params.userid,
         receiverId: route.params.buyer_id,
@@ -457,20 +463,22 @@ const ChatScreen = ({ route, navigation }) => {
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
       };
-    } else if (route.params.navtype === "price_offer" && count === 0) {
-      console.log("price offer ....");
+    } else if (route.params.navtype === 'price_offer' && count === 0) {
+      console.log('price offer ....468');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
-        textimg1: exchange_other_listing.images[0],
+        textimg1: exchange_other_listing.images[0]
+          ? exchange_other_listing.images[0]
+          : null,
         textprice: route.params.item_price,
         offerprice: route.params.offerprice,
         offerid: route.params.offerid,
-        type: "price_offer",
-        text: "price_offer", //added....
+        type: 'price_offer',
+        text: 'price_offer', //added....
         senderId: user,
         receiverId: route.params.userid,
         buyer_id: route?.params?.buyer_id,
@@ -479,16 +487,19 @@ const ChatScreen = ({ route, navigation }) => {
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
       };
-    } else if (route.params.navtype === "exchange_offer" && count === 0) {
-      console.log("exchange offer ....");
+      console.log('myMsg  489 :::::  ', myMsg);
+    } else if (route.params.navtype === 'exchange_offer' && count === 0) {
+      console.log('exchange offer ....');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
-        text: "exchange_offer",
-        textimg1: exchange_my_listing.images[0],
+        text: 'exchange_offer',
+        textimg1: exchange_my_listing.images[0]
+          ? exchange_my_listing.images[0]
+          : null,
         textimg2: exchange_other_listing.images[0],
         textprice1: route.params.itemprice1,
         textprice2: route.params.itemprice2,
@@ -496,102 +507,83 @@ const ChatScreen = ({ route, navigation }) => {
         itemname2: route.params.item2,
         offerId: route.params.offerId,
         offer_detail: route.params.offer_detail,
-        type: "exchange_offer",
+        type: 'exchange_offer',
         senderId: user,
         receiverId: route.params.userid,
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
         count: 1,
       };
-    } else if (route.params.navtype === "chatlist" && user_image === "") {
-      console.log("chatlist offer ....");
+    } else if (route.params.navtype === 'chatlist' && user_image === '') {
+      console.log('chatlist offer ____________________________....');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
-        type: "simple_text",
+        type: 'simple_text',
         senderId: user,
         receiverId: route.params.userid,
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
       };
-    } else if (route.params.navtype === "chatlist") {
-      console.log("chatlist 2....");
+    } else if (route.params.navtype === 'chatlist') {
+      console.log('chatlist 2.__________________________________________...');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
         text_image: user_image,
-        type: "image_text",
+        type: 'image_text',
         senderId: user,
         receiverId: route.params.userid,
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
       };
     } else {
-      console.log("last else ....");
+      console.log('last else ...___________________________.');
       myMsg = {
         ...msg,
         _id: uuid.v4(),
-        text_image: "image",
+        text_image: 'image',
         //type: "image_text",
         senderId: user,
         receiverId: route.params.userid,
         read: false,
         user: {
           _id: user,
-          name: "ali",
+          name: 'ali',
         },
       };
     }
 
-    // console.log("myMsg  :  ", myMsg);
-    // return;
-
-    // console.log("myMsg  ___________________________", myMsg);
-    // return;
-
-    setExchangeOffer_MyListing("");
-    setExchangeOffer_OtherListing("");
+    setExchangeOffer_MyListing('');
+    setExchangeOffer_OtherListing('');
     setCount(count + 1);
     //countfunc()
     setMessages([]);
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, myMsg)
-    );
+    setMessages(previousMessages => GiftedChat.append(previousMessages, myMsg));
 
     firestore()
-      .collection("chats")
+      .collection('chats')
       .doc(docid)
-      .collection("messages")
+      .collection('messages')
       .add({
         ...myMsg,
         createdAt: firestore.FieldValue.serverTimestamp(),
       });
 
-    // .finally(() => {
-    //   if (route?.params?.navtype == "counter_offer") {
-    //     route.params.navtype = null;
-    //     console.log(
-    //       "parms is null now+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
-    //     );
-    //   }
-    // });
-
-    //remove navtype from route params
-
-    messages.forEach((message) => {});
+    messages.forEach(message => {});
     // myMsg = "";
     setCount(count + 1);
     AllMessages();
-    setImageUrl("");
+    setImageUrl('');
     setImageData(null);
 
     // ________________________________hadnle push notification _ __________________________________
@@ -605,64 +597,75 @@ const ChatScreen = ({ route, navigation }) => {
     //price_offer
     //exchange_offer
     if (receiver_fcm) {
-      let description = "";
-      if (myMsg?.type == "counter_offer") {
-        description = "sended an counter offer";
-      } else if (myMsg?.type == "price_offer") {
-        description = "sended a price offer";
+      let description = '';
+      console.log('myMsg?.type _____________________________ : ', myMsg?.type);
+      console.log('myMsg?.type _____________________________ : ', myMsg);
+      console.log(
+        'myMsg?.type _____________________________ : ',
+        route.params.navtype,
+      );
+      if (myMsg?.type == 'counter_offer') {
+        description = 'sended an counter offer';
+      } else if (myMsg?.type == 'price_offer') {
+        description = 'sended a price offer';
         return;
-      } else if (myMsg?.type == "exchange_offer") {
-        description = "sended an exchange offer";
+      } else if (myMsg?.type == 'exchange_offer') {
+        description = 'sended an exchange offer';
         return;
-      } else if (myMsg?.text_image == "image") {
-        description = "sended a photo";
+      } else if (
+        route.params.navtype === 'price_offer' &&
+        myMsg?.text?.length > 0
+      ) {
+        description = myMsg?.text ? myMsg?.text : 'sended a message';
+      } else if (myMsg?.text_image == 'image') {
+        description = 'sended a photo';
       } else {
-        description = myMsg?.text ? myMsg?.text : "sended a message";
+        description = myMsg?.text ? myMsg?.text : 'sended a message';
       }
-      console.log("description : ", description);
+      console.log('description : ', description);
       let body = {
         to: receiver_fcm,
         notification: {
           title: login_user?.data?.user_name,
           body: description,
           // mutable_content: true,
-          sound: "default",
+          sound: 'default',
         },
         data: {
           user_id: user,
-          type: "chat",
+          type: 'chat',
         },
       };
-      console.log("push notification bodyd :   ", body);
+      console.log('push notification bodyd :   ', body);
       if (description) {
         sendPushNotification(receiver_fcm, body);
       }
     } else {
-      console.log("receiver_fcm not found : ", user_detail);
+      console.log('receiver_fcm not found : ', user_detail);
     }
 
     // ________________________________hadnle push notification _ __________________________________
   };
 
   const sendPushNotification = async (recevierFCMToken, body) => {
-    console.log("notification body : m ", body);
+    console.log('notification body : m ', body);
     var requestOptions = {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
         Authorization: `key=${firebase_server_key}`,
       },
       body: JSON.stringify(body),
     };
 
-    fetch("https://fcm.googleapis.com/fcm/send", requestOptions)
-      .then((response) => response.text())
-      .then((response) => {
+    fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
+      .then(response => response.text())
+      .then(response => {
         let res = JSON.parse(response);
-        console.log("push notification response :  ", res);
+        console.log('push notification response :  ', res);
       })
-      .catch((err) => {
-        console.log("error :  ", err);
+      .catch(err => {
+        console.log('error :  ', err);
       });
   };
   ////////////////////library image//////////////////
@@ -672,27 +675,27 @@ const ChatScreen = ({ route, navigation }) => {
       height: 300,
       cropping: true,
       compressImageQuality: 0.7,
-    }).then((image) => {
+    }).then(image => {
       setImageData(image.path);
       //uplaodImage(image)
       handleImageUpload(
-        image.path.substring(image.path.lastIndexOf("/") + 1),
-        image.path
+        image.path.substring(image.path.lastIndexOf('/') + 1),
+        image.path,
       );
     });
   };
 
-  const handleStoreImage = async (image) => {
-    var user = await AsyncStorage.getItem("Userid");
+  const handleStoreImage = async image => {
+    var user = await AsyncStorage.getItem('Userid');
     const docid =
       route.params.userid > user
-        ? user + "-" + route.params.userid
-        : route.params.userid + "-" + user;
+        ? user + '-' + route.params.userid
+        : route.params.userid + '-' + user;
     let msgObj = {
       _id: uuid.v4(),
-      text_image: "image",
+      text_image: 'image',
       //type: "image_text",
-      type: "image",
+      type: 'image',
       text: image,
       url: image,
       senderId: user,
@@ -700,21 +703,21 @@ const ChatScreen = ({ route, navigation }) => {
       read: false,
       user: {
         _id: user,
-        name: "ali",
+        name: 'ali',
       },
     };
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, msgObj)
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, msgObj),
     );
     firestore()
-      .collection("chats")
+      .collection('chats')
       .doc(docid)
-      .collection("messages")
+      .collection('messages')
       .add({
         ...msgObj,
         createdAt: firestore.FieldValue.serverTimestamp(),
       });
-    console.log("msgobj : ", msgObj);
+    console.log('msgobj : ', msgObj);
 
     let user_detail = await get_specific_user_detail(msgObj.receiverId);
     // let user_detail = receiverDetails;
@@ -722,24 +725,24 @@ const ChatScreen = ({ route, navigation }) => {
     // let login_user = login_user_details;
     let receiver_fcm = user_detail ? user_detail.fcm : null;
     if (receiver_fcm) {
-      let description = "sended a photo";
+      let description = 'sended a photo';
       let body = {
         to: receiver_fcm,
         notification: {
           title: login_user?.data?.user_name,
           body: description,
           // mutable_content: true,
-          sound: "default",
+          sound: 'default',
         },
         data: {
           user_id: user,
-          type: "chat",
+          type: 'chat',
         },
       };
-      console.log("push notification bodyd :   ", body);
+      console.log('push notification bodyd :   ', body);
       sendPushNotification(receiver_fcm, body);
     } else {
-      console.log("receiver_fcm not found : ", user_detail);
+      console.log('receiver_fcm not found : ', user_detail);
     }
   };
 
@@ -750,13 +753,13 @@ const ChatScreen = ({ route, navigation }) => {
 
       const uploadTask = storage().ref().child(fileName).putFile(filePath);
       uploadTask.on(
-        "state_changed",
-        (snapshot) => {
+        'state_changed',
+        snapshot => {
           // const progress = Math.round(
           //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
           // );
         },
-        (error) => {
+        error => {
           // alert(error);
         },
         async () => {
@@ -765,22 +768,22 @@ const ChatScreen = ({ route, navigation }) => {
           setImageUrl(url);
           //onSend(message)
           //handleSend(message, url, );
-        }
+        },
       );
     } catch (error) {
       setLoading(false);
     }
   }, []);
 
-  const handleCounterOfferPress = async (props) => {
-    let user_status = await AsyncStorage.getItem("account_status");
+  const handleCounterOfferPress = async props => {
+    let user_status = await AsyncStorage.getItem('account_status');
 
-    if (user_status == "block") {
+    if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
 
-    navigation.navigate("CounterOffer", {
+    navigation.navigate('CounterOffer', {
       sale_by: props.currentMessage.sale_by,
       buyer_id: props.currentMessage.buyer_id,
       offer_type: props.currentMessage.type,
@@ -792,21 +795,21 @@ const ChatScreen = ({ route, navigation }) => {
       offer_price: props.currentMessage.offerprice,
       offerid: props.currentMessage.offerid,
       itemprice: props.currentMessage.textprice,
-      navtype: "chat",
+      navtype: 'chat',
       userid: props.currentMessage.receiverId,
-      type: "view",
+      type: 'view',
       // userid: route.params.userid,
     });
   };
 
-  const handlePriceOfferPress = async (props) => {
-    let user_status = await AsyncStorage.getItem("account_status");
+  const handlePriceOfferPress = async props => {
+    let user_status = await AsyncStorage.getItem('account_status');
 
-    if (user_status == "block") {
+    if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
-    navigation.navigate("PriceOfferNoti", {
+    navigation.replace('PriceOfferNoti', {
       sale_by: props.currentMessage.sale_by,
       buyer_id: props.currentMessage.buyer_id,
       offer_type: props.currentMessage.type,
@@ -818,13 +821,13 @@ const ChatScreen = ({ route, navigation }) => {
       offer_price: props.currentMessage.offerprice,
       offerid: props.currentMessage.offerid,
       itemprice: props.currentMessage.textprice,
-      navtype: "chat",
+      navtype: 'chat',
       userid: props.currentMessage.receiverId,
       // userid: route.params.userid,
     });
   };
 
-  const renderComposer = (composerProps) => {
+  const renderComposer = composerProps => {
     return (
       <Composer
         {...composerProps}
@@ -834,7 +837,7 @@ const ChatScreen = ({ route, navigation }) => {
     );
   };
 
-  const CustomInputToolbar = (props) => {
+  const CustomInputToolbar = props => {
     return (
       <View
         style={{
@@ -847,8 +850,8 @@ const ChatScreen = ({ route, navigation }) => {
           borderColor: Colors.inactivetextinput,
           borderTopRightRadius: wp(3),
           borderTopLeftRadius: wp(3),
-          backgroundColor: "white",
-          shadowColor: "#000",
+          backgroundColor: 'white',
+          shadowColor: '#000',
           shadowOffset: {
             width: 0,
             height: 2,
@@ -857,8 +860,7 @@ const ChatScreen = ({ route, navigation }) => {
           shadowRadius: 3.84,
 
           elevation: 5,
-        }}
-      >
+        }}>
         {/* <View
           style={{
             backgroundColor: "red",
@@ -877,22 +879,22 @@ const ChatScreen = ({ route, navigation }) => {
           containerStyle={{
             //   backgroundColor: 'red',
             height: hp(7),
-            borderColor: "#ccc",
-            borderTopColor: "#ccc",
+            borderColor: '#ccc',
+            borderTopColor: '#ccc',
             borderWidth: 0.3,
             borderRadius: wp(5),
             marginLeft: wp(5),
             width: wp(76),
-            position: "absolute",
+            position: 'absolute',
             top: 0,
             left: wp(2),
             bottom: hp(0),
             marginTop: hp(1),
             paddingLeft: 25,
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
-          textInputStyle={{ color: "black" }}
+          textInputStyle={{color: 'black'}}
           // renderComposer={(props) => (
           //   <Composer
           //     {...props}
@@ -908,15 +910,15 @@ const ChatScreen = ({ route, navigation }) => {
           // )}
         />
         {/* <TouchableOpacity onPress={()=> choosePhotoFromLibrary()}> */}
-        <View style={{ position: "absolute", top: hp(3), left: 30 }}>
+        <View style={{position: 'absolute', top: hp(3), left: 30}}>
           <MaterialCommunityIcons
-            name={"camera"}
+            name={'camera'}
             size={25}
-            color={"black"}
+            color={'black'}
             onPress={async () => {
-              let user_status = await AsyncStorage.getItem("account_status");
+              let user_status = await AsyncStorage.getItem('account_status');
 
-              if (user_status == "block") {
+              if (user_status == 'block') {
                 setShowBlockModal(true);
                 return;
               }
@@ -931,21 +933,21 @@ const ChatScreen = ({ route, navigation }) => {
     );
   };
 
-  const SendComponent = (props) => {
+  const SendComponent = props => {
     return (
       <Send
         {...props}
         containerStyle={{
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
           height: hp(6),
           width: wp(12),
           borderRadius: wp(10),
-          position: "absolute",
+          position: 'absolute',
           bottom: hp(0),
           right: -wp(13.5),
-          backgroundColor: "white",
-          shadowColor: "#000",
+          backgroundColor: 'white',
+          shadowColor: '#000',
           shadowOffset: {
             width: 0,
             height: 2,
@@ -953,8 +955,7 @@ const ChatScreen = ({ route, navigation }) => {
           shadowOpacity: 0.25,
           shadowRadius: 3.84,
           elevation: 5,
-        }}
-      >
+        }}>
         <View
           style={
             {
@@ -976,33 +977,31 @@ const ChatScreen = ({ route, navigation }) => {
               // shadowRadius: 3.84,
               // elevation: 5,
             }
-          }
-        >
+          }>
           <Image
             source={appImages.sendicon}
             style={{
               height: 20,
               width: 20,
-              resizeMode: "contain",
+              resizeMode: 'contain',
             }}
           />
         </View>
       </Send>
     );
   };
-  const CustomBubbleText = (props) => {
+  const CustomBubbleText = props => {
     return (
       <View>
-        {props.currentMessage.type === "counter_offer" ? (
+        {props.currentMessage.type === 'counter_offer' ? (
           <TouchableOpacity
             activeOpacity={0.7}
             style={styles.p_mainview}
             onPress={() => {
               handleCounterOfferPress(props);
-            }}
-          >
+            }}>
             <Image
-              source={{ uri: IMAGE_URL + props.currentMessage.textimg1 }}
+              source={{uri: IMAGE_URL + props.currentMessage.textimg1}}
               style={styles.p_image}
               resizeMode="cover"
             />
@@ -1023,7 +1022,7 @@ const ChatScreen = ({ route, navigation }) => {
               </Text>
             </View>
           </TouchableOpacity>
-        ) : props.currentMessage.type === "price_offer" ? (
+        ) : props.currentMessage.type === 'price_offer' ? (
           <TouchableOpacity
             onPress={() => {
               // console.log(
@@ -1032,10 +1031,9 @@ const ChatScreen = ({ route, navigation }) => {
               // );
               handlePriceOfferPress(props);
             }}
-            style={styles.p_mainview}
-          >
+            style={styles.p_mainview}>
             <Image
-              source={{ uri: IMAGE_URL + props.currentMessage.textimg1 }}
+              source={{uri: IMAGE_URL + props.currentMessage.textimg1}}
               style={styles.p_image}
               resizeMode="cover"
             />
@@ -1056,30 +1054,29 @@ const ChatScreen = ({ route, navigation }) => {
               </Text>
             </View>
           </TouchableOpacity>
-        ) : props.currentMessage.type === "exchange_offer" ? (
+        ) : props.currentMessage.type === 'exchange_offer' ? (
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
-              navigation.navigate("ExchangeNoti", {
+              navigation.navigate('ExchangeNoti', {
                 item_img1: props.currentMessage.textimg1,
                 item_img2: props.currentMessage.textimg2,
                 itemname1: props.currentMessage.itemname1,
                 itemname2: props.currentMessage.itemname2,
                 itemprice1: props.currentMessage.textprice1,
                 itemprice2: props.currentMessage.textprice2,
-                navtype: "chat",
+                navtype: 'chat',
                 userid: props.currentMessage.receiverId,
                 receiverId: props.currentMessage.receiverId,
                 senderId: props.currentMessage.senderId,
                 offerId: props.currentMessage.offerId,
                 offer_detail: props.currentMessage.offer_detail,
               });
-            }}
-          >
+            }}>
             <View style={styles.e_mainview}>
               <View style={styles.e_itemview}>
                 <Image
-                  source={{ uri: IMAGE_URL + props.currentMessage.textimg1 }}
+                  source={{uri: IMAGE_URL + props.currentMessage.textimg1}}
                   style={styles.e_image}
                   resizeMode="contain"
                 />
@@ -1095,14 +1092,14 @@ const ChatScreen = ({ route, navigation }) => {
               </View>
 
               <MaterialCommunityIcons
-                name={"swap-horizontal-bold"}
+                name={'swap-horizontal-bold'}
                 size={30}
-                color={"white"}
+                color={'white'}
                 //onPress={() => navigation.toggleDrawer()}
               />
               <View style={styles.e_itemview}>
                 <Image
-                  source={{ uri: IMAGE_URL + props.currentMessage.textimg2 }}
+                  source={{uri: IMAGE_URL + props.currentMessage.textimg2}}
                   style={styles.e_image}
                   resizeMode="contain"
                 />
@@ -1146,31 +1143,30 @@ const ChatScreen = ({ route, navigation }) => {
               </View>
             </View>
           </TouchableOpacity>
-        ) : props.currentMessage.type === "image" ? (
+        ) : props.currentMessage.type === 'image' ? (
           <Image
-            source={{ uri: IMAGE_URL + props?.currentMessage?.url }}
+            source={{uri: IMAGE_URL + props?.currentMessage?.url}}
             style={{
               height: 150,
               width: 150,
-              resizeMode: "contain",
+              resizeMode: 'contain',
             }}
           />
         ) : (
           <Text
             style={{
-              color: "#fff",
+              color: '#fff',
               paddingHorizontal: wp(1),
               paddingVertical: 0,
               //fontWeight: "bold",
-            }}
-          >
+            }}>
             {props.currentMessage.text}
           </Text>
         )}
       </View>
     );
   };
-  const [composerValue, setComposerValue] = useState("Hello world");
+  const [composerValue, setComposerValue] = useState('Hello world');
 
   // useEffect(() => {
   //   // Save the default value to the database
@@ -1188,33 +1184,33 @@ const ChatScreen = ({ route, navigation }) => {
       <ChatHeader
         onPress={() => {}}
         username={username}
-        picture={{ uri: IMAGE_URL + userimage }}
-        onlineStatus={TranslationStrings.ONLINE}
-        viewstate={true}
+        picture={{uri: IMAGE_URL + userimage}}
+        // onlineStatus={TranslationStrings.ONLINE}
+        // viewstate={false}
       />
 
       <GiftedChat
         // placeholder={TranslationStrings.TYPE_A_MESSAGE}
         alwaysShowSend
         // isKeyboardInternallyHandled={true}
-        renderInputToolbar={(props) => {
+        renderInputToolbar={props => {
           return <CustomInputToolbar {...props} />;
         }}
-        renderSend={(props) => {
+        renderSend={props => {
           return <SendComponent {...props} />;
         }}
         messagesContainerStyle={{
           paddingBottom: 25,
         }}
         messages={messages}
-        onSend={(text) => {
+        onSend={text => {
           onSend(text);
         }}
         user={{
           _id: predata.userid,
         }}
         custontext={{}}
-        renderBubble={(props) => {
+        renderBubble={props => {
           return (
             <Bubble
               {...props}
@@ -1222,9 +1218,9 @@ const ChatScreen = ({ route, navigation }) => {
                 right: {
                   color: Colors.Appthemecolor,
                   backgroundColor:
-                    props.currentMessage.text != ""
+                    props.currentMessage.text != ''
                       ? Colors.Appthemecolor
-                      : "orange",
+                      : 'orange',
                   // width: props.currentMessage.text != "" ? wp(80) : wp(70),
                   marginBottom: hp(1.2),
                   paddingTop: hp(2),
@@ -1233,9 +1229,9 @@ const ChatScreen = ({ route, navigation }) => {
                 left: {
                   color: Colors.Appthemecolor,
                   backgroundColor:
-                    props.currentMessage.text != ""
+                    props.currentMessage.text != ''
                       ? Colors.inactivetextinput
-                      : "orange",
+                      : 'orange',
                   //width: props.currentMessage.text != "" ? wp(80) : wp(70),
                   marginBottom: hp(1.2),
                   paddingTop: hp(1),
@@ -1245,7 +1241,7 @@ const ChatScreen = ({ route, navigation }) => {
             />
           );
         }}
-        renderMessageText={(props) => {
+        renderMessageText={props => {
           return <CustomBubbleText {...props} />;
         }}
       />
@@ -1253,10 +1249,10 @@ const ChatScreen = ({ route, navigation }) => {
       <CamerBottomSheet
         refRBSheet={refRBSheet}
         onClose={() => refRBSheet.current.close()}
-        title={"From Gallery"}
-        type={"Chat_image"}
-        onImageUpload={(uploaded_url) => {
-          console.log("camera pressed", uploaded_url);
+        title={'From Gallery'}
+        type={'Chat_image'}
+        onImageUpload={uploaded_url => {
+          console.log('camera pressed', uploaded_url);
           handleStoreImage(uploaded_url);
         }}
         // onGalleryPress={() => {

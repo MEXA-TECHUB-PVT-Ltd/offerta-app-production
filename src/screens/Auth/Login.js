@@ -181,14 +181,14 @@ const Login = ({navigation, route}) => {
   );
 
   const getUserPreferences = async () => {
-    let data = await AsyncStorage.getItem('remember');
-    console.log('data : ', data);
-    if (data) {
-      let parse = JSON.parse(data);
-      setEmail(parse?.email);
-      setPassword(parse?.password);
-      setIsRemembered(true);
-    }
+    // let data = await AsyncStorage.getItem('remember');
+    // console.log('data : ', data);
+    // if (data) {
+    //   let parse = JSON.parse(data);
+    //   setEmail(parse?.email);
+    //   setPassword(parse?.password);
+    //   setIsRemembered(true);
+    // }
   };
 
   const LoginUser = async () => {
@@ -609,6 +609,7 @@ const Login = ({navigation, route}) => {
           </View>
           <View>
             <CustomTextInput
+              autoCapitalize={'none'}
               icon={appImages.email}
               type={'iconinput'}
               texterror={'invalid'}
@@ -641,7 +642,7 @@ const Login = ({navigation, route}) => {
                 flex: 1,
                 marginLeft: wp(8),
               }}>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 activeOpacity={0.4}
                 onPress={() => {
                   setIsRemembered(!isRemembered);
@@ -659,7 +660,7 @@ const Login = ({navigation, route}) => {
                 <Text style={{...styles.forgettext, marginBottom: 0}}>
                   {TranslationStrings.REMEMBER_ME}
                 </Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View
               style={{

@@ -271,8 +271,9 @@ const MainListingsDetails = ({navigation, route}) => {
     console.log('getting listings details....');
     GetListingsDetails_New(predata.listing_id)
       .then(res => {
+        console.log('res?.data  :  ', res?.data);
         if (res?.data?.error == true) {
-          alert('No Record Found');
+          // alert('No Record Found');
           return;
         }
         let response = {
@@ -401,12 +402,14 @@ const MainListingsDetails = ({navigation, route}) => {
         user_id: listing_user_id,
         listing_user_detail: listing_user_detail,
         type: 'giveaway',
+        navType: 'Order',
       });
     } else {
       // navigation.navigate("ConfirmAddress");
       navigation.replace('PaymentOptions', {
         user_id: listing_user_id,
         listing_user_detail: listing_user_detail,
+        navType: 'Order',
       });
     }
   };

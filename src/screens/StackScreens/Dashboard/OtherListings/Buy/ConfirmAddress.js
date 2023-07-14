@@ -237,7 +237,9 @@ const ConfirmAddress = ({navigation, route}) => {
                 console.log('else executed.......');
                 setTimeout(() => {
                   // navigation.navigate("BottomTab");
-                  navigation.replace('SalesOrders');
+                  navigation.replace('SalesOrders', {
+                    navType: route?.params?.navType,
+                  });
                 }, 500);
               }
             } else {
@@ -298,7 +300,7 @@ const ConfirmAddress = ({navigation, route}) => {
             createListingTranscation(order_id, type);
             updateListing();
           } else {
-            alert('Something went wrong');
+            // alert('Something went wrong');
           }
         })
         .catch(err => {
@@ -358,7 +360,9 @@ const ConfirmAddress = ({navigation, route}) => {
             // navigation?.goBack();
             navigation.navigate('WatchLiveStream', route?.params);
           } else {
-            navigation.replace('SalesOrders');
+            navigation.replace('SalesOrders', {
+              navType: route?.params?.navType,
+            });
           }
         } else {
           console.log('create order response :  ', res?.data);

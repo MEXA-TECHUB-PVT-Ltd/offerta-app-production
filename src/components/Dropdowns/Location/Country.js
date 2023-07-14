@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, {useEffect, useState, useRef} from 'react';
 import {
   View,
   Text,
@@ -6,41 +6,41 @@ import {
   Image,
   FlatList,
   TextInput,
-} from "react-native";
+} from 'react-native';
 
 ///////////////////app pakages///////////////
-import RBSheet from "react-native-raw-bottom-sheet";
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 /////////////icons///////////
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 ////////////app styles//////////////
-import styles from "./styles";
+import styles from './styles';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
+} from 'react-native-responsive-screen';
 
 ////////////////////redux////////////
-import { useSelector, useDispatch } from "react-redux";
-import { setCountryName } from "../../../redux/Location/actions";
+import {useSelector, useDispatch} from 'react-redux';
+import {setCountryName} from '../../../redux/Location/actions';
 
 //////////////////////////app api/////////////////////////
-import axios from "axios";
-import TranslationStrings from "../../../utills/TranslationStrings";
+import axios from 'axios';
+import TranslationStrings from '../../../utills/TranslationStrings';
 
-const CountryDropDown = (props) => {
+const CountryDropDown = props => {
   /////////////redux states///////
-  const { condition } = useSelector((state) => state.userReducer);
+  const {condition} = useSelector(state => state.userReducer);
   const dispatch = useDispatch();
 
   //seacrh states
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [filteredDataSource, setFilteredDataSource] = useState([]);
   const [masterDataSource, setMasterDataSource] = useState([]);
 
   //search textfield
-  const searchFilterFunction = (text) => {
+  const searchFilterFunction = text => {
     // Check if searched text is not blank
     if (text) {
       // Inserted text is not blank
@@ -49,7 +49,7 @@ const CountryDropDown = (props) => {
       const newData = masterDataSource.filter(function (item) {
         const itemData = item.country
           ? item.country.toUpperCase()
-          : "".toUpperCase();
+          : ''.toUpperCase();
         const textData = text.toUpperCase();
         return itemData.indexOf(textData) > -1;
       });
@@ -68,8 +68,8 @@ const CountryDropDown = (props) => {
   ///////////////CarCondition function///////////////
   const GetCountry = async () => {
     axios({
-      method: "GET",
-      url: "https://countriesnow.space/api/v0.1/countries",
+      method: 'GET',
+      url: 'https://countriesnow.space/api/v0.1/countries',
     })
       .then(function (response) {
         setFilteredDataSource(response.data.data);
@@ -77,7 +77,7 @@ const CountryDropDown = (props) => {
         setdata(response.data.data);
       })
       .catch(function (error) {
-        console.log("error", error);
+        console.log('error in get country', error);
       });
   };
   useEffect(() => {
@@ -95,10 +95,10 @@ const CountryDropDown = (props) => {
       //height={500}
       customStyles={{
         wrapper: {
-          backgroundColor: "rgba(52, 52, 52, 0.5)",
+          backgroundColor: 'rgba(52, 52, 52, 0.5)',
         },
         draggableIcon: {
-          backgroundColor: "white",
+          backgroundColor: 'white',
         },
         container: {
           borderTopLeftRadius: wp(10),
@@ -106,15 +106,13 @@ const CountryDropDown = (props) => {
           height: hp(90),
           maxHeight: hp(90),
         },
-      }}
-    >
+      }}>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           marginHorizontal: 0,
-        }}
-      >
+        }}>
         <Text style={styles.bottomsheettext}>
           {TranslationStrings.SELECT_COUNTRY}
         </Text>
@@ -125,20 +123,19 @@ const CountryDropDown = (props) => {
           style={styles.textInput}
           placeholder={TranslationStrings.SEARCH}
           placeholderTextColor="#999"
-          onChangeText={(text) => searchFilterFunction(text)}
+          onChangeText={text => searchFilterFunction(text)}
           value={search}
         />
       </View>
       <FlatList
         data={filteredDataSource}
-        renderItem={({ item, index, separators }) => (
+        renderItem={({item, index, separators}) => (
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => {
               dispatch(setCountryName(item.country)),
                 props.refRBSheet.current.close();
-            }}
-          >
+            }}>
             <View style={styles.card}>
               <Text style={styles.cardtext}>{item.country}</Text>
             </View>

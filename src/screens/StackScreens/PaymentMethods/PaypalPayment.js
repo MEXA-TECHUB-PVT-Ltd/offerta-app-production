@@ -10,6 +10,7 @@ import WebView from 'react-native-webview';
 import GoogleButton from '../../../components/Button/GoogleButton';
 const queryString = require('query-string');
 import Loader from '../../../components/Loader/Loader';
+import {Appbar} from 'react-native-paper';
 import {
   post_Promotions,
   post_Promotions_new,
@@ -32,6 +33,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {updateListingDetails} from '../../../api/PostApis';
 import firestore from '@react-native-firebase/firestore';
+import Colors from '../../../utills/Colors';
 
 const PaypalPayment = ({navigation, route}) => {
   const {exchange_other_listing} = useSelector(state => state.userReducer);
@@ -262,6 +264,7 @@ const PaypalPayment = ({navigation, route}) => {
     formdata.append('app_img', route?.params?.app_img);
     formdata.append('app_img_link', route?.params?.app_img_link);
     formdata.append('cast', route?.params?.cast);
+    formdata.append('payment_mode', 'paypal');
 
     var requestOptions = {
       method: 'POST',
@@ -542,6 +545,19 @@ const PaypalPayment = ({navigation, route}) => {
         title="pay with paypal"
         onPress={() => testPayPalPayment()}
       /> */}
+
+      <Appbar.Header style={{backgroundColor: Colors.Appthemecolor}}>
+        <Appbar.Content title="Make Payment" color="#FFFF" />
+        {/* <Appbar.Action icon="calendar" onPress={() => {}} /> */}
+        <Appbar.Action
+          color="#FFFFFF"
+          icon="close"
+          onPress={() => {
+            navigation?.goBack();
+          }}
+        />
+      </Appbar.Header>
+
       <Loader isLoading={loading} />
       {isWebViewopen && (
         <WebView

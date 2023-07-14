@@ -239,6 +239,28 @@ const PriceOfferNoti = ({navigation, route}) => {
     setCurrentUser(user_id);
   };
 
+  const handleTalkOnChat = async () => {
+    let logged_in_user_id = await AsyncStorage.getItem('Userid');
+    // navigation.navigate("ChatScreen", {
+    console.log(
+      'route?.params : ',
+      route?.params?.buyer_id,
+      route?.params?.userid,
+    );
+
+    let chat_user_id =
+      route?.params?.buyer_id == logged_in_user_id
+        ? route?.params?.userid
+        : route?.params?.buyer_id;
+
+    navigation.replace('ChatScreen', {
+      navtype: 'chatlist',
+      // userid: predata.userid,
+      // userid: route?.params?.userid,
+      userid: chat_user_id,
+    });
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView
@@ -356,14 +378,7 @@ const PriceOfferNoti = ({navigation, route}) => {
             marginTop: hp(3),
           }}
           onPress={() => {
-            // navigation.navigate("ChatScreen", {
-            console.log('route?.params : ', route?.params);
-            navigation.replace('ChatScreen', {
-              navtype: 'chatlist',
-              // userid: predata.userid,
-              // userid: route?.params?.userid,
-              userid: route?.params?.buyer_id,
-            });
+            handleTalkOnChat();
           }}>
           <Text style={styles.LastText}>{TranslationStrings.TALK_ON_CHAT}</Text>
         </TouchableOpacity>

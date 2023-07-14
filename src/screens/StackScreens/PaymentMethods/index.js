@@ -52,7 +52,7 @@ const PaymentMethods = ({navigation, route}) => {
       if (route?.params?.type == 'account_verify') {
         navigation?.replace('PaypalMonthlySubscription', route?.params);
       } else {
-        navigation.navigate('PaypalPayment', route?.params);
+        navigation.replace('PaypalPayment', route?.params);
       }
     }
     if (index === 2) {

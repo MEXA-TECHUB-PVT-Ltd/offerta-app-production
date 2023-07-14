@@ -285,6 +285,7 @@ const StripePayment = ({navigation, route}) => {
     formdata.append('app_img', route?.params?.app_img);
     formdata.append('app_img_link', route?.params?.app_img_link);
     formdata.append('cast', route?.params?.cast);
+    formdata.append('payment_mode', 'stripe');
 
     var requestOptions = {
       method: 'POST',

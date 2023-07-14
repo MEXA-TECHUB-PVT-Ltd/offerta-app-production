@@ -45,7 +45,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BlockUserView from '../../../../components/BlockUserView';
 import {get_user_status} from '../../../../api/GetApis';
 import TranslationStrings from '../../../../utills/TranslationStrings';
-
+import Loader from '../../../../components/Loader/Loader';
+import {Snackbar} from 'react-native-paper';
 //////////////////appImages.//////////////////
 
 const PriceOffer = ({navigation, route}) => {
@@ -54,74 +55,85 @@ const PriceOffer = ({navigation, route}) => {
     state => state.userReducer,
   );
 
-  console.log('exchange_other_listing  : ', exchange_other_listing);
   const dispatch = useDispatch();
+
+  const [visible, setVisible] = useState(false);
+  const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
+  const onDismissSnackBar = () => setVisible(false);
 
   //////////////////Textinput state////////////
   const [offerprice, setOfferPrice] = React.useState(0);
 
   const [showBlockModal, setShowBlockModal] = useState(false);
 
+  const [loading, setLoading] = useState(false);
+
   ////////////LISTING LIKES//////////
   const Listings_Exchange_Offer = async props => {
     let user_status = await AsyncStorage.getItem('account_status');
-
     if (user_status == 'block') {
       setShowBlockModal(true);
       return;
     }
-
-    // console.log("props   :  ", props);
-    // console.log("exchange_other_listing  :   ", exchange_other_listing.user_id);
-    // console.log("exchange_other_listing  :   ", exchange_other_listing.id);
-    // return;
-
-    setList_Date({
-      otheruser_id: exchange_other_listing.user_id,
-      other_item_id: exchange_other_listing.id,
-      item_offerprice: props,
-    });
-
-    var user_id = await AsyncStorage.getItem('Userid');
-
-    post_Listings_Price_Offer(
-      exchange_other_listing.user_id,
-      exchange_other_listing.id,
-      offerprice,
-    )
-      .then(response => {
-        //dispatch(setExchangeOffer_OtherListing(list_data))
-        console.log('exchnage response hereL:', response?.data);
-
-        navigation.replace('ChatScreen', {
-          buyer_id: user_id,
-          sale_by: exchange_other_listing.user_id,
-          userid: exchange_other_listing.user_id,
-          offerprice: props,
-          offerid: response.data.data.id,
-          item_price: exchange_other_listing.price,
-          navtype: 'price_offer',
-          listing_id: exchange_other_listing.id,
-        });
-        // setListing_Like_User_id(response.data.data.user_id);
-      })
-      .catch(err => {
-        console.log('Error  : ', err);
+    if (offerprice?.length == 0 || offerprice == 0) {
+      setsnackbarValue({
+        value: 'Please Enter Offer Price',
+        color: 'red',
       });
+      setVisible(true);
+    } else {
+      // console.log("props   :  ", props);
+      // console.log("exchange_other_listing  :   ", exchange_other_listing.user_id);
+      // console.log("exchange_other_listing  :   ", exchange_other_listing.id);
+      // return;
+
+      setList_Date({
+        otheruser_id: exchange_other_listing.user_id,
+        other_item_id: exchange_other_listing.id,
+        item_offerprice: props,
+      });
+
+      var user_id = await AsyncStorage.getItem('Userid');
+      setLoading(true);
+      post_Listings_Price_Offer(
+        exchange_other_listing.user_id,
+        exchange_other_listing.id,
+        offerprice,
+      )
+        .then(response => {
+          //dispatch(setExchangeOffer_OtherListing(list_data))
+          console.log('exchnage response hereL:', response?.data);
+
+          navigation.replace('ChatScreen', {
+            buyer_id: user_id,
+            sale_by: exchange_other_listing.user_id,
+            userid: exchange_other_listing.user_id,
+            offerprice: props,
+            offerid: response.data.data.id,
+            item_price: exchange_other_listing.price,
+            navtype: 'price_offer',
+            listing_id: exchange_other_listing.id,
+          });
+          // setListing_Like_User_id(response.data.data.user_id);
+        })
+        .catch(err => {
+          console.log('Error  : ', err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
   };
   const [list_data, setList_Date] = useState({
     otheruser_id: exchange_other_listing.user_id,
     other_item_id: exchange_other_listing.id,
     item_offerprice: offerprice,
   });
-  useEffect(() => {
-    console.log('image here:', exchange_other_listing);
-  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <BlockUserView visible={showBlockModal} setVisible={setShowBlockModal} />
-
+      <Loader isLoading={loading} />
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}>
@@ -169,6 +181,18 @@ const PriceOffer = ({navigation, route}) => {
             <Text style={styles.btnText}>{TranslationStrings.SUBMIT}</Text>
           </TouchableOpacity>
         </View>
+
+        <Snackbar
+          duration={2000}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+          style={{
+            backgroundColor: snackbarValue.color,
+            marginBottom: hp(20),
+            zIndex: 999,
+          }}>
+          {snackbarValue.value}
+        </Snackbar>
       </ScrollView>
     </SafeAreaView>
   );

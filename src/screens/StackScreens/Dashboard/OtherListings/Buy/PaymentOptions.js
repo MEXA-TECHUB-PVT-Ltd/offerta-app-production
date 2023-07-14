@@ -165,6 +165,8 @@ const PaymentOptions = ({navigation, route}) => {
         //live stream
         response: route?.params?.response,
         host: route?.params?.host,
+
+        navType: route?.params?.navType,
       });
     } else if (
       index !== 1 ||
@@ -188,6 +190,8 @@ const PaymentOptions = ({navigation, route}) => {
         //live stream
         response: route?.params?.response,
         host: route?.params?.host,
+
+        navType: route?.params?.navType,
       });
     }
   };
