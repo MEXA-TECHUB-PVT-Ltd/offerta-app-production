@@ -46,7 +46,7 @@ const DashboardCard = props => {
           {
             backgroundColor:
               props?.added_by == 'admin'
-                ? Colors.Appthemecolor
+                ? '#A0C4FF'
                 : (props?.promotion?.tag == 'urgent' ||
                     props?.promotion?.tag == 'Urgent') &&
                   moment(new Date())?.format('YYYY-MM-DD') <
@@ -210,7 +210,8 @@ const DashboardCard = props => {
             props?.sold == 'true') && (
             <View
               style={{
-                backgroundColor: 'red',
+                // backgroundColor: 'red',
+                backgroundColor: '#C3C2C2',
                 position: 'absolute',
                 right: 0,
                 borderBottomLeftRadius: 8,
@@ -222,6 +223,7 @@ const DashboardCard = props => {
                   fontSize: 12,
                   fontFamily: fontFamily.Poppins_Regular,
                   color: '#fff',
+                  // color: '#000',
                 }}>
                 {TranslationStrings.SOLD}
               </Text>
@@ -231,8 +233,9 @@ const DashboardCard = props => {
           {props?.added_by == 'admin' && (
             <View
               style={{
-                backgroundColor: Colors.Appthemecolor,
+                // backgroundColor: Colors.Appthemecolor,
                 // backgroundColor: '#90EE90',
+                backgroundColor: '#A0C4FF',
                 position: 'absolute',
                 right: 0,
                 borderBottomLeftRadius: 8,
@@ -243,8 +246,8 @@ const DashboardCard = props => {
                 style={{
                   fontSize: 12,
                   fontFamily: fontFamily.Poppins_Regular,
-                  // color: '#000',
-                  color: 'white',
+                  color: '#000',
+                  // color: 'white',
                 }}>
                 {TranslationStrings.AFFILIATE}
               </Text>
@@ -268,10 +271,10 @@ const DashboardCard = props => {
               numberOfLines={1}
               style={{
                 ...styles.dashboardmaintext,
-                // color:
-                //   props?.added_by == 'admin' ? '#000' : Colors.Appthemecolor,
                 color:
-                  props?.added_by == 'admin' ? '#fff' : Colors.Appthemecolor,
+                  props?.added_by == 'admin' ? '#000' : Colors.Appthemecolor,
+                // color:
+                //   props?.added_by == 'admin' ? '#fff' : Colors.Appthemecolor,
               }}>
               {props.maintext}
             </Text>
