@@ -55,7 +55,7 @@ const SalesOrders = ({navigation, route}) => {
   const [visible, setVisible] = useState(false);
   const [snackbarValue, setsnackbarValue] = useState({value: '', color: ''});
 
-  const navType = route?.params.navType ? route?.params.navType : '';
+  const navType = route?.params?.navType ? route?.params?.navType : '';
 
   const onDismissSnackBar = () => setVisible(false);
 
